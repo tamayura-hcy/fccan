@@ -2,6 +2,8 @@
 
 **Frequency-aware Contrastive Cross-domain Adaptation Network for Unsupervised Domain Adaptation of OCT Images**
 
+**Keywords:** Unsupervised Domain Adaptation · OCT · Optical Coherence Tomography · Medical Imaging · Cross-Device · Frequency-Domain · Contrastive Learning · PyTorch
+
 > 🌐 Switch language: **[English](README.en.md)** · **[日本語](README.ja.md)** · **[中文](README.md)**
 
 FCCAN does unsupervised domain adaptation for OCT images. A model trained on a labeled source domain (e.g., BOE) is transferred to unlabeled target domains (e.g., TMI, CELL) for stable **AMD / DME / NORMAL** classification.

@@ -3,6 +3,8 @@
 **基于小波频带感知与类别对比的跨设备 OCT 无监督域适应网络**
 **Frequency-aware Contrastive Cross-domain Adaptation Network for Unsupervised Domain Adaptation of OCT Images**
 
+**关键词：** 无监督域适应 · OCT · 光学相干断层成像 · 医学影像 · 跨设备 · 频域 · 对比学习 · PyTorch
+
 > 🌐 语言切换：**[English](README.en.md)** · **[日本語](README.ja.md)** · **[中文](README.md)**
 
 本项目做 OCT 图像的跨设备无监督域适应：把在标注源域（如 BOE）上训练好的模型，迁移到没有标注的目标域（如 TMI、CELL），用于 **AMD / DME / NORMAL** 三类病灶的稳定分类。

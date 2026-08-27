@@ -3,6 +3,8 @@
 **OCT 画像の教師なしドメイン適応のためのウェーブレット周波数帯認識・クラス対比型クロスドメイン適応ネットワーク**
 **Frequency-aware Contrastive Cross-domain Adaptation Network for Unsupervised Domain Adaptation of OCT Images**
 
+**キーワード：** 教師なしドメイン適応 · OCT · 光干渉断層撮影 · 医用画像 · クロスデバイス · 周波数領域 · 対照学習 · PyTorch
+
 > 🌐 言語切替：**[English](README.en.md)** · **[日本語](README.ja.md)** · **[中文](README.md)**
 
 このプロジェクトは OCT 画像のクロスデバイス教師なしドメイン適応を行います。ラベル付きソースドメイン（例：BOE）で学習したモデルを、ラベルなしのターゲットドメイン（例：TMI、CELL）へ移し、**AMD / DME / NORMAL** の 3 クラス病変を安定的に分類します。
