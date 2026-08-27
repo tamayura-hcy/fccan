@@ -1,0 +1,22 @@
+# FEA-Net / FCCAN 运行依赖
+#
+# ═══════════════════════════════════════════════════════════════════
+# 【严格复现档】FCCAN 主实验（表1 主结果、消融、稳定性）及 BOE->CELL /
+#   TMI->CELL 敏感性在【远程服务器】上运行并报告，环境为：
+#   PyTorch 2.8.0（CUDA 12.8）+ torchvision 0.23.0。
+#   用这一档才能保证与论文主表数字完全一致（含随机种子行为）。
+#   安装：pip install -r requirements.txt
+#        （torch/torchvision 建议从 pytorch.org 对应 CUDA 的 wheel 装，
+#          并保持版本号一致，例如 pip install torch==2.8.0 torchvision==0.23.0
+#          --index-url https://download.pytorch.org/whl/cu128）
+#
+# 另：对比方法复现与 BOE->TMI 敏感性在【实验室工作站】运行
+#     （PyTorch 2.7.1 + CUDA 12.6），数值可能有微小浮点差异，趋势一致。
+# ═══════════════════════════════════════════════════════════════════
+torch==2.8.0
+torchvision==0.23.0
+numpy>=1.24
+scikit-learn>=1.2
+tqdm>=4.60
+matplotlib>=3.7
+seaborn>=0.12

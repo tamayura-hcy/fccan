@@ -1,0 +1,7 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Oversized model checkpoint (exceeds GitHub 100 MB per-file limit)
+comparison_experiments/third_party/TVT/checkpoint/ViT-B_16.npz

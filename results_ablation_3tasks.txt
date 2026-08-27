@@ -1,0 +1,257 @@
+# 三任务删除式消融（末轮 EMA 教师）开始 2026-08-10 17:14:54 | tasks=['AB', 'AC', 'BC'] plans=no_fea,no_em,no_ll,no_caco,no_scon,no_ang,no_ema,no_src seeds=[42, 123, 777, 2024, 3407] 共120runs
+no_fea       AB s   42 ov=[--use_fea_net 0]  EMA第8轮acc=0.9619  acc=0.9619 auc=0.9802 recall=0.9656 precision=0.9576 f1=0.9609 bacc=0.9576 specificity=0.9792 kappa=0.9403 gmean=0.9724 mcc=0.9412  time=677s
+no_fea       AB s   42 ov=[--use_fea_net 0]  per-epoch EMA ep1:e=0.9129 ep2:e=0.9412 ep3:e=0.9553 ep4:e=0.9477 ep5:e=0.9575 ep6:e=0.9662 ep7:e=0.9608 ep8:e=0.9619
+no_fea       AB s  123 ov=[--use_fea_net 0]  EMA第8轮acc=0.9401  acc=0.9401 auc=0.9699 recall=0.9427 precision=0.9473 f1=0.9449 bacc=0.9473 specificity=0.9681 kappa=0.9066 gmean=0.9553 mcc=0.9067  time=677s
+no_fea       AB s  123 ov=[--use_fea_net 0]  per-epoch EMA ep1:e=0.8715 ep2:e=0.9368 ep3:e=0.9510 ep4:e=0.9412 ep5:e=0.9499 ep6:e=0.9597 ep7:e=0.9401 ep8:e=0.9401
+no_fea       AB s  777 ov=[--use_fea_net 0]  EMA第8轮acc=0.9172  acc=0.9172 auc=0.9527 recall=0.9270 precision=0.9215 f1=0.9228 bacc=0.9215 specificity=0.9555 kappa=0.8707 gmean=0.9412 mcc=0.8728  time=687s
+no_fea       AB s  777 ov=[--use_fea_net 0]  per-epoch EMA ep1:e=0.8725 ep2:e=0.9139 ep3:e=0.9183 ep4:e=0.9434 ep5:e=0.9401 ep6:e=0.9150 ep7:e=0.9227 ep8:e=0.9172
+no_fea       AB s 2024 ov=[--use_fea_net 0]  EMA第8轮acc=0.9651  acc=0.9651 auc=0.9870 recall=0.9704 precision=0.9641 f1=0.9669 bacc=0.9641 specificity=0.9807 kappa=0.9454 gmean=0.9755 mcc=0.9460  time=679s
+no_fea       AB s 2024 ov=[--use_fea_net 0]  per-epoch EMA ep1:e=0.8878 ep2:e=0.9357 ep3:e=0.9542 ep4:e=0.9662 ep5:e=0.9619 ep6:e=0.9619 ep7:e=0.9575 ep8:e=0.9651
+no_fea       AB s 3407 ov=[--use_fea_net 0]  EMA第8轮acc=0.9619  acc=0.9619 auc=0.9805 recall=0.9641 precision=0.9638 f1=0.9633 bacc=0.9638 specificity=0.9795 kappa=0.9405 gmean=0.9717 mcc=0.9414  time=690s
+no_fea       AB s 3407 ov=[--use_fea_net 0]  per-epoch EMA ep1:e=0.8638 ep2:e=0.9259 ep3:e=0.9346 ep4:e=0.9216 ep5:e=0.9390 ep6:e=0.9466 ep7:e=0.9444 ep8:e=0.9619
+no_em        AB s   42 ov=[--lambda_em 0]  EMA第8轮acc=0.3824  acc=0.3824 auc=0.5200 recall=0.1275 precision=0.3333 f1=0.1844 bacc=0.3333 specificity=0.6667 kappa=0.0000 gmean=0.2915 mcc=0.0000  time=792s
+no_em        AB s   42 ov=[--lambda_em 0]  per-epoch EMA ep1:e=0.8246 ep2:e=0.6122 ep3:e=0.3824 ep4:e=0.3824 ep5:e=0.3824 ep6:e=0.3824 ep7:e=0.3824 ep8:e=0.3824
+no_em        AB s  123 ov=[--lambda_em 0]  EMA第8轮acc=0.3824  acc=0.3824 auc=0.5217 recall=0.1275 precision=0.3333 f1=0.1844 bacc=0.3333 specificity=0.6667 kappa=0.0000 gmean=0.2915 mcc=0.0000  time=775s
+no_em        AB s  123 ov=[--lambda_em 0]  per-epoch EMA ep1:e=0.7407 ep2:e=0.5240 ep3:e=0.3824 ep4:e=0.3824 ep5:e=0.3824 ep6:e=0.3824 ep7:e=0.3824 ep8:e=0.3824
+no_em        AB s  777 ov=[--lambda_em 0]  EMA第8轮acc=0.3824  acc=0.3824 auc=0.5797 recall=0.1275 precision=0.3333 f1=0.1844 bacc=0.3333 specificity=0.6667 kappa=0.0000 gmean=0.2915 mcc=0.0000  time=765s
+no_em        AB s  777 ov=[--lambda_em 0]  per-epoch EMA ep1:e=0.7593 ep2:e=0.6296 ep3:e=0.3824 ep4:e=0.3824 ep5:e=0.3824 ep6:e=0.3824 ep7:e=0.3824 ep8:e=0.3824
+no_em        AB s 2024 ov=[--lambda_em 0]  EMA第8轮acc=0.3824  acc=0.3824 auc=0.5166 recall=0.1275 precision=0.3333 f1=0.1844 bacc=0.3333 specificity=0.6667 kappa=0.0000 gmean=0.2915 mcc=0.0000  time=758s
+no_em        AB s 2024 ov=[--lambda_em 0]  per-epoch EMA ep1:e=0.7462 ep2:e=0.3943 ep3:e=0.3824 ep4:e=0.3824 ep5:e=0.3824 ep6:e=0.3824 ep7:e=0.3824 ep8:e=0.3824
+no_em        AB s 3407 ov=[--lambda_em 0]  EMA第8轮acc=0.5272  acc=0.5272 auc=0.7952 recall=0.4708 precision=0.5742 f1=0.4829 bacc=0.5742 specificity=0.7455 kappa=0.2673 gmean=0.5924 mcc=0.4227  time=768s
+no_em        AB s 3407 ov=[--lambda_em 0]  per-epoch EMA ep1:e=0.7429 ep2:e=0.7081 ep3:e=0.5904 ep4:e=0.5359 ep5:e=0.5251 ep6:e=0.5251 ep7:e=0.5272 ep8:e=0.5272
+no_ll        AB s   42 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  EMA第8轮acc=0.9412  acc=0.9412 auc=0.9613 recall=0.9511 precision=0.9270 f1=0.9371 bacc=0.9270 specificity=0.9674 kappa=0.9073 gmean=0.9592 mcc=0.9088  time=661s
+no_ll        AB s   42 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  per-epoch EMA ep1:e=0.8486 ep2:e=0.9237 ep3:e=0.9423 ep4:e=0.9444 ep5:e=0.9499 ep6:e=0.9412 ep7:e=0.9466 ep8:e=0.9412
+no_ll        AB s  123 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  EMA第8轮acc=0.9455  acc=0.9455 auc=0.9576 recall=0.9547 precision=0.9466 f1=0.9484 bacc=0.9466 specificity=0.9700 kappa=0.9147 gmean=0.9623 mcc=0.9180  time=655s
+no_ll        AB s  123 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  per-epoch EMA ep1:e=0.8878 ep2:e=0.9336 ep3:e=0.9412 ep4:e=0.9423 ep5:e=0.9412 ep6:e=0.9477 ep7:e=0.9455 ep8:e=0.9455
+no_ll        AB s  777 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  EMA第8轮acc=0.9303  acc=0.9303 auc=0.9600 recall=0.9354 precision=0.9349 f1=0.9350 bacc=0.9349 specificity=0.9625 kappa=0.8912 gmean=0.9489 mcc=0.8913  time=668s
+no_ll        AB s  777 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  per-epoch EMA ep1:e=0.8704 ep2:e=0.9292 ep3:e=0.9237 ep4:e=0.9259 ep5:e=0.9303 ep6:e=0.9270 ep7:e=0.9379 ep8:e=0.9303
+no_ll        AB s 2024 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  EMA第8轮acc=0.9401  acc=0.9401 auc=0.9756 recall=0.9433 precision=0.9287 f1=0.9353 bacc=0.9287 specificity=0.9678 kappa=0.9059 gmean=0.9555 mcc=0.9063  time=660s
+no_ll        AB s 2024 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  per-epoch EMA ep1:e=0.9063 ep2:e=0.9368 ep3:e=0.9488 ep4:e=0.9510 ep5:e=0.9499 ep6:e=0.9542 ep7:e=0.9434 ep8:e=0.9401
+no_ll        AB s 3407 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  EMA第8轮acc=0.9031  acc=0.9031 auc=0.9343 recall=0.9217 precision=0.9128 f1=0.9134 bacc=0.9128 specificity=0.9479 kappa=0.8489 gmean=0.9347 mcc=0.8543  time=654s
+no_ll        AB s 3407 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  per-epoch EMA ep1:e=0.8813 ep2:e=0.9314 ep3:e=0.8976 ep4:e=0.8878 ep5:e=0.8758 ep6:e=0.8943 ep7:e=0.8922 ep8:e=0.9031
+no_caco      AB s   42 ov=[--lambda_caco 0]  EMA第8轮acc=0.9172  acc=0.9172 auc=0.9501 recall=0.9160 precision=0.9278 f1=0.9182 bacc=0.9278 specificity=0.9576 kappa=0.8716 gmean=0.9366 mcc=0.8749  time=763s
+no_caco      AB s   42 ov=[--lambda_caco 0]  per-epoch EMA ep1:e=0.9107 ep2:e=0.9205 ep3:e=0.9444 ep4:e=0.9542 ep5:e=0.9630 ep6:e=0.9455 ep7:e=0.9325 ep8:e=0.9172
+no_caco      AB s  123 ov=[--lambda_caco 0]  EMA第8轮acc=0.9401  acc=0.9401 auc=0.9835 recall=0.9302 precision=0.9485 f1=0.9375 bacc=0.9485 specificity=0.9710 kappa=0.9073 gmean=0.9504 mcc=0.9084  time=762s
+no_caco      AB s  123 ov=[--lambda_caco 0]  per-epoch EMA ep1:e=0.8758 ep2:e=0.9161 ep3:e=0.9107 ep4:e=0.9194 ep5:e=0.9390 ep6:e=0.9521 ep7:e=0.9270 ep8:e=0.9401
+no_caco      AB s  777 ov=[--lambda_caco 0]  EMA第8轮acc=0.8682  acc=0.8682 auc=0.9197 recall=0.8784 precision=0.8831 f1=0.8691 bacc=0.8831 specificity=0.9317 kappa=0.7958 gmean=0.9046 mcc=0.8067  time=784s
+no_caco      AB s  777 ov=[--lambda_caco 0]  per-epoch EMA ep1:e=0.8736 ep2:e=0.9139 ep3:e=0.9161 ep4:e=0.9303 ep5:e=0.8889 ep6:e=0.8747 ep7:e=0.9009 ep8:e=0.8682
+no_caco      AB s 2024 ov=[--lambda_caco 0]  EMA第8轮acc=0.9455  acc=0.9455 auc=0.9797 recall=0.9407 precision=0.9515 f1=0.9451 bacc=0.9515 specificity=0.9724 kappa=0.9154 gmean=0.9564 mcc=0.9161  time=787s
+no_caco      AB s 2024 ov=[--lambda_caco 0]  per-epoch EMA ep1:e=0.8758 ep2:e=0.9368 ep3:e=0.9444 ep4:e=0.9488 ep5:e=0.9401 ep6:e=0.9488 ep7:e=0.9434 ep8:e=0.9455
+no_caco      AB s 3407 ov=[--lambda_caco 0]  EMA第8轮acc=0.9455  acc=0.9455 auc=0.9793 recall=0.9429 precision=0.9526 f1=0.9473 bacc=0.9526 specificity=0.9718 kappa=0.9153 gmean=0.9573 mcc=0.9156  time=769s
+no_caco      AB s 3407 ov=[--lambda_caco 0]  per-epoch EMA ep1:e=0.8922 ep2:e=0.9259 ep3:e=0.9423 ep4:e=0.9553 ep5:e=0.9542 ep6:e=0.9499 ep7:e=0.9521 ep8:e=0.9455
+no_scon      AB s   42 ov=[--alpha_scon 0]  EMA第8轮acc=0.9434  acc=0.9434 auc=0.9800 recall=0.9565 precision=0.9473 f1=0.9492 bacc=0.9473 specificity=0.9682 kappa=0.9113 gmean=0.9624 mcc=0.9152  time=763s
+no_scon      AB s   42 ov=[--alpha_scon 0]  per-epoch EMA ep1:e=0.8813 ep2:e=0.9052 ep3:e=0.9150 ep4:e=0.9270 ep5:e=0.9270 ep6:e=0.9314 ep7:e=0.9423 ep8:e=0.9434
+no_scon      AB s  123 ov=[--alpha_scon 0]  EMA第8轮acc=0.8312  acc=0.8312 auc=0.9447 recall=0.8312 precision=0.8604 f1=0.8263 bacc=0.8604 specificity=0.9230 kappa=0.7463 gmean=0.8759 mcc=0.7601  time=770s
+no_scon      AB s  123 ov=[--alpha_scon 0]  per-epoch EMA ep1:e=0.8660 ep2:e=0.8998 ep3:e=0.8834 ep4:e=0.8497 ep5:e=0.8083 ep6:e=0.8627 ep7:e=0.8965 ep8:e=0.8312
+no_scon      AB s  777 ov=[--alpha_scon 0]  EMA第8轮acc=0.9314  acc=0.9314 auc=0.9799 recall=0.9304 precision=0.9397 f1=0.9325 bacc=0.9397 specificity=0.9646 kappa=0.8934 gmean=0.9473 mcc=0.8958  time=773s
+no_scon      AB s  777 ov=[--alpha_scon 0]  per-epoch EMA ep1:e=0.8453 ep2:e=0.8824 ep3:e=0.8943 ep4:e=0.9118 ep5:e=0.9564 ep6:e=0.9510 ep7:e=0.9325 ep8:e=0.9314
+no_scon      AB s 2024 ov=[--alpha_scon 0]  EMA第8轮acc=0.9303  acc=0.9303 auc=0.9859 recall=0.9466 precision=0.9165 f1=0.9277 bacc=0.9165 specificity=0.9609 kappa=0.8900 gmean=0.9537 mcc=0.8944  time=767s
+no_scon      AB s 2024 ov=[--alpha_scon 0]  per-epoch EMA ep1:e=0.8617 ep2:e=0.9270 ep3:e=0.9390 ep4:e=0.9466 ep5:e=0.9575 ep6:e=0.9542 ep7:e=0.9412 ep8:e=0.9303
+no_scon      AB s 3407 ov=[--alpha_scon 0]  EMA第8轮acc=0.9390  acc=0.9390 auc=0.9764 recall=0.9531 precision=0.9411 f1=0.9446 bacc=0.9411 specificity=0.9657 kappa=0.9044 gmean=0.9594 mcc=0.9079  time=761s
+no_scon      AB s 3407 ov=[--alpha_scon 0]  per-epoch EMA ep1:e=0.8769 ep2:e=0.9150 ep3:e=0.9390 ep4:e=0.9434 ep5:e=0.9444 ep6:e=0.9357 ep7:e=0.9346 ep8:e=0.9390
+no_ang       AB s   42 ov=[--lambda_batch_ang 0]  EMA第8轮acc=0.9270  acc=0.9270 auc=0.9517 recall=0.9476 precision=0.9237 f1=0.9313 bacc=0.9237 specificity=0.9587 kappa=0.8852 gmean=0.9531 mcc=0.8912  time=771s
+no_ang       AB s   42 ov=[--lambda_batch_ang 0]  per-epoch EMA ep1:e=0.9041 ep2:e=0.9216 ep3:e=0.9183 ep4:e=0.9063 ep5:e=0.9161 ep6:e=0.9325 ep7:e=0.9401 ep8:e=0.9270
+no_ang       AB s  123 ov=[--lambda_batch_ang 0]  EMA第8轮acc=0.9488  acc=0.9488 auc=0.9764 recall=0.9586 precision=0.9503 f1=0.9524 bacc=0.9503 specificity=0.9715 kappa=0.9198 gmean=0.9650 mcc=0.9227  time=759s
+no_ang       AB s  123 ov=[--lambda_batch_ang 0]  per-epoch EMA ep1:e=0.8747 ep2:e=0.9292 ep3:e=0.9390 ep4:e=0.9303 ep5:e=0.9346 ep6:e=0.9444 ep7:e=0.9521 ep8:e=0.9488
+no_ang       AB s  777 ov=[--lambda_batch_ang 0]  EMA第8轮acc=0.9368  acc=0.9368 auc=0.9684 recall=0.9524 precision=0.9373 f1=0.9416 bacc=0.9373 specificity=0.9645 kappa=0.9009 gmean=0.9584 mcc=0.9055  time=756s
+no_ang       AB s  777 ov=[--lambda_batch_ang 0]  per-epoch EMA ep1:e=0.8758 ep2:e=0.9303 ep3:e=0.9368 ep4:e=0.9401 ep5:e=0.9237 ep6:e=0.9281 ep7:e=0.9444 ep8:e=0.9368
+no_ang       AB s 2024 ov=[--lambda_batch_ang 0]  EMA第8轮acc=0.9303  acc=0.9303 auc=0.9623 recall=0.9460 precision=0.9224 f1=0.9307 bacc=0.9224 specificity=0.9610 kappa=0.8903 gmean=0.9535 mcc=0.8948  time=763s
+no_ang       AB s 2024 ov=[--lambda_batch_ang 0]  per-epoch EMA ep1:e=0.8791 ep2:e=0.9259 ep3:e=0.9292 ep4:e=0.9270 ep5:e=0.9379 ep6:e=0.9205 ep7:e=0.9292 ep8:e=0.9303
+no_ang       AB s 3407 ov=[--lambda_batch_ang 0]  EMA第8轮acc=0.9434  acc=0.9434 auc=0.9802 recall=0.9534 precision=0.9351 f1=0.9428 bacc=0.9351 specificity=0.9684 kappa=0.9110 gmean=0.9609 mcc=0.9126  time=763s
+no_ang       AB s 3407 ov=[--lambda_batch_ang 0]  per-epoch EMA ep1:e=0.8878 ep2:e=0.9172 ep3:e=0.9281 ep4:e=0.9314 ep5:e=0.9325 ep6:e=0.9248 ep7:e=0.9270 ep8:e=0.9434
+no_ema       AB s   42 ov=[--ema_guide_caco 0]  EMA=NA(日志无ema_acc)  time=713s
+no_ema       AB s  123 ov=[--ema_guide_caco 0]  EMA=NA(日志无ema_acc)  time=713s
+no_ema       AB s  777 ov=[--ema_guide_caco 0]  EMA=NA(日志无ema_acc)  time=713s
+no_ema       AB s 2024 ov=[--ema_guide_caco 0]  EMA=NA(日志无ema_acc)  time=712s
+no_ema       AB s 3407 ov=[--ema_guide_caco 0]  EMA=NA(日志无ema_acc)  time=712s
+no_src       AB s   42 ov=[--lambda_src 0]  EMA第8轮acc=0.9357  acc=0.9357 auc=0.9600 recall=0.9505 precision=0.9355 f1=0.9398 bacc=0.9355 specificity=0.9640 kappa=0.8992 gmean=0.9573 mcc=0.9038  time=763s
+no_src       AB s   42 ov=[--lambda_src 0]  per-epoch EMA ep1:e=0.9118 ep2:e=0.9325 ep3:e=0.9488 ep4:e=0.9510 ep5:e=0.9619 ep6:e=0.9575 ep7:e=0.9488 ep8:e=0.9357
+no_src       AB s  123 ov=[--lambda_src 0]  EMA第8轮acc=0.9521  acc=0.9521 auc=0.9786 recall=0.9551 precision=0.9554 f1=0.9543 bacc=0.9554 specificity=0.9742 kappa=0.9252 gmean=0.9646 mcc=0.9265  time=761s
+no_src       AB s  123 ov=[--lambda_src 0]  per-epoch EMA ep1:e=0.8769 ep2:e=0.9216 ep3:e=0.9248 ep4:e=0.9455 ep5:e=0.9325 ep6:e=0.9336 ep7:e=0.9532 ep8:e=0.9521
+no_src       AB s  777 ov=[--lambda_src 0]  EMA第8轮acc=0.9564  acc=0.9564 auc=0.9841 recall=0.9608 precision=0.9575 f1=0.9591 bacc=0.9575 specificity=0.9764 kappa=0.9319 gmean=0.9686 mcc=0.9320  time=759s
+no_src       AB s  777 ov=[--lambda_src 0]  per-epoch EMA ep1:e=0.8802 ep2:e=0.9401 ep3:e=0.9532 ep4:e=0.9542 ep5:e=0.9673 ep6:e=0.9619 ep7:e=0.9662 ep8:e=0.9564
+no_src       AB s 2024 ov=[--lambda_src 0]  EMA第8轮acc=0.9532  acc=0.9532 auc=0.9751 recall=0.9576 precision=0.9525 f1=0.9536 bacc=0.9525 specificity=0.9746 kappa=0.9267 gmean=0.9661 mcc=0.9287  time=760s
+no_src       AB s 2024 ov=[--lambda_src 0]  per-epoch EMA ep1:e=0.8791 ep2:e=0.9434 ep3:e=0.9477 ep4:e=0.9521 ep5:e=0.9553 ep6:e=0.9434 ep7:e=0.9630 ep8:e=0.9532
+no_src       AB s 3407 ov=[--lambda_src 0]  EMA第8轮acc=0.9521  acc=0.9521 auc=0.9705 recall=0.9632 precision=0.9498 f1=0.9546 bacc=0.9498 specificity=0.9730 kappa=0.9248 gmean=0.9681 mcc=0.9274  time=767s
+no_src       AB s 3407 ov=[--lambda_src 0]  per-epoch EMA ep1:e=0.8824 ep2:e=0.9303 ep3:e=0.9357 ep4:e=0.9434 ep5:e=0.9368 ep6:e=0.9542 ep7:e=0.9423 ep8:e=0.9521
+no_fea       AC s   42 ov=[--use_fea_net 0]  EMA第15轮acc=0.8226  acc=0.8226 auc=0.9097 recall=0.8459 precision=0.8226 f1=0.8247 bacc=0.8226 specificity=0.9113 kappa=0.7339 gmean=0.8780 mcc=0.7434  time=719s
+no_fea       AC s   42 ov=[--use_fea_net 0]  per-epoch EMA ep1:e=0.7652 ep2:e=0.7706 ep3:e=0.7832 ep4:e=0.7832 ep5:e=0.8082 ep6:e=0.8208 ep7:e=0.8226 ep8:e=0.8244 ep9:e=0.8315 ep10:e=0.8351 ep11:e=0.8459 ep12:e=0.8530 ep13:e=0.8495 ep14:e=0.8315 ep15:e=0.8226
+no_fea       AC s  123 ov=[--use_fea_net 0]  EMA第15轮acc=0.8100  acc=0.8100 auc=0.9072 recall=0.8157 precision=0.8100 f1=0.8121 bacc=0.8100 specificity=0.9050 kappa=0.7151 gmean=0.8592 mcc=0.7157  time=714s
+no_fea       AC s  123 ov=[--use_fea_net 0]  per-epoch EMA ep1:e=0.7634 ep2:e=0.7563 ep3:e=0.7509 ep4:e=0.7563 ep5:e=0.7563 ep6:e=0.7616 ep7:e=0.7849 ep8:e=0.7903 ep9:e=0.7903 ep10:e=0.7832 ep11:e=0.7832 ep12:e=0.7921 ep13:e=0.8029 ep14:e=0.8082 ep15:e=0.8100
+no_fea       AC s  777 ov=[--use_fea_net 0]  EMA第15轮acc=0.8746  acc=0.8746 auc=0.9478 recall=0.8893 precision=0.8746 f1=0.8763 bacc=0.8746 specificity=0.9373 kappa=0.8118 gmean=0.9130 mcc=0.8176  time=725s
+no_fea       AC s  777 ov=[--use_fea_net 0]  per-epoch EMA ep1:e=0.7706 ep2:e=0.7975 ep3:e=0.8029 ep4:e=0.7885 ep5:e=0.7903 ep6:e=0.8100 ep7:e=0.8297 ep8:e=0.8333 ep9:e=0.8315 ep10:e=0.8369 ep11:e=0.8459 ep12:e=0.8513 ep13:e=0.8566 ep14:e=0.8656 ep15:e=0.8746
+no_fea       AC s 2024 ov=[--use_fea_net 0]  EMA第15轮acc=0.8136  acc=0.8136 auc=0.9068 recall=0.8300 precision=0.8136 f1=0.8155 bacc=0.8136 specificity=0.9068 kappa=0.7204 gmean=0.8675 mcc=0.7265  time=717s
+no_fea       AC s 2024 ov=[--use_fea_net 0]  per-epoch EMA ep1:e=0.7186 ep2:e=0.7473 ep3:e=0.7724 ep4:e=0.7796 ep5:e=0.7957 ep6:e=0.8082 ep7:e=0.8118 ep8:e=0.8244 ep9:e=0.8297 ep10:e=0.8387 ep11:e=0.8297 ep12:e=0.8280 ep13:e=0.8297 ep14:e=0.8244 ep15:e=0.8136
+no_fea       AC s 3407 ov=[--use_fea_net 0]  EMA第15轮acc=0.7509  acc=0.7509 auc=0.8633 recall=0.7603 precision=0.7509 f1=0.7522 bacc=0.7509 specificity=0.8754 kappa=0.6263 gmean=0.8159 mcc=0.6295  time=720s
+no_fea       AC s 3407 ov=[--use_fea_net 0]  per-epoch EMA ep1:e=0.6810 ep2:e=0.7097 ep3:e=0.7330 ep4:e=0.7366 ep5:e=0.7366 ep6:e=0.7312 ep7:e=0.7276 ep8:e=0.7168 ep9:e=0.7168 ep10:e=0.7151 ep11:e=0.7240 ep12:e=0.7455 ep13:e=0.7545 ep14:e=0.7527 ep15:e=0.7509
+no_em        AC s   42 ov=[--lambda_em 0]  EMA第15轮acc=0.8172  acc=0.8172 auc=0.9439 recall=0.8323 precision=0.8172 f1=0.8176 bacc=0.8172 specificity=0.9086 kappa=0.7258 gmean=0.8696 mcc=0.7312  time=807s
+no_em        AC s   42 ov=[--lambda_em 0]  per-epoch EMA ep1:e=0.7599 ep2:e=0.7724 ep3:e=0.7993 ep4:e=0.8136 ep5:e=0.8190 ep6:e=0.8136 ep7:e=0.8190 ep8:e=0.8190 ep9:e=0.8154 ep10:e=0.8172 ep11:e=0.8154 ep12:e=0.8208 ep13:e=0.8244 ep14:e=0.8208 ep15:e=0.8172
+no_em        AC s  123 ov=[--lambda_em 0]  EMA第15轮acc=0.5968  acc=0.5968 auc=0.9497 recall=0.4842 precision=0.5968 f1=0.5020 bacc=0.5968 specificity=0.7984 kappa=0.3952 gmean=0.6217 mcc=0.5179  time=807s
+no_em        AC s  123 ov=[--lambda_em 0]  per-epoch EMA ep1:e=0.7724 ep2:e=0.7814 ep3:e=0.7849 ep4:e=0.7921 ep5:e=0.8065 ep6:e=0.8190 ep7:e=0.8190 ep8:e=0.8047 ep9:e=0.7975 ep10:e=0.7724 ep11:e=0.7419 ep12:e=0.7025 ep13:e=0.6595 ep14:e=0.6129 ep15:e=0.5968
+no_em        AC s  777 ov=[--lambda_em 0]  EMA第15轮acc=0.3513  acc=0.3513 auc=0.7612 recall=0.4465 precision=0.3513 f1=0.2030 bacc=0.3513 specificity=0.6756 kappa=0.0269 gmean=0.5492 mcc=0.1170  time=830s
+no_em        AC s  777 ov=[--lambda_em 0]  per-epoch EMA ep1:e=0.7312 ep2:e=0.7348 ep3:e=0.7401 ep4:e=0.7473 ep5:e=0.7527 ep6:e=0.7491 ep7:e=0.7491 ep8:e=0.7348 ep9:e=0.7151 ep10:e=0.6828 ep11:e=0.6523 ep12:e=0.5986 ep13:e=0.4946 ep14:e=0.3835 ep15:e=0.3513
+no_em        AC s 2024 ov=[--lambda_em 0]  EMA第15轮acc=0.7115  acc=0.7115 auc=0.8819 recall=0.7558 precision=0.7115 f1=0.7058 bacc=0.7115 specificity=0.8557 kappa=0.5672 gmean=0.8042 mcc=0.5836  time=824s
+no_em        AC s 2024 ov=[--lambda_em 0]  per-epoch EMA ep1:e=0.7186 ep2:e=0.7168 ep3:e=0.7312 ep4:e=0.7276 ep5:e=0.7276 ep6:e=0.7222 ep7:e=0.7222 ep8:e=0.7168 ep9:e=0.7186 ep10:e=0.7204 ep11:e=0.7222 ep12:e=0.7186 ep13:e=0.7168 ep14:e=0.7168 ep15:e=0.7115
+no_em        AC s 3407 ov=[--lambda_em 0]  EMA第15轮acc=0.6147  acc=0.6147 auc=0.8938 recall=0.7972 precision=0.6147 f1=0.5356 bacc=0.6147 specificity=0.8073 kappa=0.4220 gmean=0.8022 mcc=0.5199  time=822s
+no_em        AC s 3407 ov=[--lambda_em 0]  per-epoch EMA ep1:e=0.7294 ep2:e=0.7222 ep3:e=0.7294 ep4:e=0.7330 ep5:e=0.7491 ep6:e=0.7509 ep7:e=0.7491 ep8:e=0.7563 ep9:e=0.7599 ep10:e=0.7509 ep11:e=0.7366 ep12:e=0.7115 ep13:e=0.6774 ep14:e=0.6380 ep15:e=0.6147
+no_ll        AC s   42 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  EMA第15轮acc=0.7276  acc=0.7276 auc=0.8037 recall=0.7640 precision=0.7276 f1=0.7297 bacc=0.7276 specificity=0.8638 kappa=0.5914 gmean=0.8124 mcc=0.6067  time=700s
+no_ll        AC s   42 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  per-epoch EMA ep1:e=0.7527 ep2:e=0.7545 ep3:e=0.7581 ep4:e=0.7760 ep5:e=0.8011 ep6:e=0.8100 ep7:e=0.8136 ep8:e=0.8047 ep9:e=0.8136 ep10:e=0.8011 ep11:e=0.7742 ep12:e=0.7706 ep13:e=0.7742 ep14:e=0.7330 ep15:e=0.7276
+no_ll        AC s  123 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  EMA第15轮acc=0.7652  acc=0.7652 auc=0.8418 recall=0.7946 precision=0.7652 f1=0.7685 bacc=0.7652 specificity=0.8826 kappa=0.6478 gmean=0.8374 mcc=0.6588  time=697s
+no_ll        AC s  123 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  per-epoch EMA ep1:e=0.7491 ep2:e=0.7581 ep3:e=0.7706 ep4:e=0.7903 ep5:e=0.7814 ep6:e=0.7796 ep7:e=0.7634 ep8:e=0.7491 ep9:e=0.7491 ep10:e=0.7652 ep11:e=0.7796 ep12:e=0.7760 ep13:e=0.7706 ep14:e=0.7760 ep15:e=0.7652
+no_ll        AC s  777 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  EMA第15轮acc=0.8423  acc=0.8423 auc=0.9058 recall=0.8454 precision=0.8423 f1=0.8421 bacc=0.8423 specificity=0.9211 kappa=0.7634 gmean=0.8825 mcc=0.7651  time=709s
+no_ll        AC s  777 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  per-epoch EMA ep1:e=0.7240 ep2:e=0.7384 ep3:e=0.7366 ep4:e=0.7455 ep5:e=0.7581 ep6:e=0.7778 ep7:e=0.7975 ep8:e=0.8065 ep9:e=0.8118 ep10:e=0.8172 ep11:e=0.8333 ep12:e=0.8315 ep13:e=0.8297 ep14:e=0.8459 ep15:e=0.8423
+no_ll        AC s 2024 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  EMA第15轮acc=0.7939  acc=0.7939 auc=0.8752 recall=0.8086 precision=0.7939 f1=0.7967 bacc=0.7939 specificity=0.8970 kappa=0.6909 gmean=0.8517 mcc=0.6944  time=699s
+no_ll        AC s 2024 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  per-epoch EMA ep1:e=0.7294 ep2:e=0.7563 ep3:e=0.7832 ep4:e=0.7993 ep5:e=0.8047 ep6:e=0.8100 ep7:e=0.8118 ep8:e=0.8047 ep9:e=0.8082 ep10:e=0.7778 ep11:e=0.7760 ep12:e=0.7849 ep13:e=0.7957 ep14:e=0.8082 ep15:e=0.7939
+no_ll        AC s 3407 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  EMA第15轮acc=0.8029  acc=0.8029 auc=0.8770 recall=0.8072 precision=0.8029 f1=0.8032 bacc=0.8029 specificity=0.9014 kappa=0.7043 gmean=0.8530 mcc=0.7061  time=680s
+no_ll        AC s 3407 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  per-epoch EMA ep1:e=0.7437 ep2:e=0.7652 ep3:e=0.7616 ep4:e=0.7634 ep5:e=0.7527 ep6:e=0.7688 ep7:e=0.7849 ep8:e=0.7832 ep9:e=0.7885 ep10:e=0.7939 ep11:e=0.7867 ep12:e=0.7849 ep13:e=0.7993 ep14:e=0.8029 ep15:e=0.8029
+no_caco      AC s   42 ov=[--lambda_caco 0]  EMA第15轮acc=0.8244  acc=0.8244 auc=0.9040 recall=0.8319 precision=0.8244 f1=0.8260 bacc=0.8244 specificity=0.9122 kappa=0.7366 gmean=0.8711 mcc=0.7383  time=811s
+no_caco      AC s   42 ov=[--lambda_caco 0]  per-epoch EMA ep1:e=0.7760 ep2:e=0.7903 ep3:e=0.7975 ep4:e=0.8280 ep5:e=0.8333 ep6:e=0.8244 ep7:e=0.8280 ep8:e=0.8244 ep9:e=0.8315 ep10:e=0.8351 ep11:e=0.8387 ep12:e=0.8441 ep13:e=0.8369 ep14:e=0.8226 ep15:e=0.8244
+no_caco      AC s  123 ov=[--lambda_caco 0]  EMA第15轮acc=0.8728  acc=0.8728 auc=0.9443 recall=0.8901 precision=0.8728 f1=0.8744 bacc=0.8728 specificity=0.9364 kappa=0.8091 gmean=0.9130 mcc=0.8163  time=824s
+no_caco      AC s  123 ov=[--lambda_caco 0]  per-epoch EMA ep1:e=0.8136 ep2:e=0.8387 ep3:e=0.8459 ep4:e=0.8584 ep5:e=0.8674 ep6:e=0.8638 ep7:e=0.8692 ep8:e=0.8477 ep9:e=0.8692 ep10:e=0.8656 ep11:e=0.8620 ep12:e=0.8602 ep13:e=0.8799 ep14:e=0.8871 ep15:e=0.8728
+no_caco      AC s  777 ov=[--lambda_caco 0]  EMA第15轮acc=0.8996  acc=0.8996 auc=0.9497 recall=0.9019 precision=0.8996 f1=0.8999 bacc=0.8996 specificity=0.9498 kappa=0.8495 gmean=0.9256 mcc=0.8503  time=802s
+no_caco      AC s  777 ov=[--lambda_caco 0]  per-epoch EMA ep1:e=0.7616 ep2:e=0.8280 ep3:e=0.8495 ep4:e=0.8620 ep5:e=0.8710 ep6:e=0.8638 ep7:e=0.8548 ep8:e=0.8692 ep9:e=0.8728 ep10:e=0.8925 ep11:e=0.8943 ep12:e=0.8907 ep13:e=0.8889 ep14:e=0.8907 ep15:e=0.8996
+no_caco      AC s 2024 ov=[--lambda_caco 0]  EMA第15轮acc=0.8513  acc=0.8513 auc=0.9295 recall=0.8747 precision=0.8513 f1=0.8535 bacc=0.8513 specificity=0.9256 kappa=0.7769 gmean=0.8998 mcc=0.7864  time=813s
+no_caco      AC s 2024 ov=[--lambda_caco 0]  per-epoch EMA ep1:e=0.7294 ep2:e=0.7563 ep3:e=0.7724 ep4:e=0.7778 ep5:e=0.8029 ep6:e=0.8136 ep7:e=0.8065 ep8:e=0.8136 ep9:e=0.8297 ep10:e=0.8405 ep11:e=0.8280 ep12:e=0.8297 ep13:e=0.8082 ep14:e=0.8333 ep15:e=0.8513
+no_caco      AC s 3407 ov=[--lambda_caco 0]  EMA第15轮acc=0.9014  acc=0.9014 auc=0.9613 recall=0.9056 precision=0.9014 f1=0.9010 bacc=0.9014 specificity=0.9507 kappa=0.8522 gmean=0.9279 mcc=0.8544  time=818s
+no_caco      AC s 3407 ov=[--lambda_caco 0]  per-epoch EMA ep1:e=0.7491 ep2:e=0.7670 ep3:e=0.8136 ep4:e=0.8280 ep5:e=0.8405 ep6:e=0.8351 ep7:e=0.8405 ep8:e=0.8566 ep9:e=0.8710 ep10:e=0.8853 ep11:e=0.8853 ep12:e=0.8925 ep13:e=0.8925 ep14:e=0.9050 ep15:e=0.9014
+no_scon      AC s   42 ov=[--alpha_scon 0]  EMA第15轮acc=0.8978  acc=0.8978 auc=0.9645 recall=0.8990 precision=0.8978 f1=0.8981 bacc=0.8978 specificity=0.9489 kappa=0.8468 gmean=0.9236 mcc=0.8471  time=814s
+no_scon      AC s   42 ov=[--alpha_scon 0]  per-epoch EMA ep1:e=0.7652 ep2:e=0.7832 ep3:e=0.8118 ep4:e=0.8244 ep5:e=0.8423 ep6:e=0.8620 ep7:e=0.8620 ep8:e=0.8710 ep9:e=0.8763 ep10:e=0.8835 ep11:e=0.8871 ep12:e=0.8996 ep13:e=0.8907 ep14:e=0.8943 ep15:e=0.8978
+no_scon      AC s  123 ov=[--alpha_scon 0]  EMA第15轮acc=0.8297  acc=0.8297 auc=0.9313 recall=0.8567 precision=0.8297 f1=0.8327 bacc=0.8297 specificity=0.9149 kappa=0.7446 gmean=0.8853 mcc=0.7550  time=817s
+no_scon      AC s  123 ov=[--alpha_scon 0]  per-epoch EMA ep1:e=0.7975 ep2:e=0.8244 ep3:e=0.8315 ep4:e=0.8387 ep5:e=0.8315 ep6:e=0.8351 ep7:e=0.8280 ep8:e=0.8226 ep9:e=0.8172 ep10:e=0.8244 ep11:e=0.8280 ep12:e=0.8333 ep13:e=0.8459 ep14:e=0.8405 ep15:e=0.8297
+no_scon      AC s  777 ov=[--alpha_scon 0]  EMA第15轮acc=0.8548  acc=0.8548 auc=0.9496 recall=0.8624 precision=0.8548 f1=0.8552 bacc=0.8548 specificity=0.9274 kappa=0.7823 gmean=0.8943 mcc=0.7856  time=809s
+no_scon      AC s  777 ov=[--alpha_scon 0]  per-epoch EMA ep1:e=0.7634 ep2:e=0.7921 ep3:e=0.8405 ep4:e=0.8548 ep5:e=0.8817 ep6:e=0.8853 ep7:e=0.8961 ep8:e=0.8817 ep9:e=0.8620 ep10:e=0.8638 ep11:e=0.8638 ep12:e=0.8566 ep13:e=0.8405 ep14:e=0.8602 ep15:e=0.8548
+no_scon      AC s 2024 ov=[--alpha_scon 0]  EMA第15轮acc=0.7975  acc=0.7975 auc=0.9119 recall=0.8224 precision=0.7975 f1=0.8007 bacc=0.7975 specificity=0.8987 kappa=0.6962 gmean=0.8598 mcc=0.7055  time=807s
+no_scon      AC s 2024 ov=[--alpha_scon 0]  per-epoch EMA ep1:e=0.7222 ep2:e=0.7401 ep3:e=0.7491 ep4:e=0.7545 ep5:e=0.7563 ep6:e=0.7616 ep7:e=0.7616 ep8:e=0.7760 ep9:e=0.7724 ep10:e=0.7599 ep11:e=0.7778 ep12:e=0.7885 ep13:e=0.7975 ep14:e=0.8029 ep15:e=0.7975
+no_scon      AC s 3407 ov=[--alpha_scon 0]  EMA第15轮acc=0.8136  acc=0.8136 auc=0.9253 recall=0.8307 precision=0.8136 f1=0.8132 bacc=0.8136 specificity=0.9068 kappa=0.7204 gmean=0.8679 mcc=0.7285  time=810s
+no_scon      AC s 3407 ov=[--alpha_scon 0]  per-epoch EMA ep1:e=0.7455 ep2:e=0.7527 ep3:e=0.7724 ep4:e=0.8011 ep5:e=0.8100 ep6:e=0.8082 ep7:e=0.8118 ep8:e=0.8226 ep9:e=0.8351 ep10:e=0.8495 ep11:e=0.8297 ep12:e=0.8262 ep13:e=0.8190 ep14:e=0.8244 ep15:e=0.8136
+no_ang       AC s   42 ov=[--lambda_batch_ang 0]  EMA第15轮acc=0.8100  acc=0.8100 auc=0.8921 recall=0.8191 precision=0.8100 f1=0.8115 bacc=0.8100 specificity=0.9050 kappa=0.7151 gmean=0.8610 mcc=0.7181  time=815s
+no_ang       AC s   42 ov=[--lambda_batch_ang 0]  per-epoch EMA ep1:e=0.7760 ep2:e=0.7921 ep3:e=0.8011 ep4:e=0.8369 ep5:e=0.8495 ep6:e=0.8513 ep7:e=0.8513 ep8:e=0.8441 ep9:e=0.8369 ep10:e=0.8262 ep11:e=0.8082 ep12:e=0.8047 ep13:e=0.7957 ep14:e=0.8047 ep15:e=0.8100
+no_ang       AC s  123 ov=[--lambda_batch_ang 0]  EMA第15轮acc=0.8781  acc=0.8781 auc=0.9440 recall=0.8964 precision=0.8781 f1=0.8803 bacc=0.8781 specificity=0.9391 kappa=0.8172 gmean=0.9175 mcc=0.8244  time=808s
+no_ang       AC s  123 ov=[--lambda_batch_ang 0]  per-epoch EMA ep1:e=0.8154 ep2:e=0.8387 ep3:e=0.8495 ep4:e=0.8620 ep5:e=0.8746 ep6:e=0.8853 ep7:e=0.8907 ep8:e=0.8978 ep9:e=0.8943 ep10:e=0.8943 ep11:e=0.8907 ep12:e=0.8889 ep13:e=0.8853 ep14:e=0.8799 ep15:e=0.8781
+no_ang       AC s  777 ov=[--lambda_batch_ang 0]  EMA第15轮acc=0.8835  acc=0.8835 auc=0.9489 recall=0.8895 precision=0.8835 f1=0.8842 bacc=0.8835 specificity=0.9418 kappa=0.8253 gmean=0.9153 mcc=0.8273  time=801s
+no_ang       AC s  777 ov=[--lambda_batch_ang 0]  per-epoch EMA ep1:e=0.7616 ep2:e=0.8244 ep3:e=0.8495 ep4:e=0.8692 ep5:e=0.8728 ep6:e=0.8853 ep7:e=0.8925 ep8:e=0.8996 ep9:e=0.8925 ep10:e=0.9014 ep11:e=0.8978 ep12:e=0.9014 ep13:e=0.8961 ep14:e=0.8925 ep15:e=0.8835
+no_ang       AC s 2024 ov=[--lambda_batch_ang 0]  EMA第15轮acc=0.8548  acc=0.8548 auc=0.9338 recall=0.8718 precision=0.8548 f1=0.8570 bacc=0.8548 specificity=0.9274 kappa=0.7823 gmean=0.8992 mcc=0.7887  time=801s
+no_ang       AC s 2024 ov=[--lambda_batch_ang 0]  per-epoch EMA ep1:e=0.7312 ep2:e=0.7581 ep3:e=0.7814 ep4:e=0.7778 ep5:e=0.7993 ep6:e=0.8029 ep7:e=0.8065 ep8:e=0.8315 ep9:e=0.8333 ep10:e=0.8280 ep11:e=0.8351 ep12:e=0.8477 ep13:e=0.8477 ep14:e=0.8566 ep15:e=0.8548
+no_ang       AC s 3407 ov=[--lambda_batch_ang 0]  EMA第15轮acc=0.8566  acc=0.8566 auc=0.9224 recall=0.8685 precision=0.8566 f1=0.8567 bacc=0.8566 specificity=0.9283 kappa=0.7849 gmean=0.8979 mcc=0.7907  time=808s
+no_ang       AC s 3407 ov=[--lambda_batch_ang 0]  per-epoch EMA ep1:e=0.7509 ep2:e=0.7616 ep3:e=0.8154 ep4:e=0.8244 ep5:e=0.8351 ep6:e=0.8387 ep7:e=0.8423 ep8:e=0.8441 ep9:e=0.8513 ep10:e=0.8566 ep11:e=0.8513 ep12:e=0.8405 ep13:e=0.8405 ep14:e=0.8513 ep15:e=0.8566
+no_ema       AC s   42 ov=[--ema_guide_caco 0]  EMA=NA(日志无ema_acc)  time=744s
+no_ema       AC s  123 ov=[--ema_guide_caco 0]  EMA=NA(日志无ema_acc)  time=748s
+no_ema       AC s  777 ov=[--ema_guide_caco 0]  EMA=NA(日志无ema_acc)  time=744s
+no_ema       AC s 2024 ov=[--ema_guide_caco 0]  EMA=NA(日志无ema_acc)  time=748s
+no_ema       AC s 3407 ov=[--ema_guide_caco 0]  EMA=NA(日志无ema_acc)  time=762s
+no_src       AC s   42 ov=[--lambda_src 0]  EMA第15轮acc=0.8996  acc=0.8996 auc=0.9568 recall=0.9011 precision=0.8996 f1=0.8999 bacc=0.8996 specificity=0.9498 kappa=0.8495 gmean=0.9251 mcc=0.8499  time=819s
+no_src       AC s   42 ov=[--lambda_src 0]  per-epoch EMA ep1:e=0.7760 ep2:e=0.7885 ep3:e=0.8029 ep4:e=0.8280 ep5:e=0.8566 ep6:e=0.8620 ep7:e=0.8530 ep8:e=0.8548 ep9:e=0.8441 ep10:e=0.8477 ep11:e=0.8584 ep12:e=0.8710 ep13:e=0.8907 ep14:e=0.8925 ep15:e=0.8996
+no_src       AC s  123 ov=[--lambda_src 0]  EMA第15轮acc=0.9068  acc=0.9068 auc=0.9569 recall=0.9106 precision=0.9068 f1=0.9075 bacc=0.9068 specificity=0.9534 kappa=0.8602 gmean=0.9318 mcc=0.8615  time=831s
+no_src       AC s  123 ov=[--lambda_src 0]  per-epoch EMA ep1:e=0.8136 ep2:e=0.8387 ep3:e=0.8477 ep4:e=0.8620 ep5:e=0.8710 ep6:e=0.8871 ep7:e=0.8925 ep8:e=0.9014 ep9:e=0.8978 ep10:e=0.9050 ep11:e=0.8961 ep12:e=0.8996 ep13:e=0.8943 ep14:e=0.8961 ep15:e=0.9068
+no_src       AC s  777 ov=[--lambda_src 0]  EMA第15轮acc=0.8925  acc=0.8925 auc=0.9513 recall=0.9039 precision=0.8925 f1=0.8937 bacc=0.8925 specificity=0.9462 kappa=0.8387 gmean=0.9248 mcc=0.8434  time=819s
+no_src       AC s  777 ov=[--lambda_src 0]  per-epoch EMA ep1:e=0.7599 ep2:e=0.8244 ep3:e=0.8548 ep4:e=0.8656 ep5:e=0.8746 ep6:e=0.8817 ep7:e=0.8889 ep8:e=0.8925 ep9:e=0.8710 ep10:e=0.8513 ep11:e=0.8477 ep12:e=0.8513 ep13:e=0.8566 ep14:e=0.8943 ep15:e=0.8925
+no_src       AC s 2024 ov=[--lambda_src 0]  EMA第15轮acc=0.8100  acc=0.8100 auc=0.8993 recall=0.8414 precision=0.8100 f1=0.8073 bacc=0.8100 specificity=0.9050 kappa=0.7151 gmean=0.8726 mcc=0.7298  time=810s
+no_src       AC s 2024 ov=[--lambda_src 0]  per-epoch EMA ep1:e=0.7294 ep2:e=0.7545 ep3:e=0.7760 ep4:e=0.7867 ep5:e=0.8065 ep6:e=0.8280 ep7:e=0.8387 ep8:e=0.8369 ep9:e=0.8387 ep10:e=0.8369 ep11:e=0.8351 ep12:e=0.8548 ep13:e=0.8459 ep14:e=0.8011 ep15:e=0.8100
+no_src       AC s 3407 ov=[--lambda_src 0]  EMA第15轮acc=0.8369  acc=0.8369 auc=0.8944 recall=0.8513 precision=0.8369 f1=0.8371 bacc=0.8369 specificity=0.9185 kappa=0.7554 gmean=0.8842 mcc=0.7622  time=816s
+no_src       AC s 3407 ov=[--lambda_src 0]  per-epoch EMA ep1:e=0.7509 ep2:e=0.7688 ep3:e=0.8190 ep4:e=0.8208 ep5:e=0.8387 ep6:e=0.8459 ep7:e=0.8423 ep8:e=0.8513 ep9:e=0.8369 ep10:e=0.8315 ep11:e=0.8495 ep12:e=0.8495 ep13:e=0.8405 ep14:e=0.8548 ep15:e=0.8369
+no_fea       BC s   42 ov=[--use_fea_net 0]  EMA第15轮acc=0.9373  acc=0.9373 auc=0.9609 recall=0.9400 precision=0.9373 f1=0.9376 bacc=0.9373 specificity=0.9686 kappa=0.9059 gmean=0.9542 mcc=0.9069  time=803s
+no_fea       BC s   42 ov=[--use_fea_net 0]  per-epoch EMA ep1:e=0.8244 ep2:e=0.8763 ep3:e=0.9032 ep4:e=0.9068 ep5:e=0.9104 ep6:e=0.9104 ep7:e=0.9140 ep8:e=0.9319 ep9:e=0.9355 ep10:e=0.9337 ep11:e=0.9337 ep12:e=0.9283 ep13:e=0.9337 ep14:e=0.9337 ep15:e=0.9373
+no_fea       BC s  123 ov=[--use_fea_net 0]  EMA第15轮acc=0.9176  acc=0.9176 auc=0.9531 recall=0.9205 precision=0.9176 f1=0.9171 bacc=0.9176 specificity=0.9588 kappa=0.8763 gmean=0.9394 mcc=0.8781  time=795s
+no_fea       BC s  123 ov=[--use_fea_net 0]  per-epoch EMA ep1:e=0.8315 ep2:e=0.8763 ep3:e=0.8978 ep4:e=0.9050 ep5:e=0.9104 ep6:e=0.9140 ep7:e=0.9194 ep8:e=0.9194 ep9:e=0.9211 ep10:e=0.9211 ep11:e=0.9211 ep12:e=0.9265 ep13:e=0.9301 ep14:e=0.9229 ep15:e=0.9176
+no_fea       BC s  777 ov=[--use_fea_net 0]  EMA第15轮acc=0.9194  acc=0.9194 auc=0.9480 recall=0.9209 precision=0.9194 f1=0.9196 bacc=0.9194 specificity=0.9597 kappa=0.8790 gmean=0.9401 mcc=0.8796  time=813s
+no_fea       BC s  777 ov=[--use_fea_net 0]  per-epoch EMA ep1:e=0.8029 ep2:e=0.8584 ep3:e=0.8835 ep4:e=0.9050 ep5:e=0.9140 ep6:e=0.9229 ep7:e=0.9194 ep8:e=0.9068 ep9:e=0.9014 ep10:e=0.9050 ep11:e=0.9068 ep12:e=0.9176 ep13:e=0.9229 ep14:e=0.9229 ep15:e=0.9194
+no_fea       BC s 2024 ov=[--use_fea_net 0]  EMA第15轮acc=0.9211  acc=0.9211 auc=0.9693 recall=0.9232 precision=0.9211 f1=0.9215 bacc=0.9211 specificity=0.9606 kappa=0.8817 gmean=0.9417 mcc=0.8824  time=824s
+no_fea       BC s 2024 ov=[--use_fea_net 0]  per-epoch EMA ep1:e=0.8208 ep2:e=0.8799 ep3:e=0.9032 ep4:e=0.9104 ep5:e=0.9194 ep6:e=0.9211 ep7:e=0.9283 ep8:e=0.9337 ep9:e=0.9319 ep10:e=0.9301 ep11:e=0.9337 ep12:e=0.9283 ep13:e=0.9247 ep14:e=0.9247 ep15:e=0.9211
+no_fea       BC s 3407 ov=[--use_fea_net 0]  EMA第15轮acc=0.9104  acc=0.9104 auc=0.9510 recall=0.9175 precision=0.9104 f1=0.9106 bacc=0.9104 specificity=0.9552 kappa=0.8656 gmean=0.9362 mcc=0.8688  time=812s
+no_fea       BC s 3407 ov=[--use_fea_net 0]  per-epoch EMA ep1:e=0.7993 ep2:e=0.8638 ep3:e=0.8835 ep4:e=0.9014 ep5:e=0.9014 ep6:e=0.9050 ep7:e=0.9158 ep8:e=0.9176 ep9:e=0.9140 ep10:e=0.9086 ep11:e=0.9086 ep12:e=0.9194 ep13:e=0.9176 ep14:e=0.9158 ep15:e=0.9104
+no_em        BC s   42 ov=[--lambda_em 0]  EMA第15轮acc=0.6022  acc=0.6022 auc=0.9396 recall=0.4535 precision=0.6022 f1=0.4992 bacc=0.6022 specificity=0.8011 kappa=0.4032 gmean=0.6028 mcc=0.5010  time=933s
+no_em        BC s   42 ov=[--lambda_em 0]  per-epoch EMA ep1:e=0.7814 ep2:e=0.8190 ep3:e=0.7796 ep4:e=0.6918 ep5:e=0.6523 ep6:e=0.6201 ep7:e=0.6111 ep8:e=0.6039 ep9:e=0.6057 ep10:e=0.6039 ep11:e=0.6022 ep12:e=0.6004 ep13:e=0.6022 ep14:e=0.6022 ep15:e=0.6022
+no_em        BC s  123 ov=[--lambda_em 0]  EMA第15轮acc=0.6362  acc=0.6362 auc=0.7881 recall=0.4795 precision=0.6362 f1=0.5298 bacc=0.6362 specificity=0.8181 kappa=0.4543 gmean=0.6263 mcc=0.5603  time=923s
+no_em        BC s  123 ov=[--lambda_em 0]  per-epoch EMA ep1:e=0.7903 ep2:e=0.8208 ep3:e=0.8513 ep4:e=0.8548 ep5:e=0.7957 ep6:e=0.6613 ep7:e=0.6344 ep8:e=0.6254 ep9:e=0.6272 ep10:e=0.6290 ep11:e=0.6272 ep12:e=0.6326 ep13:e=0.6344 ep14:e=0.6344 ep15:e=0.6362
+no_em        BC s  777 ov=[--lambda_em 0]  EMA第15轮acc=0.3333  acc=0.3333 auc=0.5181 recall=0.1111 precision=0.3333 f1=0.1667 bacc=0.3333 specificity=0.6667 kappa=0.0000 gmean=0.2722 mcc=0.0000  time=916s
+no_em        BC s  777 ov=[--lambda_em 0]  per-epoch EMA ep1:e=0.7204 ep2:e=0.8047 ep3:e=0.8405 ep4:e=0.8477 ep5:e=0.8530 ep6:e=0.7222 ep7:e=0.6183 ep8:e=0.4803 ep9:e=0.3333 ep10:e=0.3351 ep11:e=0.3333 ep12:e=0.3333 ep13:e=0.3333 ep14:e=0.3333 ep15:e=0.3333
+no_em        BC s 2024 ov=[--lambda_em 0]  EMA第15轮acc=0.3333  acc=0.3333 auc=0.4982 recall=0.1111 precision=0.3333 f1=0.1667 bacc=0.3333 specificity=0.6667 kappa=0.0000 gmean=0.2722 mcc=0.0000  time=916s
+no_em        BC s 2024 ov=[--lambda_em 0]  per-epoch EMA ep1:e=0.7473 ep2:e=0.8315 ep3:e=0.8423 ep4:e=0.8602 ep5:e=0.8566 ep6:e=0.8459 ep7:e=0.8154 ep8:e=0.7437 ep9:e=0.5842 ep10:e=0.3351 ep11:e=0.3333 ep12:e=0.3333 ep13:e=0.3333 ep14:e=0.3333 ep15:e=0.3333
+no_em        BC s 3407 ov=[--lambda_em 0]  EMA第15轮acc=0.6237  acc=0.6237 auc=0.9515 recall=0.4641 precision=0.6237 f1=0.5162 bacc=0.6237 specificity=0.8118 kappa=0.4355 gmean=0.6138 mcc=0.5356  time=931s
+no_em        BC s 3407 ov=[--lambda_em 0]  per-epoch EMA ep1:e=0.7007 ep2:e=0.7832 ep3:e=0.8065 ep4:e=0.8047 ep5:e=0.7796 ep6:e=0.6971 ep7:e=0.6416 ep8:e=0.6237 ep9:e=0.6272 ep10:e=0.6290 ep11:e=0.6254 ep12:e=0.6272 ep13:e=0.6254 ep14:e=0.6219 ep15:e=0.6237
+no_ll        BC s   42 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  EMA第15轮acc=0.8943  acc=0.8943 auc=0.9165 recall=0.8965 precision=0.8943 f1=0.8945 bacc=0.8943 specificity=0.9471 kappa=0.8414 gmean=0.9215 mcc=0.8423  time=791s
+no_ll        BC s   42 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  per-epoch EMA ep1:e=0.8280 ep2:e=0.8620 ep3:e=0.8925 ep4:e=0.9104 ep5:e=0.9086 ep6:e=0.9014 ep7:e=0.8978 ep8:e=0.9050 ep9:e=0.9104 ep10:e=0.9104 ep11:e=0.9140 ep12:e=0.9104 ep13:e=0.8943 ep14:e=0.8978 ep15:e=0.8943
+no_ll        BC s  123 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  EMA第15轮acc=0.9122  acc=0.9122 auc=0.9418 recall=0.9176 precision=0.9122 f1=0.9128 bacc=0.9122 specificity=0.9561 kappa=0.8683 gmean=0.9367 mcc=0.8704  time=785s
+no_ll        BC s  123 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  per-epoch EMA ep1:e=0.7939 ep2:e=0.8405 ep3:e=0.8692 ep4:e=0.8996 ep5:e=0.8943 ep6:e=0.9086 ep7:e=0.9140 ep8:e=0.9122 ep9:e=0.9140 ep10:e=0.9140 ep11:e=0.9176 ep12:e=0.9104 ep13:e=0.9211 ep14:e=0.9158 ep15:e=0.9122
+no_ll        BC s  777 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  EMA第15轮acc=0.8889  acc=0.8889 auc=0.9245 recall=0.8952 precision=0.8889 f1=0.8899 bacc=0.8889 specificity=0.9444 kappa=0.8333 gmean=0.9195 mcc=0.8355  time=789s
+no_ll        BC s  777 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  per-epoch EMA ep1:e=0.7545 ep2:e=0.8172 ep3:e=0.8333 ep4:e=0.8369 ep5:e=0.8423 ep6:e=0.8477 ep7:e=0.8513 ep8:e=0.8548 ep9:e=0.8674 ep10:e=0.8817 ep11:e=0.8817 ep12:e=0.8907 ep13:e=0.8871 ep14:e=0.8871 ep15:e=0.8889
+no_ll        BC s 2024 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  EMA第15轮acc=0.9319  acc=0.9319 auc=0.9579 recall=0.9320 precision=0.9319 f1=0.9319 bacc=0.9319 specificity=0.9659 kappa=0.8978 gmean=0.9488 mcc=0.8979  time=820s
+no_ll        BC s 2024 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  per-epoch EMA ep1:e=0.7778 ep2:e=0.8781 ep3:e=0.9014 ep4:e=0.9158 ep5:e=0.9229 ep6:e=0.9301 ep7:e=0.9283 ep8:e=0.9283 ep9:e=0.9247 ep10:e=0.9265 ep11:e=0.9229 ep12:e=0.9229 ep13:e=0.9247 ep14:e=0.9283 ep15:e=0.9319
+no_ll        BC s 3407 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  EMA第15轮acc=0.8656  acc=0.8656 auc=0.8709 recall=0.8673 precision=0.8656 f1=0.8661 bacc=0.8656 specificity=0.9328 kappa=0.7984 gmean=0.8994 mcc=0.7987  time=796s
+no_ll        BC s 3407 ov=[--src_ll_aug 0 --scw_ll 0 --lambda_llinv 0]  per-epoch EMA ep1:e=0.7957 ep2:e=0.8710 ep3:e=0.8871 ep4:e=0.9014 ep5:e=0.8996 ep6:e=0.8961 ep7:e=0.8907 ep8:e=0.8871 ep9:e=0.8781 ep10:e=0.8835 ep11:e=0.8746 ep12:e=0.8799 ep13:e=0.8674 ep14:e=0.8710 ep15:e=0.8656
+no_caco      BC s   42 ov=[--lambda_caco 0]  EMA第15轮acc=0.9194  acc=0.9194 auc=0.9559 recall=0.9221 precision=0.9194 f1=0.9195 bacc=0.9194 specificity=0.9597 kappa=0.8790 gmean=0.9407 mcc=0.8802  time=915s
+no_caco      BC s   42 ov=[--lambda_caco 0]  per-epoch EMA ep1:e=0.8244 ep2:e=0.8728 ep3:e=0.8925 ep4:e=0.9086 ep5:e=0.9176 ep6:e=0.9158 ep7:e=0.9194 ep8:e=0.9140 ep9:e=0.9086 ep10:e=0.9122 ep11:e=0.9122 ep12:e=0.9014 ep13:e=0.9104 ep14:e=0.9122 ep15:e=0.9194
+no_caco      BC s  123 ov=[--lambda_caco 0]  EMA第15轮acc=0.9032  acc=0.9032 auc=0.9500 recall=0.9085 precision=0.9032 f1=0.9035 bacc=0.9032 specificity=0.9516 kappa=0.8548 gmean=0.9298 mcc=0.8570  time=919s
+no_caco      BC s  123 ov=[--lambda_caco 0]  per-epoch EMA ep1:e=0.8333 ep2:e=0.8871 ep3:e=0.9158 ep4:e=0.9194 ep5:e=0.9211 ep6:e=0.9211 ep7:e=0.9158 ep8:e=0.9158 ep9:e=0.9140 ep10:e=0.9176 ep11:e=0.9194 ep12:e=0.9229 ep13:e=0.9176 ep14:e=0.9086 ep15:e=0.9032
+no_caco      BC s  777 ov=[--lambda_caco 0]  EMA第15轮acc=0.9283  acc=0.9283 auc=0.9617 recall=0.9295 precision=0.9283 f1=0.9286 bacc=0.9283 specificity=0.9642 kappa=0.8925 gmean=0.9467 mcc=0.8927  time=928s
+no_caco      BC s  777 ov=[--lambda_caco 0]  per-epoch EMA ep1:e=0.7975 ep2:e=0.8889 ep3:e=0.9014 ep4:e=0.9032 ep5:e=0.9158 ep6:e=0.9247 ep7:e=0.9265 ep8:e=0.9140 ep9:e=0.9158 ep10:e=0.9140 ep11:e=0.9176 ep12:e=0.9158 ep13:e=0.9176 ep14:e=0.9211 ep15:e=0.9283
+no_caco      BC s 2024 ov=[--lambda_caco 0]  EMA第15轮acc=0.8835  acc=0.8835 auc=0.9311 recall=0.8996 precision=0.8835 f1=0.8841 bacc=0.8835 specificity=0.9418 kappa=0.8253 gmean=0.9204 mcc=0.8327  time=913s
+no_caco      BC s 2024 ov=[--lambda_caco 0]  per-epoch EMA ep1:e=0.7832 ep2:e=0.8387 ep3:e=0.8495 ep4:e=0.8656 ep5:e=0.8835 ep6:e=0.8943 ep7:e=0.9014 ep8:e=0.8978 ep9:e=0.8871 ep10:e=0.8853 ep11:e=0.8799 ep12:e=0.8817 ep13:e=0.8781 ep14:e=0.8817 ep15:e=0.8835
+no_caco      BC s 3407 ov=[--lambda_caco 0]  EMA第15轮acc=0.9247  acc=0.9247 auc=0.9683 recall=0.9257 precision=0.9247 f1=0.9249 bacc=0.9247 specificity=0.9624 kappa=0.8871 gmean=0.9439 mcc=0.8874  time=922s
+no_caco      BC s 3407 ov=[--lambda_caco 0]  per-epoch EMA ep1:e=0.7634 ep2:e=0.8584 ep3:e=0.8763 ep4:e=0.8943 ep5:e=0.9050 ep6:e=0.8996 ep7:e=0.9086 ep8:e=0.9104 ep9:e=0.9158 ep10:e=0.9140 ep11:e=0.9122 ep12:e=0.9211 ep13:e=0.9140 ep14:e=0.9265 ep15:e=0.9247
+no_scon      BC s   42 ov=[--alpha_scon 0]  EMA第15轮acc=0.8889  acc=0.8889 auc=0.9752 recall=0.8967 precision=0.8889 f1=0.8893 bacc=0.8889 specificity=0.9444 kappa=0.8333 gmean=0.9203 mcc=0.8368  time=924s
+no_scon      BC s   42 ov=[--alpha_scon 0]  per-epoch EMA ep1:e=0.8297 ep2:e=0.8763 ep3:e=0.8871 ep4:e=0.8961 ep5:e=0.8996 ep6:e=0.9086 ep7:e=0.9086 ep8:e=0.9122 ep9:e=0.9104 ep10:e=0.9050 ep11:e=0.9032 ep12:e=0.8978 ep13:e=0.8978 ep14:e=0.8996 ep15:e=0.8889
+no_scon      BC s  123 ov=[--alpha_scon 0]  EMA第15轮acc=0.8907  acc=0.8907 auc=0.9680 recall=0.9004 precision=0.8907 f1=0.8916 bacc=0.8907 specificity=0.9453 kappa=0.8360 gmean=0.9226 mcc=0.8401  time=926s
+no_scon      BC s  123 ov=[--alpha_scon 0]  per-epoch EMA ep1:e=0.8154 ep2:e=0.8387 ep3:e=0.8656 ep4:e=0.8692 ep5:e=0.8835 ep6:e=0.8925 ep7:e=0.8978 ep8:e=0.8925 ep9:e=0.9014 ep10:e=0.8996 ep11:e=0.9050 ep12:e=0.9014 ep13:e=0.9050 ep14:e=0.8978 ep15:e=0.8907
+no_scon      BC s  777 ov=[--alpha_scon 0]  EMA第15轮acc=0.8978  acc=0.8978 auc=0.9713 recall=0.9037 precision=0.8978 f1=0.8984 bacc=0.8978 specificity=0.9489 kappa=0.8468 gmean=0.9261 mcc=0.8490  time=927s
+no_scon      BC s  777 ov=[--alpha_scon 0]  per-epoch EMA ep1:e=0.8082 ep2:e=0.8871 ep3:e=0.9068 ep4:e=0.9050 ep5:e=0.9140 ep6:e=0.9140 ep7:e=0.9140 ep8:e=0.9140 ep9:e=0.9086 ep10:e=0.9086 ep11:e=0.9050 ep12:e=0.8961 ep13:e=0.9014 ep14:e=0.8996 ep15:e=0.8978
+no_scon      BC s 2024 ov=[--alpha_scon 0]  EMA第15轮acc=0.8584  acc=0.8584 auc=0.9570 recall=0.8722 precision=0.8584 f1=0.8582 bacc=0.8584 specificity=0.9292 kappa=0.7876 gmean=0.9003 mcc=0.7943  time=920s
+no_scon      BC s 2024 ov=[--alpha_scon 0]  per-epoch EMA ep1:e=0.8082 ep2:e=0.8423 ep3:e=0.8513 ep4:e=0.8620 ep5:e=0.8656 ep6:e=0.8710 ep7:e=0.8656 ep8:e=0.8692 ep9:e=0.8602 ep10:e=0.8692 ep11:e=0.8602 ep12:e=0.8566 ep13:e=0.8584 ep14:e=0.8584 ep15:e=0.8584
+no_scon      BC s 3407 ov=[--alpha_scon 0]  EMA第15轮acc=0.8620  acc=0.8620 auc=0.9562 recall=0.8769 precision=0.8620 f1=0.8629 bacc=0.8620 specificity=0.9310 kappa=0.7930 gmean=0.9036 mcc=0.7996  time=919s
+no_scon      BC s 3407 ov=[--alpha_scon 0]  per-epoch EMA ep1:e=0.7760 ep2:e=0.8280 ep3:e=0.8333 ep4:e=0.8548 ep5:e=0.8530 ep6:e=0.8548 ep7:e=0.8602 ep8:e=0.8566 ep9:e=0.8495 ep10:e=0.8441 ep11:e=0.8369 ep12:e=0.8315 ep13:e=0.8477 ep14:e=0.8638 ep15:e=0.8620
+no_ang       BC s   42 ov=[--lambda_batch_ang 0]  EMA第15轮acc=0.9104  acc=0.9104 auc=0.9545 recall=0.9174 precision=0.9104 f1=0.9113 bacc=0.9104 specificity=0.9552 kappa=0.8656 gmean=0.9361 mcc=0.8682  time=926s
+no_ang       BC s   42 ov=[--lambda_batch_ang 0]  per-epoch EMA ep1:e=0.8244 ep2:e=0.8763 ep3:e=0.8871 ep4:e=0.8943 ep5:e=0.9014 ep6:e=0.9050 ep7:e=0.9068 ep8:e=0.9068 ep9:e=0.9122 ep10:e=0.9086 ep11:e=0.9050 ep12:e=0.8996 ep13:e=0.8978 ep14:e=0.9068 ep15:e=0.9104
+no_ang       BC s  123 ov=[--lambda_batch_ang 0]  EMA第15轮acc=0.9104  acc=0.9104 auc=0.9615 recall=0.9166 precision=0.9104 f1=0.9101 bacc=0.9104 specificity=0.9552 kappa=0.8656 gmean=0.9357 mcc=0.8687  time=931s
+no_ang       BC s  123 ov=[--lambda_batch_ang 0]  per-epoch EMA ep1:e=0.8280 ep2:e=0.8728 ep3:e=0.9032 ep4:e=0.9104 ep5:e=0.9050 ep6:e=0.9068 ep7:e=0.9050 ep8:e=0.9194 ep9:e=0.9176 ep10:e=0.9140 ep11:e=0.9194 ep12:e=0.9211 ep13:e=0.9176 ep14:e=0.9176 ep15:e=0.9104
+no_ang       BC s  777 ov=[--lambda_batch_ang 0]  EMA第15轮acc=0.9265  acc=0.9265 auc=0.9641 recall=0.9298 precision=0.9265 f1=0.9270 bacc=0.9265 specificity=0.9633 kappa=0.8898 gmean=0.9464 mcc=0.8909  time=928s
+no_ang       BC s  777 ov=[--lambda_batch_ang 0]  per-epoch EMA ep1:e=0.8011 ep2:e=0.8817 ep3:e=0.8943 ep4:e=0.9032 ep5:e=0.9122 ep6:e=0.9194 ep7:e=0.9158 ep8:e=0.9194 ep9:e=0.9176 ep10:e=0.9158 ep11:e=0.9158 ep12:e=0.9086 ep13:e=0.9211 ep14:e=0.9176 ep15:e=0.9265
+no_ang       BC s 2024 ov=[--lambda_batch_ang 0]  EMA第15轮acc=0.8620  acc=0.8620 auc=0.9262 recall=0.8799 precision=0.8620 f1=0.8615 bacc=0.8620 specificity=0.9310 kappa=0.7930 gmean=0.9051 mcc=0.8022  time=937s
+no_ang       BC s 2024 ov=[--lambda_batch_ang 0]  per-epoch EMA ep1:e=0.7778 ep2:e=0.8333 ep3:e=0.8459 ep4:e=0.8584 ep5:e=0.8674 ep6:e=0.8674 ep7:e=0.8584 ep8:e=0.8513 ep9:e=0.8566 ep10:e=0.8674 ep11:e=0.8799 ep12:e=0.8799 ep13:e=0.8835 ep14:e=0.8781 ep15:e=0.8620
+no_ang       BC s 3407 ov=[--lambda_batch_ang 0]  EMA第15轮acc=0.9032  acc=0.9032 auc=0.9485 recall=0.9117 precision=0.9032 f1=0.9043 bacc=0.9032 specificity=0.9516 kappa=0.8548 gmean=0.9315 mcc=0.8581  time=932s
+no_ang       BC s 3407 ov=[--lambda_batch_ang 0]  per-epoch EMA ep1:e=0.7616 ep2:e=0.8423 ep3:e=0.8602 ep4:e=0.8763 ep5:e=0.8853 ep6:e=0.8835 ep7:e=0.8817 ep8:e=0.8817 ep9:e=0.8871 ep10:e=0.8907 ep11:e=0.8889 ep12:e=0.8978 ep13:e=0.9032 ep14:e=0.9014 ep15:e=0.9032
+no_ema       BC s   42 ov=[--ema_guide_caco 0]  EMA=NA(日志无ema_acc)  time=889s
+no_ema       BC s  123 ov=[--ema_guide_caco 0]  EMA=NA(日志无ema_acc)  time=861s
+no_ema       BC s  777 ov=[--ema_guide_caco 0]  EMA=NA(日志无ema_acc)  time=873s
+no_ema       BC s 2024 ov=[--ema_guide_caco 0]  EMA=NA(日志无ema_acc)  time=876s
+no_ema       BC s 3407 ov=[--ema_guide_caco 0]  EMA=NA(日志无ema_acc)  time=857s
+no_src       BC s   42 ov=[--lambda_src 0]  EMA第15轮acc=0.9301  acc=0.9301 auc=0.9667 recall=0.9319 precision=0.9301 f1=0.9301 bacc=0.9301 specificity=0.9651 kappa=0.8952 gmean=0.9483 mcc=0.8960  time=944s
+no_src       BC s   42 ov=[--lambda_src 0]  per-epoch EMA ep1:e=0.8244 ep2:e=0.8728 ep3:e=0.8925 ep4:e=0.9086 ep5:e=0.9194 ep6:e=0.9194 ep7:e=0.9229 ep8:e=0.9265 ep9:e=0.9229 ep10:e=0.9194 ep11:e=0.9211 ep12:e=0.9301 ep13:e=0.9265 ep14:e=0.9211 ep15:e=0.9301
+no_src       BC s  123 ov=[--lambda_src 0]  EMA第15轮acc=0.9283  acc=0.9283 auc=0.9684 recall=0.9298 precision=0.9283 f1=0.9283 bacc=0.9283 specificity=0.9642 kappa=0.8925 gmean=0.9468 mcc=0.8932  time=914s
+no_src       BC s  123 ov=[--lambda_src 0]  per-epoch EMA ep1:e=0.8333 ep2:e=0.8853 ep3:e=0.9122 ep4:e=0.9229 ep5:e=0.9158 ep6:e=0.9158 ep7:e=0.9104 ep8:e=0.9068 ep9:e=0.8978 ep10:e=0.9122 ep11:e=0.9176 ep12:e=0.9176 ep13:e=0.9247 ep14:e=0.9283 ep15:e=0.9283
+no_src       BC s  777 ov=[--lambda_src 0]  EMA第15轮acc=0.9301  acc=0.9301 auc=0.9671 recall=0.9354 precision=0.9301 f1=0.9305 bacc=0.9301 specificity=0.9651 kappa=0.8952 gmean=0.9501 mcc=0.8974  time=919s
+no_src       BC s  777 ov=[--lambda_src 0]  per-epoch EMA ep1:e=0.7957 ep2:e=0.8871 ep3:e=0.8996 ep4:e=0.9014 ep5:e=0.9068 ep6:e=0.9086 ep7:e=0.9194 ep8:e=0.9158 ep9:e=0.9211 ep10:e=0.9176 ep11:e=0.9086 ep12:e=0.9122 ep13:e=0.9122 ep14:e=0.9247 ep15:e=0.9301
+no_src       BC s 2024 ov=[--lambda_src 0]  EMA第15轮acc=0.9140  acc=0.9140 auc=0.9546 recall=0.9187 precision=0.9140 f1=0.9144 bacc=0.9140 specificity=0.9570 kappa=0.8710 gmean=0.9376 mcc=0.8729  time=918s
+no_src       BC s 2024 ov=[--lambda_src 0]  per-epoch EMA ep1:e=0.7832 ep2:e=0.8423 ep3:e=0.8477 ep4:e=0.8656 ep5:e=0.8871 ep6:e=0.8961 ep7:e=0.8799 ep8:e=0.8907 ep9:e=0.8889 ep10:e=0.8996 ep11:e=0.9050 ep12:e=0.9176 ep13:e=0.9194 ep14:e=0.9158 ep15:e=0.9140
+no_src       BC s 3407 ov=[--lambda_src 0]  EMA第15轮acc=0.8871  acc=0.8871 auc=0.9398 recall=0.8926 precision=0.8871 f1=0.8881 bacc=0.8871 specificity=0.9435 kappa=0.8306 gmean=0.9177 mcc=0.8323  time=910s
+no_src       BC s 3407 ov=[--lambda_src 0]  per-epoch EMA ep1:e=0.7634 ep2:e=0.8620 ep3:e=0.8763 ep4:e=0.8835 ep5:e=0.8961 ep6:e=0.9086 ep7:e=0.9068 ep8:e=0.9050 ep9:e=0.9068 ep10:e=0.9014 ep11:e=0.9104 ep12:e=0.8978 ep13:e=0.8817 ep14:e=0.8799 ep15:e=0.8871
+
+=== 汇总（末轮 EMA 教师 acc，5 种子 mean±std；FULL=主表 best）===
+方案         任务     acc mean±std Δ(pp) vs FULL n         
+# 任务 AB (BOE->TMI), FULL = 0.9558
+  no_fea     AB     0.9492±0.0205  -0.66  n=5
+  no_em      AB     0.4114±0.0648  -54.44  n=5
+  no_ll      AB     0.9320±0.0171  -2.38  n=5
+  no_caco    AB     0.9233±0.0329  -3.25  n=5
+  no_scon    AB     0.9151±0.0472  -4.07  n=5
+  no_ang     AB     0.9373±0.0090  -1.85  n=5
+  no_ema     AB     NA                    n=0
+  no_src     AB     0.9499±0.0081  -0.59  n=5
+# 任务 AC (BOE->CELL), FULL = 0.8774
+  no_fea     AC     0.8143±0.0440  -6.31  n=5
+  no_em      AC     0.6183±0.1732  -25.91  n=5
+  no_ll      AC     0.7864±0.0429  -9.10  n=5
+  no_caco    AC     0.8699±0.0328  -0.75  n=5
+  no_scon    AC     0.8387±0.0392  -3.87  n=5
+  no_ang     AC     0.8566±0.0290  -2.08  n=5
+  no_ema     AC     NA                    n=0
+  no_src     AC     0.8692±0.0431  -0.82  n=5
+# 任务 BC (TMI->CELL), FULL = 0.9212
+  no_fea     BC     0.9212±0.0099  -0.00  n=5
+  no_em      BC     0.5057±0.1579  -41.55  n=5
+  no_ll      BC     0.8986±0.0250  -2.26  n=5
+  no_caco    BC     0.9118±0.0185  -0.94  n=5
+  no_scon    BC     0.8796±0.0180  -4.16  n=5
+  no_ang     BC     0.9025±0.0242  -1.87  n=5
+  no_ema     BC     NA                    n=0
+  no_src     BC     0.9179±0.0185  -0.33  n=5
+# 三任务删除式消融结束 2026-08-11 19:56:27

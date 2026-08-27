@@ -1,0 +1,3 @@
+
+Training: val, Task: BT, Accuracy = 32.36%
+Training: val, Task: BC, Accuracy = 36.09%

@@ -1,0 +1,39 @@
+# FEA-Net 结果导出 (result log)
+mode=improved
+task=BOE->CELL
+iter=1
+seed=2024
+save_dir=./saves/FEANet_BOE_to_CELL_iter1
+cmd=main.py --only BOE->CELL -es 4 -et 15 --seed 2024 -i 1 --cell_split CELL_split_2025 --save_result_txt 1 --lambda_caco 0.01 --lambda_batch_ang 0.001 --alpha_scon 0.01
+final_metric=EMA
+
+== per-epoch acc ==
+epoch,student,ema
+1,0.747312,0.729391
+2,0.779570,0.752688
+3,0.793907,0.781362
+4,0.799283,0.784946
+5,0.797491,0.804659
+6,0.802867,0.826165
+7,0.817204,0.818996
+8,0.836918,0.829749
+9,0.854839,0.860215
+10,0.827957,0.862007
+11,0.842294,0.854839
+12,0.844086,0.858423
+13,0.835125,0.854839
+14,0.802867,0.845878
+15,0.842294,0.840502
+
+== final metrics (EMA) ==
+acc=0.840502
+auc=0.913273
+recall=0.854295
+precision=0.840502
+f1=0.842821
+bacc=0.840502
+specificity=0.920251
+kappa=0.760753
+gmean=0.886660
+mcc=0.765036
+source_final_acc=0.995434

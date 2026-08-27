@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/_ref_oct_dda" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ai_skills/Supervisor-Skills" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ai_skills/academic-humanizer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ai_skills/paperjury" vcs="Git" />
+  </component>
+</project>

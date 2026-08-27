@@ -1,0 +1,32 @@
+# FEA-Net 结果导出 (result log)
+mode=improved
+task=BOE->TMI
+iter=1
+seed=3407
+save_dir=./saves/FEANet_BOE_to_TMI_iter1
+cmd=main.py --only BOE->TMI -es 5 -et 8 --seed 3407 -i 1 --cell_split CELL_split_2025 --save_result_txt 1 --src_ll_prob 0.7 --src_ll_alpha 2.0
+final_metric=EMA
+
+== per-epoch acc ==
+epoch,student,ema
+1,0.915033,0.882353
+2,0.940087,0.927015
+3,0.930283,0.933551
+4,0.922658,0.941176
+5,0.933551,0.954248
+6,0.936819,0.947712
+7,0.944444,0.953159
+8,0.955338,0.967320
+
+== final metrics (EMA) ==
+acc=0.967320
+auc=0.984242
+recall=0.969381
+precision=0.968963
+f1=0.969142
+bacc=0.968963
+specificity=0.982368
+kappa=0.948964
+gmean=0.975853
+mcc=0.949008
+source_final_acc=0.986301

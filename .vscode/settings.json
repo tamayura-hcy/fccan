@@ -1,0 +1,38 @@
+{
+    "github.copilot.chat.models": [
+        {
+            "name": "DeepSeek",
+            "vendor": "deepseek",
+            "settings": {
+                "deepseek-v4-pro": {
+                    "reasoningEffort": "max"
+                }
+            }
+        }
+    ],
+    "oaicopilot.baseUrl": "https://api.moonshot.cn/v1",
+    "oaicopilot.models": [
+        {
+            "id": "kimi-k3",
+            "owned_by": "moonshot",
+            "family": "oai-compatible",
+            "context_length": 131072,
+            "vision": true,
+            "max_tokens": 8192,
+            "reasoning_effort": "max",
+            "enable_thinking": true
+        },
+        {
+            "id": "glm-5.2",
+            "owned_by": "zhipu",
+            "family": "oai-compatible",
+            "context_length": 131072,
+            "vision": true,
+            "max_tokens": 8192,
+            "baseUrl": "https://open.bigmodel.cn/api/paas/v4",
+            "apiKey": "11198fe7d8f14a8b8ed558635e5bb53a.zXhWYEFHatuXFFod"
+        }
+    ],
+    "python-envs.defaultEnvManager": "ms-python.python:system"
+}
+

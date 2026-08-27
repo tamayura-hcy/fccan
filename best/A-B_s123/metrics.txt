@@ -1,0 +1,11 @@
+task=A-B seed=123  final metrics (2026-08-10 07:13:20)
+  acc          0.9499
+  auc          0.9852
+  recall       0.9441
+  precision    0.9558
+  f1           0.9493
+  bacc         0.9558
+  specificity  0.9749
+  kappa        0.9222
+  gmean        0.9594
+  mcc          0.9226

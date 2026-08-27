@@ -1,0 +1,39 @@
+==========================================
+gpu_id:0
+s:0
+t:1
+max_epoch:1
+batch_size:64
+worker:4
+dset:oct
+lr:0.001
+net:resnet50
+seed:42
+bottleneck:256
+epsilon:1e-05
+layer:wn
+classifier:bn
+smooth:0.1
+output:experiments/OCT/source
+da:uda
+trte:val
+class_num:3
+s_dset_path:./data/oct/BOE_list.txt
+test_dset_path:./data/oct/TMI_list.txt
+output_dir_src:experiments/OCT/source\uda\oct\B
+name_src:B
+out_file:<_io.TextIOWrapper name='experiments/OCT/source\\uda\\oct\\B\\log.txt' mode='w' encoding='cp65001'>
+
+Task: B, Iter:3/37; Accuracy = 23.64%
+Task: B, Iter:6/37; Accuracy = 24.03%
+Task: B, Iter:9/37; Accuracy = 27.52%
+Task: B, Iter:12/37; Accuracy = 34.50%
+Task: B, Iter:15/37; Accuracy = 38.76%
+Task: B, Iter:18/37; Accuracy = 47.29%
+Task: B, Iter:21/37; Accuracy = 53.49%
+Task: B, Iter:24/37; Accuracy = 56.59%
+Task: B, Iter:27/37; Accuracy = 60.47%
+Task: B, Iter:30/37; Accuracy = 61.63%
+Task: B, Iter:33/37; Accuracy = 63.95%
+Task: B, Iter:36/37; Accuracy = 63.18%
+Task: B, Iter:37/37; Accuracy = 63.57%

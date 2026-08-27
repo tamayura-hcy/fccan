@@ -1,0 +1,214 @@
+"""ADDA (Adversarial Discriminative Domain Adaptation) baseline.
+
+Tzeng et al., "Adversarial Discriminative Domain Adaptation", CVPR 2017.
+Aligned with the OCT-DDA official code (ADDA_vgg16_train.py): encoder vgg16_bn.features
+(flattened 25088-d); discriminator 25088->500->500->2 with BN+LeakyReLU+Dropout; source
+SGD lr=0.001 with val early stop; adversarial target SGD 1e-4 / critic SGD 1e-3, batch 8.
+
+Usage:
+    python -m comparison_experiments.adda.train --src A --tgt B --seed 777
+"""
+import argparse
+import copy
+import os
+import sys
+
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
+
+from comparison_experiments.common.data_loader import load_task, set_seed, LABEL_TO_DATASET
+from comparison_experiments.common.evaluate import test
+from comparison_experiments.common.models import VGGBnBackbone, VGGBnClassifier
+
+
+class Discriminator(nn.Module):
+    """OCT-DDA official ADDA discriminator (ADDA_vgg16_train.py): BN+LeakyReLU+Dropout + sigmoid."""
+
+    def __init__(self, input_dims=25088, hidden_dims=500, output_dims=2):
+        super().__init__()
+        self.layer = nn.Sequential(
+            nn.Linear(input_dims, hidden_dims), nn.BatchNorm1d(hidden_dims), nn.LeakyReLU(), nn.Dropout(),
+            nn.Linear(hidden_dims, hidden_dims), nn.BatchNorm1d(hidden_dims), nn.LeakyReLU(), nn.Dropout(),
+            nn.Linear(hidden_dims, output_dims))
+
+    def forward(self, x):
+        out = self.layer(x)
+        return torch.sigmoid(out)
+
+
+def train_source(enc, clf, src_loader, val_loader, device, epochs, lr=0.001):
+    """OCT-DDA official source stage: SGD lr=0.001 + val early stop (save best on val acc gain)."""
+    opt = optim.SGD(list(enc.parameters()) + list(clf.parameters()), lr=lr, momentum=0.9)
+    ce = nn.CrossEntropyLoss()
+    best_acc = 0.0
+    best_enc = None
+    best_clf = None
+    for ep in range(epochs):
+        enc.train(); clf.train()
+        for xs, ys in src_loader:
+            if torch.cuda.is_available():
+                xs, ys = xs.cuda(), ys.cuda()
+            opt.zero_grad()
+            loss = ce(clf(enc(xs)), ys)   # clf flattens 25088 internally
+            loss.backward()
+            opt.step()
+        # official val early stop: save only on val improvement
+        if val_loader is not None:
+            enc.eval(); clf.eval()
+            correct = total = 0
+            with torch.no_grad():
+                for xv, yv in val_loader:
+                    if torch.cuda.is_available():
+                        xv, yv = xv.cuda(), yv.cuda()
+                    pred = clf(enc(xv)).max(1)[1]
+                    correct += (pred == yv).sum().item()
+                    total += yv.size(0)
+            val_acc = float(correct) / max(total, 1)
+            if val_acc > best_acc:
+                best_acc = val_acc
+                best_enc = copy.deepcopy(enc.state_dict())
+                best_clf = copy.deepcopy(clf.state_dict())
+        else:
+            best_enc = copy.deepcopy(enc.state_dict())
+            best_clf = copy.deepcopy(clf.state_dict())
+        print("  [ADDA] source epoch {}/{} loss={:.4f} val_acc={:.4f}".format(
+            ep + 1, epochs, loss.item(), best_acc))
+    if best_enc is not None:
+        enc.load_state_dict(best_enc)
+        clf.load_state_dict(best_clf)
+    print("  [ADDA] best val acc on source = {:.4f}".format(best_acc))
+
+
+def train(args):
+    set_seed(args.seed)
+    # official transform has no ImageNet Normalize (Resize+CenterCrop+ToTensor)
+    data = load_task(args.src, args.tgt, input_size=args.input_size,
+                     batch_src=args.batch, batch_tgt=args.batch, normalize=False)
+    n_cls = len(data['class_names'])
+    print("task={}->{}  classes={}".format(
+        LABEL_TO_DATASET[args.src], LABEL_TO_DATASET[args.tgt], data['class_names']))
+    print("  [ADDA] OCT-DDA official: vgg16_bn.features(25088) + BN/LeakyReLU/Dropout discriminator")
+
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    src_enc = VGGBnBackbone().to(device)
+    clf = VGGBnClassifier(num_classes=n_cls).to(device)
+    tgt_enc = VGGBnBackbone().to(device)
+
+    print("  [ADDA] stage 1: source training (SGD 0.001 + val early-stop)")
+    train_source(src_enc, clf, data['src_train'], data.get('src_val'), device,
+                 epochs=args.src_epochs, lr=args.lr)
+
+    # pre-adversarial baseline check (print only)
+    acc_src_t, _, _ = test(src_enc, clf, data['src_test'], len(data['src_test'].dataset),
+                           num_classes=n_cls, class_names=data['class_names'])
+    acc_tgt0, _, _ = test(src_enc, clf, data['tgt_test'], len(data['tgt_test'].dataset),
+                          num_classes=n_cls, class_names=data['class_names'])
+    print("  [ADDA] BASELINE before adversarial: src test acc={:.4f}  tgt test acc={:.4f}  "
+          "(if src already low -> source pretrain issue; if src high tgt low -> check post-adversarial collapse)".format(acc_src_t, acc_tgt0))
+
+    # freeze source encoder + classifier
+    for p in src_enc.parameters():
+        p.requires_grad_(False)
+    for p in clf.parameters():
+        p.requires_grad_(False)
+    src_enc.eval(); clf.eval()
+
+    # init target encoder from the trained source encoder (official order)
+    tgt_enc.load_state_dict(src_enc.state_dict())
+
+    disc = Discriminator(input_dims=src_enc.out_dim).to(device)
+    # OCT-DDA official: target encoder SGD 1e-4, discriminator SGD 1e-3
+    opt_d = optim.SGD(disc.parameters(), lr=args.disc_lr, momentum=0.9)
+    opt_t = optim.SGD(tgt_enc.parameters(), lr=args.tgt_lr, momentum=0.9)
+    ce = nn.CrossEntropyLoss()
+
+    src_train = data['src_train']
+    tgt_train = data['tgt_train']
+    n_iter = min(len(src_train), len(tgt_train))
+    best_tgt_acc = 0.0
+    best_epoch = -1
+    best_enc = None
+
+    for epoch in range(args.epochs):
+        tgt_enc.train(); disc.train()
+        it_s = iter(src_train)
+        it_t = iter(tgt_train)
+        for i in range(n_iter):
+            xs, _ = next(it_s)
+            xt, _ = next(it_t)
+            if torch.cuda.is_available():
+                xs, xt = xs.cuda(), xt.cuda()
+
+            with torch.no_grad():
+                fs = src_enc(xs)
+            ft = tgt_enc(xt)
+            fs = fs.view(fs.size(0), -1)      # 25088
+            ft = ft.view(ft.size(0), -1)      # 25088
+            # official labels: source features -> 1, target features -> 0
+            dl_s = torch.ones(fs.size(0), dtype=torch.long, device=fs.device)
+            dl_t = torch.zeros(ft.size(0), dtype=torch.long, device=ft.device)
+
+            # 2.1 update discriminator: cat source+target into one forward so BN uses the mixed batch;
+            #     separate forwards would normalize each domain apart and make D unable to learn
+            opt_d.zero_grad()
+            pred_cat = disc(torch.cat([fs, ft], 0).detach())
+            lab_cat = torch.cat([dl_s, dl_t], 0)
+            loss_d = ce(pred_cat, lab_cat)
+            loss_d.backward()
+            opt_d.step()
+
+            # 2.2 adversarial update of target encoder: target labeled as source (1)
+            opt_t.zero_grad()
+            ft2 = tgt_enc(xt).view(xt.size(0), -1)
+            pred_tgt = disc(ft2)
+            dl_adv = torch.ones(ft2.size(0), dtype=torch.long, device=ft2.device)
+            loss_adv = ce(pred_tgt, dl_adv)
+            loss_adv.backward()
+            opt_t.step()
+
+        acc, auc, _ = test(tgt_enc, clf, data['tgt_test'], len(data['tgt_test'].dataset),
+                           num_classes=n_cls, class_names=data['class_names'])
+        if acc > best_tgt_acc:
+            best_tgt_acc = acc
+            best_epoch = epoch + 1
+            best_enc = copy.deepcopy(tgt_enc.state_dict())
+        print("  [ADDA] epoch {}/{} tgt_acc={:.4f} tgt_auc={:.4f} | best={:.4f}@ep{}".format(
+            epoch + 1, args.epochs, acc, auc, best_tgt_acc, best_epoch))
+
+    # early stop: load best-epoch weights as the final result
+    if best_enc is not None:
+        tgt_enc.load_state_dict(best_enc)
+    print("  [ADDA] early-stop: best tgt acc={:.4f} at epoch {}".format(best_tgt_acc, best_epoch))
+    acc, auc, _ = test(tgt_enc, clf, data['tgt_test'], len(data['tgt_test'].dataset),
+                       num_classes=n_cls, class_names=data['class_names'])
+    print("  [ADDA] FINAL (best-epoch model): tgt_acc={:.4f} tgt_auc={:.4f}".format(acc, auc))
+
+
+def main():
+    parser = argparse.ArgumentParser(description='ADDA baseline for OCT cross-device UDA')
+    parser.add_argument('--src', type=str, default='A', choices=['A', 'B', 'C'])
+    parser.add_argument('--tgt', type=str, default='B', choices=['A', 'B', 'C'])
+    parser.add_argument('--seed', type=int, default=777)
+    parser.add_argument('--src_epochs', type=int, default=15,
+                        help='Source pretrain epochs (early stop: 15)')
+    parser.add_argument('--epochs', type=int, default=10,
+                        help='Adversarial epochs (early stop: 10 on target, take best epoch)')
+    parser.add_argument('--batch', type=int, default=8,
+                        help='Official batch_size=8')
+    parser.add_argument('--lr', type=float, default=0.001,
+                        help='Source pretrain SGD lr=0.001 (official)')
+    parser.add_argument('--tgt_lr', type=float, default=1e-4,
+                        help='Target encoder SGD lr=1e-4 (official)')
+    parser.add_argument('--disc_lr', type=float, default=1e-3,
+                        help='Discriminator SGD lr=1e-3 (official)')
+    parser.add_argument('--input_size', type=int, default=224,
+                        help='VGG-16 official input 224')
+    args = parser.parse_args()
+    train(args)
+
+
+if __name__ == '__main__':
+    main()

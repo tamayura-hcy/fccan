@@ -1,0 +1,39 @@
+# FEA-Net 结果导出 (result log)
+mode=improved
+task=TMI->CELL
+iter=1
+seed=42
+save_dir=./saves/FEANet_TMI_to_CELL_iter1
+cmd=main.py --only TMI->CELL -es 8 -et 15 --seed 42 -i 1 --cell_split CELL_split_2025 --save_result_txt 1 --lambda_caco 0.01 --lambda_batch_ang 0.5
+final_metric=EMA
+
+== per-epoch acc ==
+epoch,student,ema
+1,0.870968,0.824373
+2,0.901434,0.872760
+3,0.901434,0.894265
+4,0.915771,0.915771
+5,0.913978,0.917563
+6,0.915771,0.919355
+7,0.924731,0.917563
+8,0.930108,0.926523
+9,0.906810,0.926523
+10,0.913978,0.917563
+11,0.921147,0.917563
+12,0.928315,0.921147
+13,0.917563,0.919355
+14,0.913978,0.915771
+15,0.928315,0.915771
+
+== final metrics (EMA) ==
+acc=0.915771
+auc=0.955183
+recall=0.916137
+precision=0.915771
+f1=0.915794
+bacc=0.915771
+specificity=0.957885
+kappa=0.873656
+gmean=0.936779
+mcc=0.873812
+source_final_acc=0.960784
