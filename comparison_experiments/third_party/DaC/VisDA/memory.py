@@ -98,7 +98,7 @@ class MemoryBank(nn.Module):
 
         
         # Adaptation loss (MMD with memory bank)
-        dev = inputs.device  # unify device to avoid CPU/CUDA mixing (official code crashes on Windows/newer torch)
+        dev = inputs.device  # 统一设备，避免 CPU/CUDA 混用（官方代码在 Windows/新版 torch 下会崩）
         target_mask = (labels>=self.args.class_num).float()
         target_idx = torch.nonzero(target_mask,as_tuple=True)
         source_idx = torch.nonzero(1-target_mask,as_tuple=True)

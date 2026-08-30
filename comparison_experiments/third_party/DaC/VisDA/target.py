@@ -26,6 +26,7 @@ def eval_initial(memory, loader, netF, netB, netC):
     """Initialize the memory bank after one epoch warm up"""
     netF.eval()
     netB.eval()
+    # netC.eval()
 
     features = torch.zeros(memory.num_samples, memory.num_features).cuda()
     labels = torch.zeros(memory.num_samples).long().cuda()
@@ -134,7 +135,7 @@ def data_load(args):
         txt_test = txt_tar.copy()
 
     dsets["target"] = ImageList_train(txt_tar, transform=image_train())
-    # Windows workers cannot pickle the autoaugment lambda, so num_workers=0
+    # Windows 下多进程 worker 无法 pickle autoaugment 的 lambda，统一 num_workers=0
     dset_loaders["target"] = DataLoader(dsets["target"], batch_size=train_bs, shuffle=True, num_workers=0, drop_last=True)
     if args.eval_aug=='weak':
         dsets["eval"] = ImageList_test(txt_tar, transform=image_train()[0])
@@ -170,7 +171,7 @@ def cal_acc(loader, netF, netB, netC, memory, flag=False):
     _, predict = torch.max(all_output, 1)
     accuracy = torch.sum(torch.squeeze(predict).float() == all_label).item() / float(all_label.size()[0])
     mean_ent = torch.mean(loss.Entropy(nn.Softmax(dim=1)(all_output))).cpu().data.item()
-    # macro-averaged AUC (one-vs-rest, consistent with the paper)
+    # 宏平均 AUC（one-vs-rest，与论文口径一致）
     try:
         auc = roc_auc_score(all_label.numpy().astype(int),
                             nn.Softmax(dim=1)(all_output).numpy(),
@@ -262,7 +263,7 @@ def train_target(args):
             netB.eval()
             netC.eval()
             mem_label = obtain_label(dset_loaders['test'], netF, netB, netC, args)
-            mem_label = torch.from_numpy(mem_label).cuda().long()  # int32 -> int64 (CrossEntropyLoss requires long)
+            mem_label = torch.from_numpy(mem_label).cuda().long()  # int32 → int64（CrossEntropyLoss 需要 long）
             memory.pred_labels = mem_label
             netF.train()
             netB.train()
@@ -410,7 +411,9 @@ def obtain_label(loader, netF, netB, netC, args):
     initc = initc / (1e-8 + aff.sum(axis=0)[:,None])
     cls_count = np.eye(K)[predict].sum(axis=0)
     labelset = np.where(cls_count>args.threshold)
+    # print(np.shapelabelset.size())
     labelset = labelset[0]
+    # print(labelset)
 
     dd = cdist(all_fea, initc[labelset], args.distance)
     pred_label = dd.argmin(axis=1)
@@ -515,7 +518,7 @@ if __name__ == "__main__":
     args.interval = args.max_epoch
     print('The gpu device',args.gpu_id)
 
-    # fix: official code runs train_target for every non-source domain; we only run the (s,t) pair given on the command line
+    # 修复：官方会遍历所有非源域各跑一遍 train_target；我们只跑命令行指定的 (s,t) 对
     target_only = args.t
     for i in range(len(names)):
         if i == args.s or i != target_only:

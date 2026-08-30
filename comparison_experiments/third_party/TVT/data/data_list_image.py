@@ -1,3 +1,5 @@
+#from __future__ import print_function, division
+
 import torch
 import numpy as np
 import random
@@ -140,6 +142,7 @@ class Normalize(object):
         Returns:
             Tensor: Normalized image.
         """
+        # TODO: make efficient
         for t, m in zip(tensor, self.mean):
             t.sub_(m)
         return tensor

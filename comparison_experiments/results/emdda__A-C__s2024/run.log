@@ -1,0 +1,120 @@
+  [CELL tgt] 75% 协议: train1068 + val600 = 1668 (约 75%)
+task=BOE->CELL  classes=['AMD', 'DME', 'NORMAL']
+  [EM-DDA] OCT-DDA 官方：vgg16_bn.features(25088) + BN/LeakyReLU/Dropout 判别器 + EM
+  [EM-DDA] step 1: 源域预训练 (vgg16_bn, 15 epochs, SGD 0.001 + val early-stop)
+  [EM-DDA] step1 source epoch 1/15 loss=0.0003 val_acc=0.9317
+  [EM-DDA] step1 source epoch 2/15 loss=0.0912 val_acc=0.9317
+  [EM-DDA] step1 source epoch 3/15 loss=0.1426 val_acc=0.9376
+  [EM-DDA] step1 source epoch 4/15 loss=0.0002 val_acc=0.9376
+  [EM-DDA] step1 source epoch 5/15 loss=0.0004 val_acc=0.9376
+  [EM-DDA] step1 source epoch 6/15 loss=0.0000 val_acc=0.9376
+  [EM-DDA] step1 source epoch 7/15 loss=0.0000 val_acc=0.9376
+  [EM-DDA] step1 source epoch 8/15 loss=0.0000 val_acc=0.9376
+  [EM-DDA] step1 source epoch 9/15 loss=0.0000 val_acc=0.9376
+  [EM-DDA] step1 source epoch 10/15 loss=0.0000 val_acc=0.9376
+  [EM-DDA] step1 source epoch 11/15 loss=0.0000 val_acc=0.9376
+  [EM-DDA] step1 source epoch 12/15 loss=0.0000 val_acc=0.9376
+  [EM-DDA] step1 source epoch 13/15 loss=0.0000 val_acc=0.9376
+  [EM-DDA] step1 source epoch 14/15 loss=0.0000 val_acc=0.9376
+  [EM-DDA] step1 source epoch 15/15 loss=0.0002 val_acc=0.9376
+  [EM-DDA] best val acc on source = 0.9376
+  test acc=0.9680 | auc=0.9991 | recall=0.9722 | precision=0.9621 | f1=0.9667 | bacc=0.9722 | specificity=0.9851 | kappa=0.9505 | gmean=0.9720 | mcc=0.9509 | time=6.0s
+  per-class recall: AMD:1.0000 | DME:0.9543 | NORMAL:0.9622
+  test acc=0.6989 | auc=0.8626 | recall=0.6989 | precision=0.7035 | f1=0.6999 | bacc=0.6989 | specificity=0.8495 | kappa=0.5484 | gmean=0.6980 | mcc=0.5493 | time=3.8s
+  per-class recall: AMD:0.7151 | DME:0.7312 | NORMAL:0.6505
+  [EM-DDA] BASELINE 对抗前: 源测试 acc=0.9680  目标测试 acc=0.6989  （若源已低→源域预训练问题；若源高目标低→看对抗后是否崩）
+  [EM-DDA] step 2: 对抗对齐 + 熵最小化 (30 epochs, early-stop on tgt acc)
+  test acc=0.7652 | auc=0.9032 | recall=0.7652 | precision=0.7755 | f1=0.7668 | bacc=0.7652 | specificity=0.8826 | kappa=0.6478 | gmean=0.7638 | mcc=0.6506 | time=3.8s
+  per-class recall: AMD:0.7527 | DME:0.8280 | NORMAL:0.7151
+  [EM-DDA] epoch 1/30 tgt_acc=0.7652 tgt_auc=0.9032 (adv=0.753 em=0.060) D_acc=0.850 | best=0.7652@ep1
+  test acc=0.7957 | auc=0.9190 | recall=0.7957 | precision=0.8073 | f1=0.7973 | bacc=0.7957 | specificity=0.8978 | kappa=0.6935 | gmean=0.7947 | mcc=0.6976 | time=3.9s
+  per-class recall: AMD:0.7849 | DME:0.7527 | NORMAL:0.8495
+  [EM-DDA] epoch 2/30 tgt_acc=0.7957 tgt_auc=0.9190 (adv=0.697 em=0.240) D_acc=0.983 | best=0.7957@ep2
+  test acc=0.8262 | auc=0.9339 | recall=0.8262 | precision=0.8330 | f1=0.8268 | bacc=0.8262 | specificity=0.9131 | kappa=0.7392 | gmean=0.8248 | mcc=0.7417 | time=3.9s
+  per-class recall: AMD:0.8065 | DME:0.8925 | NORMAL:0.7796
+  [EM-DDA] epoch 3/30 tgt_acc=0.8262 tgt_auc=0.9339 (adv=0.840 em=0.004) D_acc=0.999 | best=0.8262@ep3
+  test acc=0.8297 | auc=0.9367 | recall=0.8297 | precision=0.8397 | f1=0.8312 | bacc=0.8297 | specificity=0.9149 | kappa=0.7446 | gmean=0.8291 | mcc=0.7474 | time=3.8s
+  per-class recall: AMD:0.7903 | DME:0.8710 | NORMAL:0.8280
+  [EM-DDA] epoch 4/30 tgt_acc=0.8297 tgt_auc=0.9367 (adv=0.809 em=0.003) D_acc=1.000 | best=0.8297@ep4
+  test acc=0.8244 | auc=0.9354 | recall=0.8244 | precision=0.8417 | f1=0.8264 | bacc=0.8244 | specificity=0.9122 | kappa=0.7366 | gmean=0.8222 | mcc=0.7433 | time=3.9s
+  per-class recall: AMD:0.8118 | DME:0.7581 | NORMAL:0.9032
+  [EM-DDA] epoch 5/30 tgt_acc=0.8244 tgt_auc=0.9354 (adv=0.745 em=0.016) D_acc=1.000 | best=0.8297@ep4
+  test acc=0.8118 | auc=0.9313 | recall=0.8118 | precision=0.8319 | f1=0.8145 | bacc=0.8118 | specificity=0.9059 | kappa=0.7177 | gmean=0.8098 | mcc=0.7251 | time=3.8s
+  per-class recall: AMD:0.8011 | DME:0.7473 | NORMAL:0.8871
+  [EM-DDA] epoch 6/30 tgt_acc=0.8118 tgt_auc=0.9313 (adv=0.864 em=0.001) D_acc=1.000 | best=0.8297@ep4
+  test acc=0.8405 | auc=0.9409 | recall=0.8405 | precision=0.8452 | f1=0.8416 | bacc=0.8405 | specificity=0.9203 | kappa=0.7608 | gmean=0.8405 | mcc=0.7619 | time=3.9s
+  per-class recall: AMD:0.8333 | DME:0.8441 | NORMAL:0.8441
+  [EM-DDA] epoch 7/30 tgt_acc=0.8405 tgt_auc=0.9409 (adv=0.697 em=0.030) D_acc=1.000 | best=0.8405@ep7
+  test acc=0.8136 | auc=0.9349 | recall=0.8136 | precision=0.8334 | f1=0.8147 | bacc=0.8136 | specificity=0.9068 | kappa=0.7204 | gmean=0.8092 | mcc=0.7291 | time=3.9s
+  per-class recall: AMD:0.8280 | DME:0.7043 | NORMAL:0.9086
+  [EM-DDA] epoch 8/30 tgt_acc=0.8136 tgt_auc=0.9349 (adv=0.781 em=0.172) D_acc=1.000 | best=0.8405@ep7
+  test acc=0.8262 | auc=0.9434 | recall=0.8262 | precision=0.8432 | f1=0.8267 | bacc=0.8262 | specificity=0.9131 | kappa=0.7392 | gmean=0.8220 | mcc=0.7467 | time=3.9s
+  per-class recall: AMD:0.8548 | DME:0.7151 | NORMAL:0.9086
+  [EM-DDA] epoch 9/30 tgt_acc=0.8262 tgt_auc=0.9434 (adv=0.641 em=0.190) D_acc=1.000 | best=0.8405@ep7
+  test acc=0.8369 | auc=0.9484 | recall=0.8369 | precision=0.8453 | f1=0.8379 | bacc=0.8369 | specificity=0.9185 | kappa=0.7554 | gmean=0.8361 | mcc=0.7583 | time=3.9s
+  per-class recall: AMD:0.8548 | DME:0.7849 | NORMAL:0.8710
+  [EM-DDA] epoch 10/30 tgt_acc=0.8369 tgt_auc=0.9484 (adv=0.613 em=0.001) D_acc=1.000 | best=0.8405@ep7
+  test acc=0.8423 | auc=0.9431 | recall=0.8423 | precision=0.8554 | f1=0.8444 | bacc=0.8423 | specificity=0.9211 | kappa=0.7634 | gmean=0.8415 | mcc=0.7679 | time=3.9s
+  per-class recall: AMD:0.8118 | DME:0.8226 | NORMAL:0.8925
+  [EM-DDA] epoch 11/30 tgt_acc=0.8423 tgt_auc=0.9431 (adv=0.733 em=0.289) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.8082 | auc=0.9333 | recall=0.8082 | precision=0.8401 | f1=0.8085 | bacc=0.8082 | specificity=0.9041 | kappa=0.7124 | gmean=0.8003 | mcc=0.7264 | time=3.9s
+  per-class recall: AMD:0.8333 | DME:0.6613 | NORMAL:0.9301
+  [EM-DDA] epoch 12/30 tgt_acc=0.8082 tgt_auc=0.9333 (adv=0.794 em=0.136) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.8333 | auc=0.9441 | recall=0.8333 | precision=0.8484 | f1=0.8339 | bacc=0.8333 | specificity=0.9167 | kappa=0.7500 | gmean=0.8302 | mcc=0.7561 | time=3.9s
+  per-class recall: AMD:0.8602 | DME:0.7366 | NORMAL:0.9032
+  [EM-DDA] epoch 13/30 tgt_acc=0.8333 tgt_auc=0.9441 (adv=0.634 em=0.117) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.8244 | auc=0.9349 | recall=0.8244 | precision=0.8598 | f1=0.8276 | bacc=0.8244 | specificity=0.9122 | kappa=0.7366 | gmean=0.8192 | mcc=0.7514 | time=3.9s
+  per-class recall: AMD:0.8065 | DME:0.7204 | NORMAL:0.9462
+  [EM-DDA] epoch 14/30 tgt_acc=0.8244 tgt_auc=0.9349 (adv=0.790 em=0.049) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.7957 | auc=0.9264 | recall=0.7957 | precision=0.8346 | f1=0.7948 | bacc=0.7957 | specificity=0.8978 | kappa=0.6935 | gmean=0.7839 | mcc=0.7116 | time=3.9s
+  per-class recall: AMD:0.8280 | DME:0.6183 | NORMAL:0.9409
+  [EM-DDA] epoch 15/30 tgt_acc=0.7957 tgt_auc=0.9264 (adv=0.598 em=0.096) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.7885 | auc=0.9206 | recall=0.7885 | precision=0.8338 | f1=0.7876 | bacc=0.7885 | specificity=0.8943 | kappa=0.6828 | gmean=0.7748 | mcc=0.7042 | time=3.9s
+  per-class recall: AMD:0.8118 | DME:0.6022 | NORMAL:0.9516
+  [EM-DDA] epoch 16/30 tgt_acc=0.7885 tgt_auc=0.9206 (adv=0.748 em=0.004) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.7312 | auc=0.8828 | recall=0.7312 | precision=0.8159 | f1=0.7222 | bacc=0.7312 | specificity=0.8656 | kappa=0.5968 | gmean=0.6941 | mcc=0.6391 | time=3.9s
+  per-class recall: AMD:0.7796 | DME:0.4409 | NORMAL:0.9731
+  [EM-DDA] epoch 17/30 tgt_acc=0.7312 tgt_auc=0.8828 (adv=0.923 em=0.010) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.7849 | auc=0.9136 | recall=0.7849 | precision=0.8411 | f1=0.7858 | bacc=0.7849 | specificity=0.8925 | kappa=0.6774 | gmean=0.7710 | mcc=0.7037 | time=3.8s
+  per-class recall: AMD:0.7796 | DME:0.6075 | NORMAL:0.9677
+  [EM-DDA] epoch 18/30 tgt_acc=0.7849 tgt_auc=0.9136 (adv=0.757 em=0.000) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.7509 | auc=0.8999 | recall=0.7509 | precision=0.8232 | f1=0.7458 | bacc=0.7509 | specificity=0.8754 | kappa=0.6263 | gmean=0.7222 | mcc=0.6626 | time=3.9s
+  per-class recall: AMD:0.7957 | DME:0.4892 | NORMAL:0.9677
+  [EM-DDA] epoch 19/30 tgt_acc=0.7509 tgt_auc=0.8999 (adv=0.804 em=0.239) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.7419 | auc=0.8923 | recall=0.7419 | precision=0.8216 | f1=0.7388 | bacc=0.7419 | specificity=0.8710 | kappa=0.6129 | gmean=0.7149 | mcc=0.6518 | time=3.9s
+  per-class recall: AMD:0.7634 | DME:0.4946 | NORMAL:0.9677
+  [EM-DDA] epoch 20/30 tgt_acc=0.7419 tgt_auc=0.8923 (adv=0.812 em=0.010) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.7437 | auc=0.8905 | recall=0.7437 | precision=0.8197 | f1=0.7403 | bacc=0.7437 | specificity=0.8719 | kappa=0.6156 | gmean=0.7175 | mcc=0.6528 | time=3.8s
+  per-class recall: AMD:0.7634 | DME:0.5000 | NORMAL:0.9677
+  [EM-DDA] epoch 21/30 tgt_acc=0.7437 tgt_auc=0.8905 (adv=0.775 em=0.037) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.7814 | auc=0.9099 | recall=0.7814 | precision=0.8378 | f1=0.7826 | bacc=0.7814 | specificity=0.8907 | kappa=0.6720 | gmean=0.7683 | mcc=0.6983 | time=3.8s
+  per-class recall: AMD:0.7581 | DME:0.6183 | NORMAL:0.9677
+  [EM-DDA] epoch 22/30 tgt_acc=0.7814 tgt_auc=0.9099 (adv=0.968 em=0.030) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.7455 | auc=0.8962 | recall=0.7455 | precision=0.8228 | f1=0.7456 | bacc=0.7455 | specificity=0.8728 | kappa=0.6183 | gmean=0.7252 | mcc=0.6548 | time=3.9s
+  per-class recall: AMD:0.7258 | DME:0.5430 | NORMAL:0.9677
+  [EM-DDA] epoch 23/30 tgt_acc=0.7455 tgt_auc=0.8962 (adv=0.713 em=0.002) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.7455 | auc=0.9004 | recall=0.7455 | precision=0.8192 | f1=0.7421 | bacc=0.7455 | specificity=0.8728 | kappa=0.6183 | gmean=0.7201 | mcc=0.6544 | time=3.9s
+  per-class recall: AMD:0.7634 | DME:0.5054 | NORMAL:0.9677
+  [EM-DDA] epoch 24/30 tgt_acc=0.7455 tgt_auc=0.9004 (adv=0.680 em=0.038) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.7330 | auc=0.8841 | recall=0.7330 | precision=0.8162 | f1=0.7303 | bacc=0.7330 | specificity=0.8665 | kappa=0.5995 | gmean=0.7064 | mcc=0.6397 | time=3.9s
+  per-class recall: AMD:0.7366 | DME:0.4946 | NORMAL:0.9677
+  [EM-DDA] epoch 25/30 tgt_acc=0.7330 tgt_auc=0.8841 (adv=0.758 em=0.168) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.6810 | auc=0.8498 | recall=0.6810 | precision=0.7996 | f1=0.6720 | bacc=0.6810 | specificity=0.8405 | kappa=0.5215 | gmean=0.6347 | mcc=0.5803 | time=3.9s
+  per-class recall: AMD:0.6882 | DME:0.3817 | NORMAL:0.9731
+  [EM-DDA] epoch 26/30 tgt_acc=0.6810 tgt_auc=0.8498 (adv=0.748 em=0.005) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.6237 | auc=0.7906 | recall=0.6237 | precision=0.7899 | f1=0.5949 | bacc=0.6237 | specificity=0.8118 | kappa=0.4355 | gmean=0.5325 | mcc=0.5179 | time=3.9s
+  per-class recall: AMD:0.6452 | DME:0.2366 | NORMAL:0.9892
+  [EM-DDA] epoch 27/30 tgt_acc=0.6237 tgt_auc=0.7906 (adv=0.811 em=0.022) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.6649 | auc=0.8225 | recall=0.6649 | precision=0.7986 | f1=0.6410 | bacc=0.6649 | specificity=0.8324 | kappa=0.4973 | gmean=0.5859 | mcc=0.5668 | time=3.9s
+  per-class recall: AMD:0.7312 | DME:0.2796 | NORMAL:0.9839
+  [EM-DDA] epoch 28/30 tgt_acc=0.6649 tgt_auc=0.8225 (adv=0.811 em=0.002) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.6022 | auc=0.7313 | recall=0.6022 | precision=0.7768 | f1=0.5621 | bacc=0.6022 | specificity=0.8011 | kappa=0.4032 | gmean=0.4793 | mcc=0.4935 | time=3.9s
+  per-class recall: AMD:0.6505 | DME:0.1720 | NORMAL:0.9839
+  [EM-DDA] epoch 29/30 tgt_acc=0.6022 tgt_auc=0.7313 (adv=0.712 em=0.000) D_acc=1.000 | best=0.8423@ep11
+  test acc=0.5358 | auc=0.6081 | recall=0.5358 | precision=0.7561 | f1=0.4650 | bacc=0.5358 | specificity=0.7679 | kappa=0.3038 | gmean=0.3010 | mcc=0.4199 | time=3.8s
+  per-class recall: AMD:0.5699 | DME:0.0484 | NORMAL:0.9892
+  [EM-DDA] epoch 30/30 tgt_acc=0.5358 tgt_auc=0.6081 (adv=0.774 em=0.003) D_acc=1.000 | best=0.8423@ep11
+  [EM-DDA] early-stop: best tgt acc=0.8423 at epoch 11
+  test acc=0.8423 | auc=0.9431 | recall=0.8423 | precision=0.8554 | f1=0.8444 | bacc=0.8423 | specificity=0.9211 | kappa=0.7634 | gmean=0.8415 | mcc=0.7679 | time=3.9s
+  per-class recall: AMD:0.8118 | DME:0.8226 | NORMAL:0.8925
+  [EM-DDA] FINAL (best-epoch model): tgt_acc=0.8423 tgt_auc=0.9431

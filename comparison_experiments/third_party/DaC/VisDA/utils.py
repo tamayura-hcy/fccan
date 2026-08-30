@@ -191,6 +191,10 @@ class AdversarialNetwork(nn.Module):
     x.register_hook(grl_hook(coeff))
     x = self.ad_layer1(x)
     x = self.relu1(x)
+    # x = self.dropout1(x)
+    # x = self.ad_layer2(x)
+    # x = self.relu2(x)
+    # x = self.dropout2(x)
     y = self.ad_layer3(x)
     y = self.sigmoid(y)
     return y
@@ -254,6 +258,7 @@ class ObjectImage_mul(torch.utils.data.Dataset):
         path, target = self.imgs[index]
         img = self.loader(path)
         if self.transform is not None:
+            # print(type(self.transform).__name__)
             if type(self.transform).__name__=='list':
                 img = [t(img) for t in self.transform]
             else:
@@ -366,6 +371,7 @@ def cal_acc_visda(loader, model, flag=True, fc=None):
     acc = ' '.join(aa)
     print(acc)
 
+    # accuracy = torch.sum(torch.squeeze(predict).float() == all_label).item() / float(all_label.size()[0])
     return aacc, predict, all_output, all_label, acc
 
 

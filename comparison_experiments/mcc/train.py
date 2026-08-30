@@ -27,10 +27,15 @@ from comparison_experiments.common.models import build_models
 def mcc_loss(logits, temperature=2.5):
     """Official MCC loss (Jin et al. ECCV'20, thuml/Versatile-Domain-Adaptation).
 
-    p = softmax(logits / temperature); w = 1 + exp(-entropy(p)) (normalized);
-    cov = (p * w)^T @ p (row-normalized); loss = (sum(cov) - trace(cov)) / C.
-    Only the unlabeled-target softmax is used (target-only regularizer), so there
-    is no cross-domain matmul and no batch-size mismatch.
+    Matches the released code exactly:
+        p = softmax(logits / temperature)
+        w = 1 + exp(-entropy(p))                    # entropy weighting
+        w = batch * w / sum(w)                       # normalized
+        cov = (p * w)^T @ p                          # class confusion on target
+        cov = cov / sum(cov, dim=1)                  # row-normalize
+        loss = (sum(cov) - trace(cov)) / num_classes # off-diagonal / C
+    Only the UNLABELED TARGET softmax is used (MCC is a target-only regularizer),
+    so there is no cross-domain matmul and no batch-size mismatch issue.
     """
     p = torch.softmax(logits / temperature, dim=1)   # [B, C]
     ent = -(p * torch.log(p + 1e-5)).sum(dim=1)      # [B]
@@ -51,7 +56,7 @@ def train(args):
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     enc, clf = build_models(len(data['class_names']), device)
-    # thuml official: single SGD with layered lr (backbone 0.1x) + nesterov + wd + LambdaLR
+    # thuml 官方：单一 SGD 分层 lr（backbone 0.1×）+ nesterov + wd + LambdaLR
     optimizer = optim.SGD(clf.get_parameters(base_lr=1.0, backbone=enc),
                           lr=args.lr, momentum=0.9, weight_decay=args.weight_decay, nesterov=True)
     lr_scheduler = LambdaLR(optimizer,
@@ -96,20 +101,20 @@ def main():
     parser.add_argument('--tgt', type=str, default='B', choices=['A', 'B', 'C'])
     parser.add_argument('--seed', type=int, default=777)
     parser.add_argument('--epochs', type=int, default=20,
-                        help='thuml official MCC epochs=20')
+                        help='thuml 官方 MCC epochs=20')
     parser.add_argument('--batch', type=int, default=36,
-                        help='thuml official MCC batch=36')
+                        help='thuml 官方 MCC batch=36')
     parser.add_argument('--lr', type=float, default=0.005,
-                        help='thuml official MCC lr=0.005')
+                        help='thuml 官方 MCC lr=0.005')
     parser.add_argument('--weight_decay', type=float, default=1e-3,
-                        help='thuml official MCC wd=1e-3')
+                        help='thuml 官方 MCC wd=1e-3')
     parser.add_argument('--lr_gamma', type=float, default=0.001)
     parser.add_argument('--lr_decay', type=float, default=0.75)
     parser.add_argument('--lambda_mcc', type=float, default=1.0,
-                        help='MCC loss weight (thuml official trade_off=1.0)')
+                        help='MCC loss weight (thuml 官方 trade_off=1.0)')
     parser.add_argument('--temp', type=float, default=2.5)
     parser.add_argument('--input_size', type=int, default=224,
-                        help='thuml ResNet official input 224')
+                        help='thuml ResNet 官方输入 224')
     args = parser.parse_args()
     train(args)
 

@@ -120,7 +120,7 @@ python -m comparison_experiments.run_all --methods dann,mcc,emdda --tasks A-B,A-
 python run_comparison.py          # 或一键跑全部
 ```
 
-方法清单（11 个域适应方法 + 基线）：`DANN`、`ADDA`、`CDAN`、`EM-DDA`、`MCC`、`SHOT`、`CAT`、`SVDNA`、`DAGCN`、`TVT`、`DaC`；另有 3 个 source-only 下界（ResNet-18/50、VGG-16）和 1 个 oracle 参考行。详见 `comparison_experiments/README.md`。
+方法清单（13 个域适应方法 + 基线）：`DANN`、`ADDA`、`CDAN`、`EM-DDA`、`MCC`、`FDA`、`CAN`、`SHOT`、`CAT`、`SVDNA`、`DAGCN`、`TVT`、`DaC`；另有 3 个 source-only 下界（ResNet-18/50、VGG-16）和 1 个 oracle 参考行。详见 `comparison_experiments/README.md`。
 
 > `BNM` / `TENT` / `DAN` / `DDC` 在 OCT 跨设备任务上是完全负迁移（低于仅源域下界），已从对比实验和论文中移除。
 

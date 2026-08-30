@@ -38,6 +38,8 @@ comparison_experiments/
 | CDAN | adversarial, conditional | `cdan/train.py` | thuml/CDAN |
 | EM-DDA | adversarial + entropy min | `emdda/train.py` | Luo et al. [30] in DAGCN（VGG16） |
 | MCC | non-adversarial | `mcc/train.py` | thuml/Versatile-Domain-Adaptation |
+| FDA | frequency-domain (Fourier) | `fda/train.py` | YanchaoYang/FDA (CVPR 2020) |
+| CAN | contrastive learning | `can/train.py` | thuml/Contrastive-Adaptation-Network (CVPR 2019) |
 | SHOT | non-adversarial, source-free | `shot/train.py` | tim-learn/SHOT |
 | CAT | self-training | `cat/train.py` | Deng et al. ICCV 2019（VGG16） |
 | SVDNA | OCT-specific | `svdna/train.py` | ValentinKoch/SVDNA |

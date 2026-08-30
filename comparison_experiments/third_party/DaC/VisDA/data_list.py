@@ -29,7 +29,10 @@ def l_loader(path):
 
 
 class ImageList(Dataset):
-    """Single-image dataset used by source.py: returns (img, target) pairs."""
+    """source.py 使用的单图数据集：返回 (img, target) 两元组。
+
+    官方仓库 data_list.py 与 source.py 版本不匹配（缺此类），此处补齐。
+    """
     def __init__(self, image_list, labels=None, transform=None,
                  target_transform=None, mode='RGB'):
         imgs = make_dataset(image_list, labels)

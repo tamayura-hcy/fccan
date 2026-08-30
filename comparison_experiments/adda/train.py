@@ -1,9 +1,20 @@
 """ADDA (Adversarial Discriminative Domain Adaptation) baseline.
 
 Tzeng et al., "Adversarial Discriminative Domain Adaptation", CVPR 2017.
-Aligned with the OCT-DDA official code (ADDA_vgg16_train.py): encoder vgg16_bn.features
-(flattened 25088-d); discriminator 25088->500->500->2 with BN+LeakyReLU+Dropout; source
-SGD lr=0.001 with val early stop; adversarial target SGD 1e-4 / critic SGD 1e-3, batch 8.
+按 OCT-DDA 官方代码（xuqing88/OCT_DDA，ADDA_vgg16_train.py）完整对齐——
+这是 DAGCN 论文对比 ADDA 的同源实现：
+  - 编码器：vgg16_bn.features（卷积特征，展平 25088 = 512*7*7 维）
+  - 判别器：Linear(25088->500)+BN+LeakyReLU+Dropout + Linear(500->500)+BN+LeakyReLU+Dropout
+            + Linear(500,2)+Sigmoid（作用在 25088 维原始卷积特征上）
+  - 源域：SGD lr=0.001, momentum=0.9（官方 + val 早停）
+  - 对抗：optimizer_tgt=SGD(lr=1e-4), optimizer_critic=SGD(lr=1e-3)，batch=8
+  - 判别器损失：CE(sigmoid输出, label) 源=1/目标=0；目标编码器 CE(输出, 1) 骗过判别器
+  - transform：Resize(256)+CenterCrop(224)+ToTensor（官方无 ImageNet Normalize）
+
+流程：
+1. 源域 CE 预训练（SGD 0.001）
+2. 冻结源编码器+分类器；训练判别器区分源/目标（SGD 1e-3）
+3. 对抗训练目标编码器（SGD 1e-4，目标判为源）
 
 Usage:
     python -m comparison_experiments.adda.train --src A --tgt B --seed 777
@@ -25,7 +36,7 @@ from comparison_experiments.common.models import VGGBnBackbone, VGGBnClassifier
 
 
 class Discriminator(nn.Module):
-    """OCT-DDA official ADDA discriminator (ADDA_vgg16_train.py): BN+LeakyReLU+Dropout + sigmoid."""
+    """OCT-DDA 官方 ADDA 判别器（ADDA_vgg16_train.py）：BN+LeakyReLU+Dropout + sigmoid。"""
 
     def __init__(self, input_dims=25088, hidden_dims=500, output_dims=2):
         super().__init__()
@@ -40,7 +51,7 @@ class Discriminator(nn.Module):
 
 
 def train_source(enc, clf, src_loader, val_loader, device, epochs, lr=0.001):
-    """OCT-DDA official source stage: SGD lr=0.001 + val early stop (save best on val acc gain)."""
+    """OCT-DDA 官方源域：SGD lr=0.001 + val 早停（val acc 提升才保存 best，最后加载 best）。"""
     opt = optim.SGD(list(enc.parameters()) + list(clf.parameters()), lr=lr, momentum=0.9)
     ce = nn.CrossEntropyLoss()
     best_acc = 0.0
@@ -52,10 +63,10 @@ def train_source(enc, clf, src_loader, val_loader, device, epochs, lr=0.001):
             if torch.cuda.is_available():
                 xs, ys = xs.cuda(), ys.cuda()
             opt.zero_grad()
-            loss = ce(clf(enc(xs)), ys)   # clf flattens 25088 internally
+            loss = ce(clf(enc(xs)), ys)   # clf 内部自动展平 25088
             loss.backward()
             opt.step()
-        # official val early stop: save only on val improvement
+        # 官方 val 早停：val 提升才保存
         if val_loader is not None:
             enc.eval(); clf.eval()
             correct = total = 0
@@ -84,13 +95,13 @@ def train_source(enc, clf, src_loader, val_loader, device, epochs, lr=0.001):
 
 def train(args):
     set_seed(args.seed)
-    # official transform has no ImageNet Normalize (Resize+CenterCrop+ToTensor)
+    # 官方 transform 无 ImageNet Normalize（Resize+CenterCrop+ToTensor）
     data = load_task(args.src, args.tgt, input_size=args.input_size,
                      batch_src=args.batch, batch_tgt=args.batch, normalize=False)
     n_cls = len(data['class_names'])
     print("task={}->{}  classes={}".format(
         LABEL_TO_DATASET[args.src], LABEL_TO_DATASET[args.tgt], data['class_names']))
-    print("  [ADDA] OCT-DDA official: vgg16_bn.features(25088) + BN/LeakyReLU/Dropout discriminator")
+    print("  [ADDA] OCT-DDA 官方：vgg16_bn.features(25088) + BN/LeakyReLU/Dropout 判别器")
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     src_enc = VGGBnBackbone().to(device)
@@ -101,13 +112,13 @@ def train(args):
     train_source(src_enc, clf, data['src_train'], data.get('src_val'), device,
                  epochs=args.src_epochs, lr=args.lr)
 
-    # pre-adversarial baseline check (print only)
+    # ── 对抗前基线诊断（纯打印，不影响训练）──
     acc_src_t, _, _ = test(src_enc, clf, data['src_test'], len(data['src_test'].dataset),
                            num_classes=n_cls, class_names=data['class_names'])
     acc_tgt0, _, _ = test(src_enc, clf, data['tgt_test'], len(data['tgt_test'].dataset),
                           num_classes=n_cls, class_names=data['class_names'])
-    print("  [ADDA] BASELINE before adversarial: src test acc={:.4f}  tgt test acc={:.4f}  "
-          "(if src already low -> source pretrain issue; if src high tgt low -> check post-adversarial collapse)".format(acc_src_t, acc_tgt0))
+    print("  [ADDA] BASELINE 对抗前: 源测试 acc={:.4f}  目标测试 acc={:.4f}  "
+          "（若源已低→源域预训练问题；若源高目标低→看对抗后是否崩）".format(acc_src_t, acc_tgt0))
 
     # freeze source encoder + classifier
     for p in src_enc.parameters():
@@ -116,11 +127,11 @@ def train(args):
         p.requires_grad_(False)
     src_enc.eval(); clf.eval()
 
-    # init target encoder from the trained source encoder (official order)
+    # 目标编码器从【训练好的】源编码器初始化（官方顺序：先 train_source 再复制）
     tgt_enc.load_state_dict(src_enc.state_dict())
 
     disc = Discriminator(input_dims=src_enc.out_dim).to(device)
-    # OCT-DDA official: target encoder SGD 1e-4, discriminator SGD 1e-3
+    # OCT-DDA 官方：目标编码器 SGD 1e-4，判别器 SGD 1e-3（D 快 G 慢 + BN/Dropout 防过拟合）
     opt_d = optim.SGD(disc.parameters(), lr=args.disc_lr, momentum=0.9)
     opt_t = optim.SGD(tgt_enc.parameters(), lr=args.tgt_lr, momentum=0.9)
     ce = nn.CrossEntropyLoss()
@@ -147,12 +158,12 @@ def train(args):
             ft = tgt_enc(xt)
             fs = fs.view(fs.size(0), -1)      # 25088
             ft = ft.view(ft.size(0), -1)      # 25088
-            # official labels: source features -> 1, target features -> 0
+            # 官方标签：源特征 -> 1，目标特征 -> 0
             dl_s = torch.ones(fs.size(0), dtype=torch.long, device=fs.device)
             dl_t = torch.zeros(ft.size(0), dtype=torch.long, device=ft.device)
 
-            # 2.1 update discriminator: cat source+target into one forward so BN uses the mixed batch;
-            #     separate forwards would normalize each domain apart and make D unable to learn
+            # 2.1 update discriminator：官方把源+目标 cat 一次前向（BN 用混合批次，
+            #     保留域差异；分开前向会让 BN 分别归一化抹平域差异导致 D 学不动）
             opt_d.zero_grad()
             pred_cat = disc(torch.cat([fs, ft], 0).detach())
             lab_cat = torch.cat([dl_s, dl_t], 0)
@@ -160,7 +171,7 @@ def train(args):
             loss_d.backward()
             opt_d.step()
 
-            # 2.2 adversarial update of target encoder: target labeled as source (1)
+            # 2.2 adversarial update target encoder：目标被判为源(1)
             opt_t.zero_grad()
             ft2 = tgt_enc(xt).view(xt.size(0), -1)
             pred_tgt = disc(ft2)
@@ -178,7 +189,7 @@ def train(args):
         print("  [ADDA] epoch {}/{} tgt_acc={:.4f} tgt_auc={:.4f} | best={:.4f}@ep{}".format(
             epoch + 1, args.epochs, acc, auc, best_tgt_acc, best_epoch))
 
-    # early stop: load best-epoch weights as the final result
+    # 早停：加载 best epoch 权重作为最终结果
     if best_enc is not None:
         tgt_enc.load_state_dict(best_enc)
     print("  [ADDA] early-stop: best tgt acc={:.4f} at epoch {}".format(best_tgt_acc, best_epoch))
@@ -193,19 +204,19 @@ def main():
     parser.add_argument('--tgt', type=str, default='B', choices=['A', 'B', 'C'])
     parser.add_argument('--seed', type=int, default=777)
     parser.add_argument('--src_epochs', type=int, default=15,
-                        help='Source pretrain epochs (early stop: 15)')
+                        help='源域预训练 epochs（早停：15 轮）')
     parser.add_argument('--epochs', type=int, default=10,
-                        help='Adversarial epochs (early stop: 10 on target, take best epoch)')
+                        help='对抗 epochs（早停：目标域 10 轮，取 best epoch）')
     parser.add_argument('--batch', type=int, default=8,
-                        help='Official batch_size=8')
+                        help='官方 batch_size=8')
     parser.add_argument('--lr', type=float, default=0.001,
-                        help='Source pretrain SGD lr=0.001 (official)')
+                        help='源域预训练 SGD lr=0.001（官方）')
     parser.add_argument('--tgt_lr', type=float, default=1e-4,
-                        help='Target encoder SGD lr=1e-4 (official)')
+                        help='目标编码器 SGD lr=1e-4（官方）')
     parser.add_argument('--disc_lr', type=float, default=1e-3,
-                        help='Discriminator SGD lr=1e-3 (official)')
+                        help='判别器 SGD lr=1e-3（官方）')
     parser.add_argument('--input_size', type=int, default=224,
-                        help='VGG-16 official input 224')
+                        help='VGG-16 官方输入 224')
     args = parser.parse_args()
     train(args)
 

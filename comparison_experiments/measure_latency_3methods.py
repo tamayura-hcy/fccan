@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-"""Measure inference latency of TVT / DaC on target test sets.
+"""measure_latency_3methods.py —— TVT / DaC 目标域测试集推理耗时。
 
-Protocol matches Table V: batch 16, 3 repeats, total test-set time (s).
-Model structure matches the official code (random init; weights do not affect latency).
+与表 V 同口径：batch 16、3 遍取均值、输出整个测试集总时间（s）。
+模型结构与官方一致（权重值不影响推理耗时，采用随机初始化）。
 
-Usage:
+用法：
     python -m comparison_experiments.measure_latency_3methods --method tvt --task A-B
     python -m comparison_experiments.measure_latency_3methods --method all
-Output: comparison_experiments/results/latency_3methods.csv
+输出：
+    comparison_experiments/results/latency_3methods.csv
 """
 import argparse
 import csv
@@ -24,7 +25,7 @@ ROOT = os.path.dirname(HERE)
 IM_MEAN = [0.485, 0.456, 0.406]
 IM_STD = [0.229, 0.224, 0.225]
 
-# Target-domain test sets (same as the main table)
+# 目标域测试集（与主表一致）
 TASKS = {"A-B": "TMI", "A-C": "CELL", "B-C": "CELL"}
 DATA_DIRS = {"TMI": "TMIdata_split_by_person", "CELL": "CELL_split_2025"}
 
@@ -48,7 +49,7 @@ def build_tvt(task=None):
     cfg = CONFIGS["ViT-B_16"]
     model = VisionTransformer(cfg, 224, zero_head=True, num_classes=3, msa_layer=12)
     ad_net = AdversarialNetwork(cfg.hidden_size // 12, cfg.hidden_size // 12)
-    # TVT test transform (official office branch: Resize(224) + mean subtraction only)
+    # TVT 测试 transform（官方 office 分支：Resize(224) + 仅减均值）
     tf = transforms.Compose([
         transforms.Resize((224, 224)), transforms.ToTensor(),
         transforms.Normalize(mean=IM_MEAN, std=[1.0, 1.0, 1.0])])
@@ -90,7 +91,7 @@ def measure(method, task, device="cuda", batch=16, repeats=3):
         ad_net.to(device).eval()
     loader = get_loader(task, batch=batch, tf=tf)
 
-    # Warm-up (first batch includes CUDA init)
+    # 预热（首个 batch 含 CUDA 初始化）
     with torch.no_grad():
         for x, _ in loader:
             forward(method, model, x.to(device), ad_net)
@@ -129,7 +130,7 @@ def main():
         w = csv.DictWriter(f, fieldnames=["method", "task", "best_s", "avg_s"])
         w.writeheader()
         w.writerows(rows)
-    print("Saved to {}".format(out_csv))
+    print("已写入 {}".format(out_csv))
 
 
 if __name__ == "__main__":

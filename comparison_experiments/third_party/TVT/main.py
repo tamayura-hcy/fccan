@@ -17,8 +17,8 @@ from torch.nn import CrossEntropyLoss
 from tqdm import tqdm
 from torch.utils.tensorboard import SummaryWriter
 from sklearn.metrics import roc_auc_score
-# apex is only used in the official train.py; main.py never calls amp/DDP,
-# so it was removed for torch 2.x compatibility (originally: from apex import amp / DistributedDataParallel as DDP)
+# apex 仅在官方 train.py 使用；main.py 全程不调用 amp/DDP，
+# 为兼容 torch 2.x 直接移除（原 from apex import amp / DistributedDataParallel as DDP）
 
 from models.modeling import VisionTransformer, CONFIGS, AdversarialNetwork
 from utils.scheduler import WarmupLinearSchedule, WarmupCosineSchedule
@@ -141,7 +141,7 @@ def valid(args, model, ad_net, writer, test_loader, global_step):
     else:
         accuracy = simple_accuracy(all_preds, all_label)
 
-    # macro-averaged AUC (one-vs-rest, consistent with the paper)
+    # 宏平均 AUC（one-vs-rest，与论文口径一致）
     try:
         auc = roc_auc_score(all_label.astype(int), all_probs,
                             multi_class='ovr', average='macro')

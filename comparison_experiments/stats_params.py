@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Count parameters (M) of comparison-method inference models."""
+"""stats_params.py —— 统计对比方法推理模型的参数量（M）。"""
 import os
 import sys
 

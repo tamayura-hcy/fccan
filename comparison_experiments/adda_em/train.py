@@ -20,12 +20,12 @@ ROOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
 SAVE_ROOT = os.path.join(ROOT, "saves_adda_em")
 RESULT_CSV = os.path.join(ROOT, "results", "adda_em_summary.csv")
 
-TASKS = [("A", "B"), ("A", "C"), ("B", "C")]          # paper's three cross-device scenarios
+TASKS = [("A", "B"), ("A", "C"), ("B", "C")]          # 论文三个跨设备场景
 SEEDS = [42, 123, 777, 2024, 3407]
 
 
 class Discriminator(nn.Module):
-    """OCT-DDA official discriminator (ADDA_EM_vgg16_train.py): BN+LeakyReLU+Dropout + sigmoid."""
+    """OCT-DDA 官方 ADDA 判别器（ADDA_EM_vgg16_train.py）：BN+LeakyReLU+Dropout + sigmoid。"""
 
     def __init__(self, input_dims=25088, hidden_dims=500, output_dims=2):
         super().__init__()
@@ -39,13 +39,13 @@ class Discriminator(nn.Module):
 
 
 def entropy_loss(p_logit):
-    """Official EM loss: -sum(p * log p), averaged over the batch."""
+    """官方 EM 损失：-sum(p * log p)（batch 平均）。"""
     p = F.softmax(p_logit, dim=-1)
     return -1.0 * torch.sum(p * F.log_softmax(p_logit, dim=-1)) / p_logit.size(0)
 
 
 def train_source(enc, clf, src_loader, val_loader, device, epochs, lr=0.001):
-    """Official source stage: SGD lr=0.001 + val early stop (save best on val acc gain)."""
+    """官方源域：SGD lr=0.001 + val 早停（val acc 提升才保存，最后加载 best）。"""
     opt = optim.SGD(list(enc.parameters()) + list(clf.parameters()), lr=lr, momentum=0.9)
     ce = nn.CrossEntropyLoss()
     best_acc, best_enc, best_clf = 0.0, None, None
@@ -56,7 +56,7 @@ def train_source(enc, clf, src_loader, val_loader, device, epochs, lr=0.001):
             if torch.cuda.is_available():
                 xs, ys = xs.cuda(), ys.cuda()
             opt.zero_grad()
-            loss = ce(clf(enc(xs)), ys)      # clf flattens 25088 internally
+            loss = ce(clf(enc(xs)), ys)      # clf 内部展平 25088
             loss.backward()
             opt.step()
             loss_sum += loss.item()
@@ -90,11 +90,11 @@ def train_source(enc, clf, src_loader, val_loader, device, epochs, lr=0.001):
 def train_tgt(src_enc, src_clf, tgt_enc, netD, src_loader, tgt_loader, device,
               num_epochs, tgt_lr=1e-4, disc_lr=1e-3, em_w=1.0, disc_updates=1,
               disc_gap=False, g_updates=1, log_fn=print):
-    """Official ADDA+EM: discriminator + target encoder (adversarial + entropy), no early stop.
+    """官方 ADDA+EM：判别器 + 目标编码器（对抗 + 熵最小化），无早停（报告 final-epoch）。
 
-    disc_gap=True: discriminator input is GAP features (512-d) instead of flattened 25088-d.
-    The official structure is unstable at batch 16 + SGD; GAP is an engineering variant
-    to keep the discriminator trainable and avoid negative transfer.
+    disc_gap=True：判别器输入改用 GAP 特征（512 维）而非 25088 维展平卷积特征。
+    官方结构在 batch 16 + SGD 下不稳定（D 快压死生成器 / D 慢学不动），
+    GAP 降维是让判别器可训、避免负迁移的工程化变体。
     """
     src_enc.eval(); src_clf.eval()
     ce = nn.CrossEntropyLoss()
@@ -105,8 +105,8 @@ def train_tgt(src_enc, src_clf, tgt_enc, netD, src_loader, tgt_loader, device,
     def _feat(enc, x):
         f = enc(x)
         if disc_gap:
-            return f.mean(dim=(2, 3))   # 512-d GAP
-        return f.view(f.size(0), -1)    # flattened 25088-d
+            return f.mean(dim=(2, 3))   # 512 维 GAP
+        return f.view(f.size(0), -1)    # 25088 维展平
 
     for epoch in range(num_epochs):
         tgt_enc.train(); netD.train()
@@ -124,9 +124,9 @@ def train_tgt(src_enc, src_clf, tgt_enc, netD, src_loader, tgt_loader, device,
             dl_s = torch.ones(fs.size(0), dtype=torch.long, device=fs.device)
             dl_t = torch.zeros(ft.size(0), dtype=torch.long, device=ft.device)
 
-            # 2.1 update discriminator (source=1 / target=0), disc_updates times (official=1).
-            # Cat source+target into one batch so BN sees the mixed batch (separate forwards
-            # would normalize each domain apart and make D unable to learn).
+            # 2.1 更新判别器（源=1 / 目标=0）；disc_updates 次（官方=1）
+            # 官方：把源+目标特征 cat 成一个大 batch 后一次前向 netD（保留域差异，
+            # 避免 BN 分别按源/目标各自归一化而抹平域差异导致 D 学不动）
             for _ in range(max(1, int(disc_updates))):
                 opt_d.zero_grad()
                 pred_cat = netD(torch.cat([fs, ft], 0).detach())
@@ -134,13 +134,13 @@ def train_tgt(src_enc, src_clf, tgt_enc, netD, src_loader, tgt_loader, device,
                 loss_d = ce(pred_cat, lab_cat)
                 loss_d.backward()
                 opt_d.step()
-            # discriminator accuracy (diagnostic: ~1.0 = D too strong, negative-transfer risk; ~0.5 = D not learning)
+            # 判别器准确率（诊断：若接近 1.0 说明 D 过强，易负迁移；若 ~0.5 说明 D 没学到）
             d_pred = pred_cat.detach().argmax(1)
             d_correct += int((d_pred == lab_cat).sum().item())
             d_total += int(lab_cat.numel())
 
-            # 2.2 update target encoder: adversarial (label as source) + EM; g_updates times (official=1).
-            # Increase g_updates when D converges too fast (D once per step, G multiple times).
+            # 2.2 更新目标编码器：对抗（判为源）+ EM（分类器熵）；g_updates 次（官方=1）
+            # 判别器收敛过快时加大 g_updates 让生成器追上（D 每步 1 次、G 每步多次）
             for _ in range(max(1, int(g_updates))):
                 opt_t.zero_grad()
                 raw2 = tgt_enc(xt)
@@ -148,13 +148,13 @@ def train_tgt(src_enc, src_clf, tgt_enc, netD, src_loader, tgt_loader, device,
                 pred_tgt = netD(ft2)
                 dl_adv = torch.ones(ft2.size(0), dtype=torch.long, device=ft2.device)
                 loss_adv = ce(pred_tgt, dl_adv)
-                # classifier always uses flattened 25088-d features (as official), independent of D input dim
+                # 分类器始终使用 25088 维展平特征（与官方一致），与判别器输入维度无关
                 outputs = src_clf(raw2.view(raw2.size(0), -1))
                 loss_em = entropy_loss(outputs)
                 loss = loss_adv + em_w * loss_em
                 loss.backward()
                 opt_t.step()
-        # per-epoch target test (final-epoch report) + discriminator diagnostic
+        # 每 epoch 目标域测试（final-epoch 报告）+ 判别器诊断
         acc, auc, _ = test(tgt_enc, src_clf, tgt_loader, len(tgt_loader.dataset))
         log_fn("  [ADDA-EM] tgt epoch {}/{} tgt_acc={:.4f} tgt_auc={:.4f}  D_acc={:.3f}".format(
             epoch + 1, num_epochs, acc, auc, float(d_correct) / max(d_total, 1)))
@@ -165,10 +165,10 @@ def run_one(src, tgt, seed, src_epochs, epochs, em_w, batch, save_ckpt=False,
             tgt_lr=1e-4, disc_lr=1e-3, disc_updates=1, tgt_protocol='paper75',
             src_only=False, disc_gap=False, g_updates=1):
     set_seed(seed)
-    tgt_pct = 75 if tgt_protocol == 'paper75' else 50   # paper75=merged 75%; official50=train only
+    tgt_pct = 75 if tgt_protocol == 'paper75' else 50   # paper75=论文 75% 合并；official50=官方仅 train
     data = load_task(src, tgt, input_size=224, batch_src=batch, batch_tgt=batch,
                      tmi_target_unlabeled_pct=tgt_pct,
-                     train_aug=False, normalize=False)   # official: no aug, no ImageNet normalization
+                     train_aug=False, normalize=False)   # 官方无增强、无 ImageNet 归一化
     n_cls = len(data['class_names'])
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print("\n[ADDA-EM] task {}->{} seed={} classes={} tgt_protocol={}".format(
@@ -182,21 +182,21 @@ def run_one(src, tgt, seed, src_epochs, epochs, em_w, batch, save_ckpt=False,
     src_enc, src_clf = train_source(src_enc, src_clf, data['src_train'], data.get('src_val'),
                                     device, epochs=src_epochs)
 
-    # source-only performance on target (to detect negative transfer)
+    # 源域本身在目标域上的表现（source-only 基线，用于判断是否负迁移）
     acc_so, auc_so, _ = test(src_enc, src_clf, data['tgt_test'], len(data['tgt_test'].dataset),
                              num_classes=n_cls, class_names=data['class_names'])
     print("  [ADDA-EM] source-only on target: acc={:.4f} auc={:.4f}".format(acc_so, auc_so))
     if src_only:
-        print("  [ADDA-EM] --src_only: skip adversarial adaptation, return source-only result")
+        print("  [ADDA-EM] --src_only: 不进行对抗适应，返回 source-only 结果")
         return acc_so, auc_so
 
-    # freeze source
+    # 冻结源
     for p in src_enc.parameters():
         p.requires_grad_(False)
     for p in src_clf.parameters():
         p.requires_grad_(False)
 
-    # init target encoder from the trained source encoder (official order)
+    # 目标编码器从【训练好的】源编码器初始化（官方顺序：先 train_source 再复制）
     tgt_enc.load_state_dict(src_enc.state_dict())
 
     netD = Discriminator(input_dims=(512 if disc_gap else src_enc.out_dim)).to(device)
@@ -207,7 +207,7 @@ def run_one(src, tgt, seed, src_epochs, epochs, em_w, batch, save_ckpt=False,
               em_w=em_w, disc_updates=disc_updates, disc_gap=disc_gap,
               g_updates=g_updates)
 
-    # final-epoch test (paper protocol)
+    # final-epoch 测试（论文统一协议）
     acc, auc, _ = test(tgt_enc, src_clf, data['tgt_test'], len(data['tgt_test'].dataset),
                        num_classes=n_cls, class_names=data['class_names'])
     print("  [ADDA-EM] FINAL (final-epoch): tgt_acc={:.4f} tgt_auc={:.4f}  (source-only {:.4f})"
@@ -237,7 +237,7 @@ def run_all(args):
                                disc_gap=args.disc_gap, g_updates=args.g_updates)
             rows.append({"task": "{}->{}".format(LABEL_TO_DATASET[src], LABEL_TO_DATASET[tgt]),
                          "seed": seed, "acc": acc, "auc": auc})
-    # summary
+    # 汇总
     with open(RESULT_CSV, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["task", "seed", "acc", "auc"])
         w.writeheader()
@@ -260,22 +260,22 @@ def main():
     ap.add_argument("--src", type=str, default="A", choices=["A", "B", "C"])
     ap.add_argument("--tgt", type=str, default="B", choices=["A", "B", "C"])
     ap.add_argument("--seed", type=int, default=42)
-    ap.add_argument("--src_epochs", type=int, default=5, help="Source pretrain epochs (official default 5, val early stop)")
-    ap.add_argument("--epochs", type=int, default=10, help="Target adversarial+EM epochs (unified 10 in paper)")
-    ap.add_argument("--em_w", type=float, default=1.0, help="EM loss weight (official = 1)")
-    ap.add_argument("--batch", type=int, default=16, help="Official batch_size=16")
-    ap.add_argument("--tgt_lr", type=float, default=1e-4, help="Target encoder SGD lr (official 1e-4)")
-    ap.add_argument("--disc_lr", type=float, default=1e-3, help="Discriminator SGD lr (official 1e-3, lower if negative transfer)")
-    ap.add_argument("--disc_updates", type=int, default=1, help="Discriminator updates per step (official 1)")
-    ap.add_argument("--g_updates", type=int, default=1, help="Target encoder updates per step (official 1; increase e.g. 2/3 if D converges too fast)")
+    ap.add_argument("--src_epochs", type=int, default=5, help="源域预训练 epochs（官方默认 5，val 早停）")
+    ap.add_argument("--epochs", type=int, default=10, help="目标域对抗+EM epochs（论文统一 10）")
+    ap.add_argument("--em_w", type=float, default=1.0, help="EM 损失权重（官方 = 1）")
+    ap.add_argument("--batch", type=int, default=16, help="官方 batch_size=16")
+    ap.add_argument("--tgt_lr", type=float, default=1e-4, help="目标编码器 SGD lr（官方 1e-4）")
+    ap.add_argument("--disc_lr", type=float, default=1e-3, help="判别器 SGD lr（官方 1e-3，负迁移时可调小）")
+    ap.add_argument("--disc_updates", type=int, default=1, help="每步判别器更新次数（官方 1）")
+    ap.add_argument("--g_updates", type=int, default=1, help="每步目标编码器更新次数（官方 1；D 收敛过快时调大，如 2/3）")
     ap.add_argument("--tgt_protocol", type=str, default="paper75",
                     choices=["paper75", "official50"],
-                    help="paper75=paper 75% target merge; official50=official train dir only")
+                    help="paper75=论文 75% 目标合并；official50=官方仅 train 目录")
     ap.add_argument("--disc_gap", action="store_true",
-                    help="Use GAP 512-dim features for discriminator (stabilize adversarial, avoid unstable 25088-dim D)")
-    ap.add_argument("--src_only", action="store_true", help="Train source only and test target (negative-transfer diagnostic baseline)")
+                    help="判别器用 GAP 512 维特征（稳定对抗，规避 25088 维 D 不稳定）")
+    ap.add_argument("--src_only", action="store_true", help="只训源并测目标（诊断负迁移基线）")
     ap.add_argument("--save_ckpt", type=int, default=0, choices=[0, 1])
-    ap.add_argument("--all", action="store_true", help="Run 3 tasks x 5 seeds and aggregate")
+    ap.add_argument("--all", action="store_true", help="跑 3 任务 × 5 种子并汇总")
     args = ap.parse_args()
     if args.all:
         run_all(args)

@@ -1,0 +1,62 @@
+  [TMI tgt] 75% 协议: train1828 + val1009 = 2837 (约 75%)
+task=BOE->TMI  classes=['AMD', 'DME', 'NORMAL']
+  test acc=0.4793 | auc=0.7601 | recall=0.5590 | precision=0.5874 | f1=0.4755 | bacc=0.5590 | specificity=0.7617 | kappa=0.2689 | gmean=0.4910 | mcc=0.3177 | time=6.1s
+  per-class recall: AMD:0.3048 | DME:0.9731 | NORMAL:0.3990
+  [CAN] epoch 1/20 tgt_acc=0.4793 tgt_auc=0.7601
+  test acc=0.5828 | auc=0.8297 | recall=0.6462 | precision=0.6591 | f1=0.5846 | bacc=0.6462 | specificity=0.8076 | kappa=0.4005 | gmean=0.6094 | mcc=0.4417 | time=6.1s
+  per-class recall: AMD:0.4615 | DME:0.9731 | NORMAL:0.5039
+  [CAN] epoch 2/20 tgt_acc=0.5828 tgt_auc=0.8297
+  test acc=0.6035 | auc=0.8506 | recall=0.6682 | precision=0.6983 | f1=0.6072 | bacc=0.6682 | specificity=0.8200 | kappa=0.4323 | gmean=0.6319 | mcc=0.4810 | time=6.2s
+  per-class recall: AMD:0.4929 | DME:1.0000 | NORMAL:0.5118
+  [CAN] epoch 3/20 tgt_acc=0.6035 tgt_auc=0.8506
+  test acc=0.6373 | auc=0.8553 | recall=0.6935 | precision=0.6954 | f1=0.6403 | bacc=0.6935 | specificity=0.8337 | kappa=0.4748 | gmean=0.6668 | mcc=0.5120 | time=6.1s
+  per-class recall: AMD:0.5983 | DME:0.9731 | NORMAL:0.5092
+  [CAN] epoch 4/20 tgt_acc=0.6373 tgt_auc=0.8553
+  test acc=0.6122 | auc=0.8324 | recall=0.6755 | precision=0.6761 | f1=0.6162 | bacc=0.6755 | specificity=0.8216 | kappa=0.4413 | gmean=0.6408 | mcc=0.4809 | time=6.2s
+  per-class recall: AMD:0.5726 | DME:0.9892 | NORMAL:0.4646
+  [CAN] epoch 5/20 tgt_acc=0.6122 tgt_auc=0.8324
+  test acc=0.6111 | auc=0.8372 | recall=0.6753 | precision=0.6813 | f1=0.6159 | bacc=0.6753 | specificity=0.8191 | kappa=0.4376 | gmean=0.6406 | mcc=0.4755 | time=6.2s
+  per-class recall: AMD:0.5299 | DME:1.0000 | NORMAL:0.4961
+  [CAN] epoch 6/20 tgt_acc=0.6111 tgt_auc=0.8372
+  test acc=0.6394 | auc=0.8452 | recall=0.7014 | precision=0.7016 | f1=0.6422 | bacc=0.7014 | specificity=0.8369 | kappa=0.4815 | gmean=0.6647 | mcc=0.5254 | time=6.2s
+  per-class recall: AMD:0.6581 | DME:1.0000 | NORMAL:0.4462
+  [CAN] epoch 7/20 tgt_acc=0.6394 tgt_auc=0.8452
+  test acc=0.6318 | auc=0.8483 | recall=0.6923 | precision=0.6923 | f1=0.6358 | bacc=0.6923 | specificity=0.8300 | kappa=0.4668 | gmean=0.6618 | mcc=0.5040 | time=6.2s
+  per-class recall: AMD:0.5783 | DME:0.9946 | NORMAL:0.5039
+  [CAN] epoch 8/20 tgt_acc=0.6318 tgt_auc=0.8483
+  test acc=0.6427 | auc=0.8507 | recall=0.7005 | precision=0.6877 | f1=0.6460 | bacc=0.7005 | specificity=0.8328 | kappa=0.4790 | gmean=0.6729 | mcc=0.5099 | time=6.2s
+  per-class recall: AMD:0.5926 | DME:0.9892 | NORMAL:0.5197
+  [CAN] epoch 9/20 tgt_acc=0.6427 tgt_auc=0.8507
+  test acc=0.6264 | auc=0.8401 | recall=0.6894 | precision=0.6881 | f1=0.6295 | bacc=0.6894 | specificity=0.8299 | kappa=0.4628 | gmean=0.6519 | mcc=0.5052 | time=6.2s
+  per-class recall: AMD:0.6353 | DME:0.9946 | NORMAL:0.4383
+  [CAN] epoch 10/20 tgt_acc=0.6264 tgt_auc=0.8401
+  test acc=0.6089 | auc=0.8258 | recall=0.6742 | precision=0.6631 | f1=0.6138 | bacc=0.6742 | specificity=0.8162 | kappa=0.4327 | gmean=0.6380 | mcc=0.4659 | time=6.2s
+  per-class recall: AMD:0.5527 | DME:1.0000 | NORMAL:0.4698
+  [CAN] epoch 11/20 tgt_acc=0.6089 tgt_auc=0.8258
+  test acc=0.6253 | auc=0.8368 | recall=0.6859 | precision=0.6702 | f1=0.6294 | bacc=0.6859 | specificity=0.8231 | kappa=0.4536 | gmean=0.6551 | mcc=0.4833 | time=6.3s
+  per-class recall: AMD:0.5698 | DME:0.9892 | NORMAL:0.4987
+  [CAN] epoch 12/20 tgt_acc=0.6253 tgt_auc=0.8368
+  test acc=0.6405 | auc=0.8438 | recall=0.6993 | precision=0.6758 | f1=0.6443 | bacc=0.6993 | specificity=0.8298 | kappa=0.4740 | gmean=0.6699 | mcc=0.5010 | time=6.2s
+  per-class recall: AMD:0.6125 | DME:0.9892 | NORMAL:0.4961
+  [CAN] epoch 13/20 tgt_acc=0.6405 tgt_auc=0.8438
+  test acc=0.6590 | auc=0.8579 | recall=0.7141 | precision=0.6941 | f1=0.6627 | bacc=0.7141 | specificity=0.8382 | kappa=0.4989 | gmean=0.6894 | mcc=0.5245 | time=6.2s
+  per-class recall: AMD:0.6097 | DME:0.9892 | NORMAL:0.5433
+  [CAN] epoch 14/20 tgt_acc=0.6590 tgt_auc=0.8579
+  test acc=0.6514 | auc=0.8612 | recall=0.7089 | precision=0.7058 | f1=0.6558 | bacc=0.7089 | specificity=0.8362 | kappa=0.4903 | gmean=0.6820 | mcc=0.5218 | time=6.2s
+  per-class recall: AMD:0.5755 | DME:1.0000 | NORMAL:0.5512
+  [CAN] epoch 15/20 tgt_acc=0.6514 tgt_auc=0.8612
+  test acc=0.6416 | auc=0.8547 | recall=0.7004 | precision=0.6936 | f1=0.6462 | bacc=0.7004 | specificity=0.8319 | kappa=0.4772 | gmean=0.6719 | mcc=0.5089 | time=6.2s
+  per-class recall: AMD:0.5869 | DME:0.9946 | NORMAL:0.5197
+  [CAN] epoch 16/20 tgt_acc=0.6416 tgt_auc=0.8547
+  test acc=0.6525 | auc=0.8579 | recall=0.7103 | precision=0.6930 | f1=0.6566 | bacc=0.7103 | specificity=0.8366 | kappa=0.4919 | gmean=0.6820 | mcc=0.5209 | time=6.2s
+  per-class recall: AMD:0.6296 | DME:0.9946 | NORMAL:0.5066
+  [CAN] epoch 17/20 tgt_acc=0.6525 tgt_auc=0.8579
+  test acc=0.6645 | auc=0.8699 | recall=0.7193 | precision=0.6909 | f1=0.6680 | bacc=0.7193 | specificity=0.8400 | kappa=0.5058 | gmean=0.6942 | mcc=0.5290 | time=6.2s
+  per-class recall: AMD:0.6410 | DME:0.9892 | NORMAL:0.5276
+  [CAN] epoch 18/20 tgt_acc=0.6645 tgt_auc=0.8699
+  test acc=0.6688 | auc=0.8698 | recall=0.7235 | precision=0.7010 | f1=0.6728 | bacc=0.7235 | specificity=0.8425 | kappa=0.5125 | gmean=0.6992 | mcc=0.5370 | time=6.1s
+  per-class recall: AMD:0.6325 | DME:0.9946 | NORMAL:0.5433
+  [CAN] epoch 19/20 tgt_acc=0.6688 tgt_auc=0.8698
+  test acc=0.6340 | auc=0.8538 | recall=0.6956 | precision=0.6783 | f1=0.6379 | bacc=0.6956 | specificity=0.8284 | kappa=0.4673 | gmean=0.6633 | mcc=0.4987 | time=6.2s
+  per-class recall: AMD:0.6011 | DME:1.0000 | NORMAL:0.4856
+  [CAN] epoch 20/20 tgt_acc=0.6340 tgt_auc=0.8538

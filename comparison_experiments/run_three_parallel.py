@@ -1,24 +1,33 @@
 # -*- coding: utf-8 -*-
-"""Serial reproduction of TVT / DaC baselines.
+"""run_three_parallel.py —— TVT / DaC 两方法串行复现。
 
-They cannot share a 16GB GPU, so they run sequentially (each 3 tasks x 5 seeds).
-Output per method: results_{tvt,dac}.csv and history_{tvt,dac}.csv.
+16GB 单卡上两个方法显存无法共存，改为**串行**：依次完整跑完
+TVT → DaC（每个方法内部仍是 3 任务 × 5 种子）。
 
-Usage:
+每个方法输出：
+- results_{tvt,dac}.csv（汇总）
+- history_{tvt,dac}.csv（逐轮记录）
+
+协议：
+- TVT：单阶段 5000 步（官方 VisDA 协议，每 100 步评估一轮，无源/目标分离）
+- DaC：源域 10 epoch + 目标域 15 epoch
+
+用法：
     python -m comparison_experiments.run_three_parallel [--methods tvt dac] [--tvt-batch 16]
-Logs: comparison_experiments/logs/{tvt,dac}.log
+日志：
+    comparison_experiments/logs/{tvt,dac}.log
 """
 import argparse
 import os
 import subprocess
 import sys
 
-# Windows GBK console: use replacement chars for subprocess output to avoid UnicodeEncodeError
+# 服务器 Windows 控制台 GBK：打印子进程输出含特殊字符时用替换符，避免 UnicodeEncodeError
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(errors="replace")
 
 HERE = os.path.dirname(os.path.abspath(__file__))  # comparison_experiments/
-ROOT = os.path.dirname(HERE)                        # project root (package-visible location)
+ROOT = os.path.dirname(HERE)                        # 项目根目录（包可见位置）
 LOGS_DIR = os.path.join(HERE, "logs")
 
 SEEDS = [42, 123, 777, 2024, 3407]
@@ -27,7 +36,7 @@ SEEDS = [42, 123, 777, 2024, 3407]
 def build_cmd(method, gpu_id, tvt_batch=None):
     cmd = [sys.executable, "-m", "comparison_experiments.{}.run_all".format(method),
            "--seeds"] + [str(s) for s in SEEDS]
-    # TVT's run_all has no --gpu-id, use env var instead; DaC supports --gpu-id
+    # TVT 的 run_all 无 --gpu-id，改用环境变量；DaC 支持 --gpu-id
     if gpu_id is not None and method != "tvt":
         cmd += ["--gpu-id", str(gpu_id)]
     if method == "tvt" and tvt_batch is not None:
@@ -36,19 +45,19 @@ def build_cmd(method, gpu_id, tvt_batch=None):
 
 
 def run_method(method, tag, gpu_id, tvt_batch):
-    """Run one method serially: write output line-by-line to log and forward to console."""
+    """串行跑一个方法：输出逐行写日志并转发主控台。"""
     cmd = build_cmd(method, gpu_id, tvt_batch=tvt_batch)
-    print("\n[MAIN] ===== Start {}: {} =====".format(tag, " ".join(cmd)), flush=True)
+    print("\n[MAIN] ===== 开始 {}: {} =====".format(tag, " ".join(cmd)), flush=True)
     env = dict(os.environ)
     if gpu_id is not None and method == "tvt":
         env["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
-    # cwd must be the project root, otherwise -m comparison_experiments.xxx cannot find the package
+    # cwd 必须是项目根目录，否则 `-m comparison_experiments.xxx` 找不到包
     proc = subprocess.Popen(cmd, cwd=ROOT, stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT, text=True,
                             encoding="utf-8", errors="replace", env=env)
     log_path = os.path.join(LOGS_DIR, method + ".log")
     with open(log_path, "a", encoding="utf-8") as f:
-        f.write("\n==== {} started: {} ====\n".format(tag, " ".join(cmd)))
+        f.write("\n==== {} 启动: {} ====\n".format(tag, " ".join(cmd)))
         for line in proc.stdout:
             line = line.rstrip()
             if ('%|' in line) or ('it/s' in line):
@@ -62,12 +71,12 @@ def run_method(method, tag, gpu_id, tvt_batch):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Serial reproduction of TVT/DaC")
+    ap = argparse.ArgumentParser(description="TVT/DaC 两方法串行复现")
     ap.add_argument("--methods", nargs="+", default=["tvt", "dac"],
-                    help="Methods to run serially in order (default: all)")
-    ap.add_argument("--gpu-tvt", type=str, default=None, help="GPU for TVT (default: inherit env)")
-    ap.add_argument("--gpu-dac", type=str, default=None, help="GPU for DaC")
-    ap.add_argument("--tvt-batch", type=int, default=16, help="TVT training batch (suggest 16 on a 16GB GPU)")
+                    help="按顺序串行运行的方法（默认全部）")
+    ap.add_argument("--gpu-tvt", type=str, default=None, help="TVT 用哪张卡（默认继承环境）")
+    ap.add_argument("--gpu-dac", type=str, default=None, help="DaC 用哪张卡")
+    ap.add_argument("--tvt-batch", type=int, default=16, help="TVT 训练 batch（16GB 单卡建议 16）")
     args = ap.parse_args()
 
     os.makedirs(LOGS_DIR, exist_ok=True)
@@ -79,19 +88,19 @@ def main():
         rc = run_method(method, tags[method], gpus[method], args.tvt_batch)
         if rc != 0:
             failed.append(tags[method])
-            print("[MAIN] {} failed rc={}, continue with the next method".format(tags[method], rc), flush=True)
+            print("[MAIN] {} 失败 rc={}，继续跑下一个方法".format(tags[method], rc), flush=True)
         else:
-            print("[MAIN] {} done".format(tags[method]), flush=True)
+            print("[MAIN] {} 完成".format(tags[method]), flush=True)
 
-    print("\n[MAIN] All finished. Result files:", flush=True)
+    print("\n[MAIN] 全部结束。结果文件：", flush=True)
     for method in args.methods:
         r = os.path.join(HERE, method, "results_{}.csv".format(method))
         h = os.path.join(HERE, method, "history_{}.csv".format(method))
         print("  {}: {} | {}".format(method, r, h), flush=True)
     if failed:
-        print("[MAIN] Failed methods: {}".format(", ".join(failed)), flush=True)
+        print("[MAIN] 失败方法：{}".format(", ".join(failed)), flush=True)
         sys.exit(1)
-    print("[MAIN] All succeeded", flush=True)
+    print("[MAIN] 全部成功", flush=True)
 
 
 if __name__ == "__main__":

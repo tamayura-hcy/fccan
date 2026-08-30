@@ -1,10 +1,10 @@
-"""DAGCN model (ported from official DAGCN code, tao2025dagcn).
+"""DAGCN 模型（从 DAGCN 官方代码移植，tao2025dagcn）。
 
-DAGCNModel: dual ResNet50 (cnn 2048-d features + dsa 1000-class scores for the graph)
-+ torch_geometric GCN (in=1000, hidden=256, layers=3, out=64) -> concat 2048+64 = 2112-d.
-Returns (features, scores). GCN output is 64-d in the official weights (not 150), hence 64.
-
-Requires torch_geometric (pip install torch_geometric).
+DAGCNModel: 双 ResNet50（cnn 提 2048 特征 + dsa 出 1000 类 scores 建图）
+            + torch_geometric GCN（in=1000, hidden=256, layers=3, out=64）
+            → concat 特征 2048+64 = 2112 维。返回 (features, scores)。
+注意：官方权重（saves/*_best.7z）中 GCN 输出为 64 维（非默认 150），故默认值用 64。
+依赖：torch_geometric（pip install torch_geometric）。
 """
 import torch
 import torch.nn as nn
@@ -23,9 +23,9 @@ class DAGCNModel(nn.Module):
         self.combined_features = features + gcn_out_channels  # 2048 + 64 = 2112
 
         self.cnn = nn.Sequential(*list(self.cnn.children())[:-1])  # -> 2048
-        self.dsa = resnet50(weights=ResNet50_Weights.IMAGENET1K_V2)  # full 1000-class output
+        self.dsa = resnet50(weights=ResNet50_Weights.IMAGENET1K_V2)  # 完整 1000 输出
 
-        gcn_in_channels = 1000  # DSA module output
+        gcn_in_channels = 1000  # DSA 模块输出
         self.gcn = geometric_nn.GCN(in_channels=gcn_in_channels,
                                     hidden_channels=gcn_hidden_channels,
                                     num_layers=gcn_layers,

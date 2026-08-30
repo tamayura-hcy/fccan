@@ -96,6 +96,7 @@ def data_load(args):
     if args.trte == "val":
         dsize = len(txt_src)
         tr_size = int(0.9*dsize)
+        # print(dsize, tr_size, dsize - tr_size)
         tr_txt, te_txt = torch.utils.data.random_split(txt_src, [tr_size, dsize - tr_size])
     else:
         dsize = len(txt_src)
@@ -179,6 +180,7 @@ def cal_acc_oda(loader, netF, netB, netC):
     unknown_acc = acc[-1:].item()
 
     return np.mean(acc[:-1]), np.mean(acc), unknown_acc
+    # return np.mean(acc), np.mean(acc[:-1])
 
 def train_source(args):
     dset_loaders = data_load(args)
@@ -348,6 +350,7 @@ if __name__ == "__main__":
     torch.cuda.manual_seed(SEED)
     np.random.seed(SEED)
     random.seed(SEED)
+    # torch.backends.cudnn.deterministic = True
 
     folder = './data/'
     args.s_dset_path = folder + args.dset + '/' + names[args.s] + '_list.txt'
@@ -379,7 +382,7 @@ if __name__ == "__main__":
         args.t = i
         args.name = names[args.s][0].upper() + names[args.t][0].upper()
 
-        folder = './data/'  # fix: official repo hardcodes the author's machine path /Checkpoint/liangjian/tran/data/
+        folder = './data/'  # 修复：官方写死作者机器路径 /Checkpoint/liangjian/tran/data/
         args.s_dset_path = folder + args.dset + '/' + names[args.s] + '_list.txt'
         args.test_dset_path = folder + args.dset + '/' + names[args.t] + '_list.txt'
 

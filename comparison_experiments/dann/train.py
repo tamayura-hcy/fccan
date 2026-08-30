@@ -27,7 +27,7 @@ from comparison_experiments.common.models import build_models
 
 
 class GradientReverseFunction(Function):
-    """thuml GradientReverseFunction: identity forward, backward scaled by -alpha."""
+    """thuml GradientReverseFunction：forward 恒等，backward 乘 -alpha。"""
 
     @staticmethod
     def forward(ctx, x, alpha):
@@ -40,10 +40,10 @@ class GradientReverseFunction(Function):
 
 
 class WarmStartGradientReverseLayer(nn.Module):
-    """thuml WarmStartGradientReverseLayer (modules/grl.py).
+    """thuml WarmStartGradientReverseLayer（modules/grl.py）。
 
-    alpha ramps from lo to hi (sigmoid-shaped within max_iters), auto-stepping per iteration.
-    DANN official (thuml) defaults: alpha=1.0, lo=0.0, hi=1.0, max_iters=1000, auto_step=True.
+    alpha 从 lo 渐变到 hi（sigmoid 型，max_iters 内），自动按累计迭代步推进。
+    DANN 官方 (thuml) 默认 alpha=1.0, lo=0.0, hi=1.0, max_iters=1000, auto_step=True。
     """
 
     def __init__(self, alpha=1.0, lo=0.0, hi=1.0, max_iters=1000., auto_step=True):
@@ -61,7 +61,7 @@ class WarmStartGradientReverseLayer(nn.Module):
         return GradientReverseFunction.apply(x, self.alpha)
 
     def step(self):
-        """Ramp alpha: 2(hi-lo)/(1+exp(-10*iter/max)) - (hi-lo) + lo while iter < max."""
+        """渐增 alpha：2(hi-lo)/(1+exp(-10*iter/max)) - (hi-lo) + lo，iter<max 前。"""
         self.iter_num += 1
         if self.iter_num < self.max_iters:
             self.alpha = 2.0 * (self.hi - self.lo) / (1.0 + np.exp(-10.0 * self.iter_num / self.max_iters)) \
@@ -71,10 +71,10 @@ class WarmStartGradientReverseLayer(nn.Module):
 
 
 class DomainDiscriminator(nn.Module):
-    """thuml official DomainDiscriminator (modules/domain_discriminator.py).
+    """thuml 官方 DomainDiscriminator（modules/domain_discriminator.py）。
 
-    Linear(256->1024)+BN+ReLU + Linear(1024->1024)+BN+ReLU + Linear(1024,1)+Sigmoid.
-    Input = 256-d bottleneck features; output = 1-d sigmoid (source=1 / target=0).
+    Linear(256->1024)+BN+ReLU + Linear(1024->1024)+BN+ReLU + Linear(1024,1)+Sigmoid。
+    输入 = bottleneck 后 256 维特征；输出 1 维 sigmoid（源=1/目标=0）。
     """
 
     def __init__(self, in_feature=256, hidden_size=1024):
@@ -92,10 +92,10 @@ class DomainDiscriminator(nn.Module):
 
 
 class DomainAdversarialLoss(nn.Module):
-    """thuml official DomainAdversarialLoss (alignment/dann.py).
+    """thuml 官方 DomainAdversarialLoss（alignment/dann.py）。
 
-    Discriminator and encoder share one optimizer: GRL reverses feature gradients,
-    BCE separates source (1) / target (0). reduction='mean'.
+    判别器+目标编码器在同一个 optimizer 内更新：GRL 自动反转特征梯度，
+    BCE 区分源(1)/目标(0)。reduction='mean'。
     """
 
     def __init__(self, domain_discriminator, reduction='mean', grl=None):
@@ -108,7 +108,8 @@ class DomainAdversarialLoss(nn.Module):
     def forward(self, f_s, f_t):
         f = self.grl(torch.cat((f_s, f_t), dim=0))
         d = self.domain_discriminator(f)
-        # official chunk(2) assumes equal src/tgt batch; slice by actual sizes instead
+        # 官方 chunk(2) 假设源/目标 batch 相同；A-B 源/目标最后一批可能不等（如 14 vs 12），
+        # 会切错导致 label 与预测尺寸不匹配而崩溃 → 按实际 batch 大小切片
         bs = f_s.size(0)
         d_s, d_t = d[:bs], d[bs:]
         d_label_s = torch.ones((f_s.size(0), 1)).to(f_s.device)
@@ -128,16 +129,16 @@ def train(args):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print("[DANN] device={}  loading ResNet50 weights ...".format(device), flush=True)
     enc, clf = build_models(len(data['class_names']), device)
-    # official: discriminator input = 256-d bottleneck features
+    # thuml 官方：判别器输入 = bottleneck 后 256 维特征
     disc = DomainDiscriminator(in_feature=clf.features_dim).to(device)
     print("[DANN] models ready (bottleneck dim={})".format(clf.features_dim), flush=True)
 
-    # official optimizer: single SGD, backbone 0.1x lr, bottleneck/head 1x lr,
-    # nesterov + weight_decay; discriminator in the same optimizer (GRL reverses grad)
+    # thuml 官方优化器：单一 SGD，backbone 0.1×lr，bottleneck/head 1×lr，
+    # nesterov + weight_decay；判别器同一 optimizer（GRL 反转梯度）
     param_groups = clf.get_parameters(base_lr=1.0, backbone=enc) + disc.get_parameters()
     optimizer = optim.SGD(param_groups, lr=args.lr, momentum=0.9,
                           weight_decay=args.weight_decay, nesterov=True)
-    # official lr_scheduler: lr * (1 + lr_gamma * step) ** (-lr_decay)
+    # thuml 官方 lr_scheduler: lr * (1 + lr_gamma * step) ** (-lr_decay)
     lr_scheduler = LambdaLR(optimizer,
                             lambda x: args.lr * (1. + args.lr_gamma * float(x)) ** (-args.lr_decay))
 
@@ -164,7 +165,7 @@ def train(args):
             ft = enc(xt)
             logits_s = clf(fs)
             loss_cls = ce(logits_s, ys)
-            # official: discriminator operates on 256-d bottleneck features
+            # thuml 官方：判别器作用在 bottleneck 后 256 维特征
             f256_s = clf.forward_features(fs)
             f256_t = clf.forward_features(ft)
             loss_adv = domain_adv(f256_s, f256_t)
@@ -187,15 +188,15 @@ def main():
     parser.add_argument('--epochs', type=int, default=10)
     parser.add_argument('--batch', type=int, default=16)
     parser.add_argument('--lr', type=float, default=0.01,
-                        help='thuml official DANN lr=0.01 (TLL examples/.../dann.py)')
+                        help='thuml 官方 DANN lr=0.01（TLL examples/.../dann.py）')
     parser.add_argument('--weight_decay', type=float, default=1e-3,
-                        help='thuml official DANN weight_decay=1e-3')
+                        help='thuml 官方 DANN weight_decay=1e-3')
     parser.add_argument('--lr_gamma', type=float, default=0.001,
-                        help='thuml official lr_scheduler gamma (LambdaLR: (1+γx)^(-decay))')
+                        help='thuml 官方 lr_scheduler gamma（LambdaLR: (1+γx)^(-decay)）')
     parser.add_argument('--lr_decay', type=float, default=0.75,
-                        help='thuml official lr_scheduler decay')
+                        help='thuml 官方 lr_scheduler decay')
     parser.add_argument('--input_size', type=int, default=224,
-                        help='thuml ResNet official input 224')
+                        help='thuml ResNet 官方输入 224')
     args = parser.parse_args()
     train(args)
 

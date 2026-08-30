@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\hcy\comparison_experiments\fda\train.py", line 126, in <module>
+    main()
+  File "E:\hcy\comparison_experiments\fda\train.py", line 122, in main
+    train(args)
+  File "E:\hcy\comparison_experiments\fda\train.py", line 93, in train
+    xs_ = fda_swap_amplitude(xs, xt, beta=args.beta)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\hcy\comparison_experiments\fda\train.py", line 56, in fda_swap_amplitude
+    amp_src[:, :, h1:h2, w1:w2] = amp_tgt[:, :, h1:h2, w1:w2]
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^
+RuntimeError: The expanded size of the tensor (36) must match the existing size (12) at non-singleton dimension 0.  Target sizes: [36, 3, 22, 22].  Tensor sizes: [12, 3, 22, 22]
+  [CELL tgt] 75% 协议: train1068 + val600 = 1668 (约 75%)
+task=BOE->CELL  classes=['AMD', 'DME', 'NORMAL']

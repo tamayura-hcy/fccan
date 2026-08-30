@@ -226,9 +226,8 @@ class Block(nn.Module):
     def load_from(self, weights, n_block):
         ROOT = f"Transformer/encoderblock_{n_block}"
         with torch.no_grad():
-            # Official code uses os.path.join, which produces backslashes on
-            # Windows and breaks npz key lookups; use forward slashes to match
-            # the Linux behavior of the official code.
+            # 注：官方用 os.path.join（Windows 下产生反斜杠导致 npz 键不匹配），
+            # 此处统一用正斜杠拼接，与 Linux 官方行为一致。
             query_weight = np2th(weights["/".join((ROOT, ATTENTION_Q, "kernel"))]).view(self.hidden_size, self.hidden_size).t()
             key_weight = np2th(weights["/".join((ROOT, ATTENTION_K, "kernel"))]).view(self.hidden_size, self.hidden_size).t()
             value_weight = np2th(weights["/".join((ROOT, ATTENTION_V, "kernel"))]).view(self.hidden_size, self.hidden_size).t()

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Generate the three-task data lists for the official DaC code (oct dataset branch).
+"""make_lists.py —— 为 DaC 官方代码生成三任务数据列表（oct 数据集分支）。
 
-Format (DaC data_list.make_dataset): one "abs_path label" per line.
-Source list (labeled, for source.py pretraining); target list (train+val; shared by
-source-free adaptation and evaluation, target.py splits internally).
+格式（DaC data_list.make_dataset）：每行 "绝对路径 类别号"。
+- 源域列表（含标签，供 source.py 预训练）
+- 目标域列表（train+val；source-free 适应与评估共用，target.py 会从中划分）
 
-Output: third_party/DaC/VisDA/data/oct/{BOE,TMI,CELL}_list.txt
+输出：third_party/DaC/VisDA/data/oct/{BOE,TMI,CELL}_list.txt
 """
 import os
 
@@ -37,7 +37,7 @@ def collect(ds, splits):
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
     for ds in DATASETS:
-        # source uses train; target uses train+val (DaC target.py splits internally)
+        # 源域用 train；目标域用 train+val（DaC 的 target.py 内部划分评估）
         entries = collect(ds, ["train", "val"])
         out_path = os.path.join(OUT_DIR, "{}_list.txt".format(ds))
         with open(out_path, "w", encoding="utf-8") as f:

@@ -1,4 +1,6 @@
-"""Run all baseline methods x tasks x seeds, collect results into results_summary.csv.
+"""批量运行所有对比方法 × 任务 × 种子，收集结果到 results_summary.csv。
+
+（Run all baseline methods x tasks x seeds, collect results into results_summary.csv）
 
 Usage:
     python -m comparison_experiments.run_all --methods dann,mcc --tasks A-B,A-C --seeds 777,42
@@ -10,24 +12,27 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ALL_METHODS = ['dann', 'adda', 'cdan', 'mcc', 'shot', 'svdna', 'emdda']
+ALL_METHODS = ['dann', 'adda', 'cdan', 'mcc', 'shot', 'svdna', 'emdda', 'fda', 'can']
 ALL_TASKS = ['A-B', 'A-C', 'B-C']
 DEFAULT_SEEDS = [42, 123, 777, 2024, 3407]
 
 
-# Official training config per method (consistent with run_comparison.py; --epochs/--batch only a fallback)
+# 各方法官方训练配置（与 run_comparison.py 保持一致；统一 --epochs/--batch 只作兜底）
 METHOD_EPOCHS_BATCH = {
-    # thuml TLL official: DANN/CDAN 20ep x 32, MCC 20ep x 36 (batch can be reduced for VRAM)
+    # thuml TLL 官方：DANN/CDAN 20ep×32、MCC 20ep×36（batch 因显存可降，见备注）
     'dann':  (20, 32),
     'cdan':  (20, 32),
     'mcc':   (20, 36),
-    # SHOT official: source 20ep / target 15ep, batch 64
+    # SHOT 官方：源 20ep / 目标 15ep，batch 64
     'shot':  (15, 64),
-    # SVDNA: no official training code (MICCAI'22 repo has only README/Colab); self-implemented
+    # SVDNA：官方无训练代码（MICCAI'22 仓库仅 README/Colab），按论文描述自实现
     'svdna': (10, 16),
-    # OCT-DDA official ADDA/EM-DDA: 30ep x batch 8 (required, do not change)
+    # OCT-DDA 官方 ADDA/EM-DDA：30ep × batch 8（必须，勿改）
     'adda':  (30, 8),
     'emdda': (30, 8),
+    # FDA / CAN：按主表非对抗方法统一 20ep × batch 36（同 MCC 协议）
+    'fda':   (20, 36),
+    'can':   (20, 36),
 }
 
 

@@ -308,6 +308,7 @@ def train(args, txt_src, txt_tgt):
             targets_u = pt / pt.sum(dim=1, keepdim=True)
             targets_u = targets_u.detach()
 
+        ####################################################################
         all_inputs = torch.cat([inputs_s, inputs_t, inputs_t2], dim=0)
         all_targets = torch.cat([targets_s, targets_u, targets_u], dim=0)
         if args.alpha > 0:
@@ -325,6 +326,11 @@ def train(args, txt_src, txt_tgt):
         # interleave labeled and unlabed samples between batches to get correct batchnorm calculation 
         mixed_input = list(torch.split(mixed_input, args.batch_size))
         mixed_input = utils.interleave(mixed_input, args.batch_size)  
+        # s = [sa, sb, sc]
+        # t1 = [t1a, t1b, t1c]
+        # t2 = [t2a, t2b, t2c]
+        # => s' = [sa, t1b, t2c]   t1' = [t1a, sb, t1c]   t2' = [t2a, t2b, sc]
+
         logits = base_network(mixed_input[0])
         logits = [logits]
         for input in mixed_input[1:]:
@@ -332,6 +338,7 @@ def train(args, txt_src, txt_tgt):
             logits.append(temp)
 
         # put interleaved samples back
+        # [i[:,0] for i in aa]
         logits = utils.interleave(logits, args.batch_size)
         logits_x = logits[0]
         logits_u = torch.cat(logits[1:], dim=0)
@@ -446,6 +453,7 @@ if __name__ == "__main__":
     torch.cuda.manual_seed(SEED)
     np.random.seed(SEED)
     random.seed(SEED)
+    # torch.backends.cudnn.deterministic = True
 
     folder = './data/'
     for i in range(len(names)):
@@ -461,6 +469,13 @@ if __name__ == "__main__":
             args.output_dir = osp.join(args.output_tar, args.da, args.dset, names[args.s][0].upper())
         else:
             args.output_dir = osp.join(args.output_tar, args.da, args.dset, args.name)
+
+        # args.savename = 'par_' + str(args.cls_par)
+        # if args.ssl > 0:
+        #      args.savename += ('_ssl_' + str(args.ssl))
+
+        # if args.model == "source":
+        #     args.savename = "srconly"
 
         args.log = 'ps_' + str(args.ps) + '_' + args.savename
         args.mm_dir = osp.join(args.output, args.da, args.dset, args.name)

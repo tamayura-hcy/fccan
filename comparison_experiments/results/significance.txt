@@ -1,59 +1,47 @@
 # FCCAN vs 对比方法显著性（5-seed Welch t-test，Holm--Bonferroni 全局校正）
-# 范围：表 1 中 17 个无标签对比方法（3 源-only + src_only_FEA-Net + 13 DA）x 3 场景 = 51 组
+# 范围：表 1 中 13 个无标签对比方法（1 源-only + 12 DA）x 3 场景 = 39 组
 # oracle 为有监督参考行，不纳入显著性检验
 
-# ===== Holm--Bonferroni 全局校正（共 51 组，按 p 升序） =====
+# ===== Holm--Bonferroni 全局校正（共 39 组，按 p 升序） =====
 # 显著 = p <= 0.05/(n-k+1) 且 p < 0.05
-AB   ResNet-18          [mean±std] p=3.35e-07 显著 wilcoxon_p=nan seeds=0.5394±0.0320
 AB   ResNet-50          [mean±std] p=1.134e-08 显著 wilcoxon_p=nan seeds=0.5203±0.0248
-AB   VGG-16             [mean±std] p=1.086e-05 显著 wilcoxon_p=nan seeds=0.3603±0.0608
-AB   src_only_FEA-Net   [mean±std] p=6.506e-07 显著 wilcoxon_p=nan seeds=0.5852±0.0320
 AB   DANN               [mean±std] p=6.091e-05 显著 wilcoxon_p=nan seeds=0.7022±0.0431
-AB   ADDA               [mean±std] p=1.768e-07 显著 wilcoxon_p=nan seeds=0.6202±0.0270
+AB   ADDA               [mean±std] p=0.0002413 显著 wilcoxon_p=nan seeds=0.7020±0.0538
 AB   CDAN               [mean±std] p=2.309e-06 显著 wilcoxon_p=nan seeds=0.7723±0.0239
-AB   EM-DDA             [mean±std] p=0.00457 显著 wilcoxon_p=nan seeds=0.7575±0.0803
+AB   EM-DDA             [mean±std] p=0.01025 显著 wilcoxon_p=nan seeds=0.8059±0.0756
 AB   MCC                [mean±std] p=5.489e-07 显著 wilcoxon_p=nan seeds=0.6739±0.0271
 AB   SHOT               [mean±std] p=0.001176 显著 wilcoxon_p=nan seeds=0.6255±0.0935
 AB   CAT                [per-seed] p=0.006724 显著 wilcoxon_p=0.0625 seeds=0.8867/0.8889/0.8649/0.8017/0.7745
-AB   DAN                [mean±std] p=7.783e-06 显著 wilcoxon_p=nan seeds=0.4571±0.0510
-AB   DDC                [per-seed] p=0.0002302 显著 wilcoxon_p=0.0625 seeds=0.4150/0.3508/0.4150/0.5959/0.4989
 AB   SVDNA              [mean±std] p=0.0002977 显著 wilcoxon_p=nan seeds=0.4980±0.0924
-AB   BNM                [mean±std] p=2.841e-06 显著 wilcoxon_p=nan seeds=0.4593±0.0444
-AB   TENT               [mean±std] p=5.269e-11 显著 wilcoxon_p=nan seeds=0.4813±0.0166
 AB   DAGCN              [mean±std] p=0.0001503 显著 wilcoxon_p=nan seeds=0.8510±0.0257
-AC   ResNet-18          [mean±std] p=1.165e-06 显著 wilcoxon_p=nan seeds=0.6807±0.0231
+AB   TVT                [mean±std] p=9.372e-07 显著 wilcoxon_p=nan seeds=0.7787±0.0068
+AB   DaC                [mean±std] p=1.42e-05 显著 wilcoxon_p=nan seeds=0.8227±0.0045
+AB   CAN                [per-seed] p=8.07e-06 显著 wilcoxon_p=0.0625 seeds=0.5969/0.6895/0.6340/0.6667/0.6122
 AC   ResNet-50          [mean±std] p=4.666e-07 显著 wilcoxon_p=nan seeds=0.6154±0.0295
-AC   VGG-16             [mean±std] p=7.686e-10 显著 wilcoxon_p=nan seeds=0.3644±0.0196
-AC   src_only_FEA-Net   [mean±std] p=5.297e-05 显著 wilcoxon_p=nan seeds=0.7427±0.0289
 AC   DANN               [mean±std] p=0.006682 显著 wilcoxon_p=nan seeds=0.7240±0.0722
-AC   ADDA               [mean±std] p=2.272e-08 显著 wilcoxon_p=nan seeds=0.5326±0.0176
+AC   ADDA               [mean±std] p=3.329e-06 显著 wilcoxon_p=nan seeds=0.6649±0.0311
 AC   CDAN               [mean±std] p=0.0003003 显著 wilcoxon_p=nan seeds=0.7735±0.0287
-AC   EM-DDA             [mean±std] p=0.01627 不显著 wilcoxon_p=nan seeds=0.6638±0.1226
+AC   EM-DDA             [mean±std] p=0.005728 不显著 wilcoxon_p=nan seeds=0.7409±0.0629
 AC   MCC                [mean±std] p=9.692e-06 显著 wilcoxon_p=nan seeds=0.6305±0.0395
 AC   SHOT               [mean±std] p=0.0002356 显著 wilcoxon_p=nan seeds=0.5627±0.0704
 AC   CAT                [per-seed] p=0.05498 不显著 wilcoxon_p=0.1875 seeds=0.7527/0.8387/0.8154/0.8656/0.8495
-AC   DAN                [mean±std] p=4.59e-08 显著 wilcoxon_p=nan seeds=0.5821±0.0210
-AC   DDC                [per-seed] p=0.0005031 显著 wilcoxon_p=0.0625 seeds=0.3333/0.4409/0.5394/0.5484/0.3333
 AC   SVDNA              [mean±std] p=1.266e-05 显著 wilcoxon_p=nan seeds=0.6885±0.0096
-AC   BNM                [mean±std] p=3.586e-08 显著 wilcoxon_p=nan seeds=0.5040±0.0299
-AC   TENT               [mean±std] p=2.854e-09 显著 wilcoxon_p=nan seeds=0.4330±0.0185
 AC   DAGCN              [mean±std] p=0.0006438 显著 wilcoxon_p=nan seeds=0.7964±0.0227
-BC   ResNet-18          [mean±std] p=1.51e-05 显著 wilcoxon_p=nan seeds=0.5939±0.0370
+AC   TVT                [mean±std] p=1.044e-05 显著 wilcoxon_p=nan seeds=0.6552±0.0076
+AC   DaC                [mean±std] p=0.005935 显著 wilcoxon_p=nan seeds=0.8201±0.0036
+AC   CAN                [per-seed] p=4.578e-05 显著 wilcoxon_p=0.0625 seeds=0.6792/0.6362/0.7312/0.7240/0.6828
 BC   ResNet-50          [mean±std] p=1.968e-05 显著 wilcoxon_p=nan seeds=0.5527±0.0422
-BC   VGG-16             [mean±std] p=5.991e-07 显著 wilcoxon_p=nan seeds=0.3771±0.0327
-BC   src_only_FEA-Net   [mean±std] p=0.001377 显著 wilcoxon_p=nan seeds=0.6129±0.0889
 BC   DANN               [mean±std] p=3.485e-05 显著 wilcoxon_p=nan seeds=0.8161±0.0192
-BC   ADDA               [mean±std] p=4.106e-06 显著 wilcoxon_p=nan seeds=0.5996±0.0303
+BC   ADDA               [mean±std] p=0.0002326 显著 wilcoxon_p=nan seeds=0.7527±0.0354
 BC   CDAN               [mean±std] p=2.5e-05 显著 wilcoxon_p=nan seeds=0.8150±0.0186
-BC   EM-DDA             [mean±std] p=0.1347 不显著 wilcoxon_p=nan seeds=0.8871±0.0406
+BC   EM-DDA             [mean±std] p=0.1195 不显著 wilcoxon_p=nan seeds=0.8946±0.0299
 BC   MCC                [mean±std] p=0.0002069 显著 wilcoxon_p=nan seeds=0.8147±0.0245
 BC   SHOT               [mean±std] p=4.352e-07 显著 wilcoxon_p=nan seeds=0.8215±0.0064
 BC   CAT                [per-seed] p=0.000463 显著 wilcoxon_p=0.0625 seeds=0.8190/0.8638/0.8566/0.8548/0.8692
-BC   DAN                [mean±std] p=2.161e-05 显著 wilcoxon_p=nan seeds=0.7011±0.0296
-BC   DDC                [per-seed] p=6.497e-05 显著 wilcoxon_p=0.0625 seeds=0.5018/0.3333/0.3333/0.3333/0.3333
 BC   SVDNA              [mean±std] p=0.001151 显著 wilcoxon_p=nan seeds=0.7545±0.0481
-BC   BNM                [mean±std] p=1.491e-07 显著 wilcoxon_p=nan seeds=0.4774±0.0250
-BC   TENT               [mean±std] p=3.152e-12 显著 wilcoxon_p=nan seeds=0.5083±0.0097
 BC   DAGCN              [mean±std] p=0.02434 不显著 wilcoxon_p=nan seeds=0.8875±0.0224
+BC   TVT                [mean±std] p=0.0002311 显著 wilcoxon_p=nan seeds=0.7398±0.0375
+BC   DaC                [mean±std] p=0.007785 显著 wilcoxon_p=nan seeds=0.7432±0.0816
+BC   CAN                [per-seed] p=1.237e-05 显著 wilcoxon_p=0.0625 seeds=0.7957/0.8387/0.8262/0.8118/0.8047
 
-==> Holm 校正后显著 47/51
+==> Holm 校正后显著 35/39

@@ -1,3 +1,5 @@
+#from __future__ import print_function, division
+
 import torch
 import numpy as np
 import random
@@ -198,9 +200,11 @@ class alexnetlist(Dataset):
 
         # substract mean
         img -= np.array(self.mean_color)
+        # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
         # ToTensor transform cv2 HWC->CHW, only byteTensor will be div by 255.
         tensor = torchvision.transforms.ToTensor()
         img = tensor(img)
+        # img = np.transpose(img, (2, 0, 1))
 
         return img, label

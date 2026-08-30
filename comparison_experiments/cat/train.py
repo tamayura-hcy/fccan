@@ -1,9 +1,29 @@
-"""CAT (Cluster Alignment with a Teacher) baseline.
+"""CAT (Cluster Alignment with a Teacher) baseline。
 
 Deng, Luo, Zhu, "Cluster Alignment with a Teacher for Unsupervised Domain
-Adaptation", ICCV 2019. Aligned with the OCT-DDA official code (CAT_vgg16_train.py):
-encoder vgg16_bn.features (25088-d); discriminator on 3-d logits (3->200->200->1+sigmoid);
-loss = loss_cls + lamb2*sntg_loss; RevGrad-style adversarial (0.1 weight); SGD lr=0.001, batch 8.
+Adaptation", ICCV 2019 (arXiv:1903.09980)。DAGCN 论文（TMI 2025）对比方法，
+ref [41]（"cluster and teacher alignment"）。
+
+★ 按 OCT-DDA 官方代码（xuqing88/OCT_DDA，`CAT_vgg16_train.py`）完整对齐
+  （与 EM-DDA/ADDA 同源同配置）：
+  - 编码器：vgg16_bn.features（卷积特征，展平 25088 维）
+  - 分类器：vgg16_bn 原生 classifier（fc6-fc7-fc8'，fc8'=n_cls）
+  - 判别器 netD：Linear(3→200)+ReLU + Linear(200→200)+ReLU + Linear(200,1)+Sigmoid
+    （输入 = 3 维 logits）
+  - loss = loss_cls + lamb2·sntg_loss（官方；对应论文 Eq.4 的 L_y + α(L_c+L_a)）
+        sntg_loss = L_a(类原型对齐) + L_c(目标) + L_c(源)，全部在 logits 上
+        L_c(源)：真实标签同类指示 δ，平方欧氏距离，margin LAMBDA=0.01（官方取值，
+                 注释注明论文为 30）
+        L_c(目标)：teacher 伪标签（Π-model：目标样本两次前向，第二次 detach）
+        L_a：源/目标类原型（logits 均值）L2 距离，fm_mask 剔除缺失类并归一化
+        lamb2 ramp-up：gd≥5 起，lamb2 = exp(-(1-min((gd-5)/15,1))·10)（第 20 epoch≈1）
+  - RevGrad 式域对抗（0.1 权重）：D 用 MultiLabelSoftMarginLoss 判别源/目标 logits，
+    D_loss=0.1·D_loss，与主 loss 分步 backward（loss.backward(retain_graph=True);
+    D_loss.backward()；★ 严格对齐官方——官方无 G_loss=-D_loss，旧实现符号相反会使
+    判别器往"判别越错"方向训练，已修复 2026-08-09）
+  - SGD lr=0.001（encoder+classifier 0.001 / netD 固定 0.001, momentum=0.9）；batch=8；epochs=15
+    （★ 2026-08-09：官方 30 → 15 轮早停，lamb2 ramp-up 至 1.0 后崩溃，epoch15≈0.89 为峰）
+  - transform：Resize(256)+CenterCrop(224)+ToTensor（官方无 Normalize）
 
 Usage:
     python -m comparison_experiments.cat.train --src A --tgt B --seed 777
@@ -25,16 +45,16 @@ from comparison_experiments.common.models import VGGBnBackbone, VGGBnClassifier
 
 
 def adaptation_factor(x):
-    """Official adaptation_factor: 2/(1+exp(-10x))-1, clipped to <=1."""
+    """官方 adaptation_factor：2/(1+exp(-10x))-1，截断 ≤1。"""
     lamb = 2.0 / (1.0 + math.exp(-10.0 * x)) - 1.0
     return min(lamb, 1.0)
 
 
 def unsorted_segment_sum(data, segment_ids, num_segments, device):
-    """Sum by segment_ids (equivalent of util_cat.py unsorted_segment_sum_device).
+    """按 segment_ids 求和（官方 util_cat.py `unsorted_segment_sum_device` 等价实现）。
 
-    data: 1D (counts) or 2D [N, D]; segment_ids: 1D [N].
-    Returns [num_segments] or [num_segments, D].
+    data 可为 1D（计数）或 2D [N, D]（logits/特征）；segment_ids 1D [N]。
+    返回 [num_segments] 或 [num_segments, D]。
     """
     if len(segment_ids.shape) == 1 and data.dim() > 1:
         seg = segment_ids.unsqueeze(1).expand_as(data)
@@ -47,7 +67,7 @@ def unsorted_segment_sum(data, segment_ids, num_segments, device):
 
 
 class Discriminator(nn.Module):
-    """OCT-DDA official CAT discriminator: 3-d logits in, Linear(3->200)+ReLU x2 + Linear(200,1)+Sigmoid."""
+    """OCT-DDA 官方 CAT 判别器：输入 3 维 logits，Linear(3→200)+ReLU ×2 + Linear(200,1)+Sigmoid。"""
 
     def __init__(self, input_features=3, hidden_size=200):
         super().__init__()
@@ -65,13 +85,13 @@ class Discriminator(nn.Module):
 
 def train(args):
     set_seed(args.seed)
-    # official transform has no ImageNet Normalize
+    # 官方 transform 无 ImageNet Normalize
     data = load_task(args.src, args.tgt, input_size=args.input_size,
                      batch_src=args.batch, batch_tgt=args.batch, normalize=False)
     n_cls = len(data['class_names'])
     print("task={}->{}  classes={}".format(
         LABEL_TO_DATASET[args.src], LABEL_TO_DATASET[args.tgt], data['class_names']))
-    print("  [CAT] OCT-DDA official: vgg16_bn.features(25088) + SNTG/prototype on logits + Π-model teacher")
+    print("  [CAT] OCT-DDA 官方：vgg16_bn.features(25088) + logits 上 SNTG/原型 + Π-model teacher")
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     enc = VGGBnBackbone().to(device)
@@ -79,14 +99,14 @@ def train(args):
     netD = Discriminator(input_features=n_cls).to(device)
     print("  [CAT] models ready (feature dim=25088, discriminator on logits)")
 
-    # official hyperparams: lr=0.001; LAMBDA=0.01 (paper says 30)
-    LAMBDA = args.margin            # 0.01 (official)
-    lamb2_rampup = 5                # sntg weight ramp-up start epoch
-    lamb2_rampup_win = 15           # ramp-up window (rises to ~1 by epoch 20)
+    # 官方超参：lr=0.001；LAMBDA=0.01（margin，注释注明原论文为 30）
+    LAMBDA = args.margin            # 0.01（官方）
+    lamb2_rampup = 5                # sntg 权重 ramp-up 起始 epoch
+    lamb2_rampup_win = 15           # ramp-up 窗口（第 5→20 epoch 升到 ~1）
 
     optimizer = optim.SGD(list(enc.parameters()) + list(clf.parameters()),
                           lr=args.lr, momentum=0.9)
-    # official: discriminator lr fixed at 0.001 (independent of main lr)
+    # ★ 官方对齐：判别器 lr 固定 0.001（官方 CAT_vgg16_train.py 独立于主 lr）
     optimizerD = optim.SGD(netD.parameters(), lr=0.001, momentum=0.9)
     criterion = nn.CrossEntropyLoss()
 
@@ -98,10 +118,10 @@ def train(args):
     for epoch in range(args.epochs):
         enc.train(); clf.train(); netD.train()
         gd += 1
-        # sntg weight: ramp-up from epoch 5, ~1.0 at epoch 20
+        # sntg 权重：第 5 epoch 起 ramp-up，第 20 epoch ≈ 1.0
         lamb2 = math.exp(-(1.0 - min((gd - lamb2_rampup) * 1.0 / lamb2_rampup_win, 1.0)) * 10.0) \
             if gd >= lamb2_rampup else 0.0
-        lamb = adaptation_factor(gd * 1.0 / args.epochs)   # unused (kept as in official code)
+        lamb = adaptation_factor(gd * 1.0 / args.epochs)   # 未使用（官方保留变量）
         iter_src = iter(src_train)
         iter_tgt = iter(tgt_train)
 
@@ -109,7 +129,7 @@ def train(args):
             xs, ys = next(iter_src)
             xt, _ = next(iter_tgt)
             if xs.size(0) != xt.size(0):
-                continue   # equivalent to official drop_last: skip batch when src/tgt sizes differ (onehot/scatter need same shape)
+                continue   # 等价官方 drop_last：跳过源/目标 batch 大小不等的一批（onehot/scatter 需同形）
             if torch.cuda.is_available():
                 xs, ys, xt = xs.cuda(), ys.cuda(), xt.cuda()
             bs = xs.size(0)
@@ -117,29 +137,30 @@ def train(args):
             optimizer.zero_grad()
             optimizerD.zero_grad()
 
-            # -- source classification loss --
-            source_logits = clf(enc(xs))                     # [B, n_cls], the paper's "feature space"
+            # ── 分类损失（源域）──
+            source_logits = clf(enc(xs))                     # [B, n_cls] 即论文 "feature space"
             loss_cls = criterion(source_logits, ys)
 
-            # -- target: Pi-model teacher (two forwards, second detached as pseudo-label) --
-            target_logits = clf(enc(xt))                     # with grad
+            # ── 目标：Π-model teacher（两次前向，第二次 detach 作伪标签）──
+            target_logits = clf(enc(xt))                     # 带梯度
             with torch.no_grad():
-                target_logits_2 = clf(enc(xt)).detach()      # teacher (dropout perturbation)
+                target_logits_2 = clf(enc(xt)).detach()      # teacher（dropout 扰动）
             target_pred = target_logits_2.argmax(dim=1)
             target_onehot = torch.zeros(bs, n_cls, device=device).scatter_(1, target_pred.unsqueeze(-1), 1)
 
-            # -- domain discrimination (input = logits) --
+            # ── 域判别（输入 = logits）──
             D_src = netD(source_logits)                      # [B, 1]
             D_tgt = netD(target_logits)
             D_real_loss = torch.mean(nn.MultiLabelSoftMarginLoss()(
                 D_tgt, torch.ones_like(D_tgt).to(device)))
             D_fake_loss = torch.mean(nn.MultiLabelSoftMarginLoss()(
                 D_src, torch.zeros_like(D_src).to(device)))
-            # official: D_loss scaled by 0.1 (RevGrad convention); only loss.backward
-            # (retain_graph) + D_loss.backward() exist in the official code (no G_loss=-D_loss)
+            # ★ 官方对齐：D_loss 用 0.1 缩放（RevGrad 惯例），backward 走 D_loss 本身
+            #   （官方 CAT_vgg16_train.py 只有 loss.backward(retain_graph) + D_loss.backward()，
+            #    无 G_loss=-D_loss。原实现符号相反会使判别器往"判别越错"方向训练）
             D_loss = 0.1 * (D_real_loss + D_fake_loss)
 
-            # -- L_c(source): same-class indicator delta from true labels --
+            # ── L_c(源)：真实标签同类指示 δ ──
             y_onehot = torch.zeros(bs, n_cls, device=device).scatter_(
                 1, ys.unsqueeze(-1), 1)
             graph_src = torch.sum(y_onehot[:, None, :] * y_onehot[None, :, :], dim=2)
@@ -147,13 +168,13 @@ def train(args):
             source_sntg = torch.mean(graph_src * dist_src
                                      + (1 - graph_src) * torch.relu(LAMBDA - dist_src))
 
-            # -- L_c(target): same-class indicator from teacher pseudo-labels --
+            # ── L_c(目标)：teacher 伪标签同类指示 ──
             graph_tgt = torch.sum(target_onehot[:, None, :] * target_onehot[None, :, :], dim=2)
             dist_tgt = torch.mean((target_logits[:, None, :] - target_logits[None, :, :]) ** 2, dim=2)
             target_sntg = torch.mean(graph_tgt * dist_tgt
                                      + (1 - graph_tgt) * torch.relu(LAMBDA - dist_tgt))
 
-            # -- L_a: class-prototype alignment (fm_mask drops missing classes and normalizes) --
+            # ── L_a：类原型对齐（fm_mask 剔除缺失类并归一化）──
             src_label = ys
             cur_src_count = unsorted_segment_sum(torch.ones_like(src_label, dtype=torch.float32, device=device),
                                                  src_label, n_cls, device)
@@ -170,7 +191,8 @@ def train(args):
             sntg_loss = L_a + target_sntg + source_sntg
             loss = loss_cls + lamb2 * sntg_loss
 
-            # official: backward main loss and D_loss (with 0.1 scaling) separately
+            # ★ 官方对齐：loss 主损失 + D_loss（含 0.1 缩放）分别 backward
+            #   （官方 CAT_vgg16_train.py：loss.backward(retain_graph=True); D_loss.backward()）
             loss.backward(retain_graph=True)
             D_loss.backward()
             optimizer.step()
@@ -188,13 +210,13 @@ def main():
     parser.add_argument('--tgt', type=str, default='B', choices=['A', 'B', 'C'])
     parser.add_argument('--seed', type=int, default=777)
     parser.add_argument('--epochs', type=int, default=15,
-                        help='OCT-DDA official default 30; this project early-stops at 15 epochs (collapses after lamb2 ramps up to 1.0, decided by user 2026-08-09)')
+                        help='OCT-DDA 官方默认 30；本项目 15 轮早停（lamb2 ramp-up 至 1.0 后崩溃，用户 2026-08-09 决定）')
     parser.add_argument('--batch', type=int, default=8,
-                        help='OCT-DDA official batch=8')
+                        help='OCT-DDA 官方 batch=8')
     parser.add_argument('--lr', type=float, default=0.001,
-                        help='OCT-DDA official CAT lr=0.001')
+                        help='OCT-DDA 官方 CAT lr=0.001')
     parser.add_argument('--margin', type=float, default=0.01,
-                        help='OCT-DDA official LAMBDA=0.01 (comments note paper value 30)')
+                        help='OCT-DDA 官方 LAMBDA=0.01（注释注明论文原值 30）')
     parser.add_argument('--input_size', type=int, default=224)
     args = parser.parse_args()
     train(args)

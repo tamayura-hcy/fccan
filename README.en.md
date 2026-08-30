@@ -119,7 +119,7 @@ python -m comparison_experiments.run_all --methods dann,mcc,emdda --tasks A-B,A-
 python run_comparison.py          # or run everything in one batch
 ```
 
-Methods (11 DA methods + baselines): `DANN`, `ADDA`, `CDAN`, `EM-DDA`, `MCC`, `SHOT`, `CAT`, `SVDNA`, `DAGCN`, `TVT`, `DaC`; plus 3 source-only lower bounds (ResNet-18/50, VGG-16) and 1 oracle reference row. See `comparison_experiments/README.md`.
+Methods (13 DA methods + baselines): `DANN`, `ADDA`, `CDAN`, `EM-DDA`, `MCC`, `FDA`, `CAN`, `SHOT`, `CAT`, `SVDNA`, `DAGCN`, `TVT`, `DaC`; plus 3 source-only lower bounds (ResNet-18/50, VGG-16) and 1 oracle reference row. See `comparison_experiments/README.md`.
 
 > `BNM` / `TENT` / `DAN` / `DDC` show fully negative transfer on OCT cross-device tasks (below the source-only lower bound) and have been removed from the experiments and the paper.
 

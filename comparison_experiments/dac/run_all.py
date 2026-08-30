@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
-"""Batch reproduction of DaC: 3 tasks x 5 seeds (source-free two stages).
+"""run_all.py —— DaC 三任务 × 5 种子批量复现（source-free 两阶段）。
 
-Protocol (same as the main table): stage 1 source.py pretraining 10 epochs (save source
-model); stage 2 target.py source-free adaptation 15 epochs; per-round target-test acc
-recorded to history CSV.
+协议（与主表口径一致）：
+- 阶段 1：source.py 源域预训练 10 epoch（保存源模型）
+- 阶段 2：target.py 目标域 source-free 适应 15 epoch
+- 逐轮记录每 epoch 的目标测试集 acc 到 history CSV
 
-Usage: python -m comparison_experiments.dac.make_lists (generate lists first), then
-python -m comparison_experiments.dac.run_all [--tasks A-B A-C B-C] [--gpu-id 0]
-Output: results_dac.csv (final acc per task/seed) and history_dac.csv
+用法：
+    python -m comparison_experiments.dac.make_lists     # 先生成列表
+    python -m comparison_experiments.dac.run_all [--tasks A-B A-C B-C] [--gpu-id 0]
+输出：
+    comparison_experiments/dac/results_dac.csv    # 汇总（每任务每种子最终 acc）
+    comparison_experiments/dac/history_dac.csv    # 每轮记录（phase, round, iter, acc）
 """
 import argparse
 import csv
@@ -17,7 +21,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-# Windows GBK console: use replacement chars for subprocess output to avoid UnicodeEncodeError
+# 服务器 Windows 控制台 GBK：打印子进程输出含特殊字符时用替换符，避免 UnicodeEncodeError
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(errors="replace")
 
@@ -27,9 +31,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 VISDA_DIR = os.path.join(ROOT, "comparison_experiments", "third_party", "DaC", "VisDA")
 SEEDS = [42, 123, 777, 2024, 3407]
-# s/t are oct dataset indices: 0=BOE, 1=TMI, 2=CELL
+# s/t 为 oct 数据集索引：0=BOE, 1=TMI, 2=CELL
 TASK_ST = {"A-B": (0, 1), "A-C": (0, 2), "B-C": (1, 2)}
-# official per-round eval print: Task: {name}, Iter:{n}/{max}; Accuracy = {x}%. AUC = {y}%
+# 官方每轮评估打印：Task: {name}, Iter:{n}/{max}; Accuracy = {x}%. AUC = {y}%
 ITER_ACC_RE = re.compile(r"Iter:(\d+)/\d+; Accuracy = ([\d.]+)%. AUC = ([\d.]+)%")
 ACC_RE = re.compile(r"Accuracy of the network on the \d+ test images:\s*([\d.]+)%")
 ACC_RE2 = re.compile(r"acc:\s*([\d.]+)")
@@ -51,7 +55,7 @@ def run_stage(cmd, cwd, tag, task, seed, phase, history_rows=None):
             continue
         if line:
             print(line)
-        # per-round record: official prints Iter and Accuracy/AUC per epoch
+        # 逐轮记录：官方按 epoch 打印 Iter 与 Accuracy/AUC
         m = ITER_ACC_RE.search(line)
         if m and history_rows is not None:
             rnd += 1
@@ -65,7 +69,7 @@ def run_stage(cmd, cwd, tag, task, seed, phase, history_rows=None):
             acc = float(m.group(1))
     proc.wait()
     if proc.returncode != 0:
-        print("[ERROR] {} failed rc={}".format(tag, proc.returncode))
+        print("[ERROR] {} 失败 rc={}".format(tag, proc.returncode))
         sys.exit(1)
     return acc, auc
 
@@ -79,9 +83,9 @@ def run_one(task, seed, gpu_id="0", history_rows=None, skip_source=False):
     out_tgt = "{}/target".format(exp)
     src_ckpt = os.path.join(VISDA_DIR, out_src, "source_F.pt")
     if skip_source and os.path.exists(src_ckpt):
-        print("[DaC] source model exists, skip source stage: {}".format(src_ckpt))
+        print("[DaC] 源模型已存在，跳过 source 阶段: {}".format(src_ckpt))
     else:
-        # stage 1: source pretraining 10 epochs (--trte val selects model on target val, per official protocol)
+        # 阶段 1：源域预训练 10 epoch（--trte val 用目标验证集选模型，与官方协议一致）
         src_cmd = [sys.executable, "source.py", "--trte", "val",
                    "--output", out_src, "--da", "uda",
                    "--gpu_id", gpu_id, "--dset", "oct", "--net", "resnet50",
@@ -89,7 +93,7 @@ def run_one(task, seed, gpu_id="0", history_rows=None, skip_source=False):
                    "--s", str(s), "--t", str(t), "--seed", str(seed)]
         run_stage(src_cmd, VISDA_DIR, "DaC source {}".format(task),
                   task, seed, "source", history_rows)
-    # stage 2: target source-free adaptation 15 epochs (official run_target.sh args + --max_epoch 15)
+    # 阶段 2：目标域 source-free 适应 15 epoch（官方 run_target.sh 参数 + --max_epoch 15）
     tgt_cmd = [sys.executable, "target.py", "--gpu_id", gpu_id,
                "--output", out_tgt, "--output_src", out_src,
                "--da", "uda", "--dset", "oct", "--net", "resnet50",
@@ -103,20 +107,20 @@ def run_one(task, seed, gpu_id="0", history_rows=None, skip_source=False):
     secs = (datetime.now() - t0).total_seconds()
     print("[TIME] DaC {} seed={} end: {} ({} s)".format(task, seed, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), int(secs)), flush=True)
     if acc is None:
-        print("[WARN] final acc not captured, check target.py output format")
+        print("[WARN] 未捕获最终 acc，请查 target.py 输出格式")
     return acc, auc, secs
 
 
 def main():
-    ap = argparse.ArgumentParser(description='DaC batch reproduction')
+    ap = argparse.ArgumentParser(description='DaC 批量复现')
     ap.add_argument('--tasks', nargs='+', default=['A-B', 'A-C', 'B-C'])
     ap.add_argument('--seeds', nargs='+', type=int, default=SEEDS)
     ap.add_argument('--gpu-id', type=str, default='0')
     ap.add_argument('--skip-source', action='store_true',
-                    help='Skip source training when source model exists (run target stage directly)')
+                    help='源模型已存在时跳过源域训练（直接跑 target 阶段）')
     args = ap.parse_args()
 
-    # regenerate lists to avoid stale absolute paths from another machine
+    # 重新生成列表：避免同步过来的列表残留旧机器绝对路径
     make_lists_main()
 
     rows = []
@@ -136,21 +140,21 @@ def main():
             sd = (sum((a - m) ** 2 for a in valid) / len(valid)) ** 0.5
             print("== {} DaC = {:.2f}±{:.2f}%".format(task, m, sd))
         else:
-            print("== {} DaC = no valid result".format(task))
+            print("== {} DaC = 无有效结果".format(task))
 
     out_csv = os.path.join(HERE, "results_dac.csv")
     with open(out_csv, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["task", "seed", "acc", "auc", "seconds"])
         w.writeheader()
         w.writerows(rows)
-    print("Saved to {}".format(out_csv))
+    print("已写入 {}".format(out_csv))
 
     hist_csv = os.path.join(HERE, "history_dac.csv")
     with open(hist_csv, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=HISTORY_FIELDS)
         w.writeheader()
         w.writerows(history_rows)
-    print("Saved to {} ({} rounds)".format(hist_csv, len(history_rows)))
+    print("已写入 {}（{} 轮记录）".format(hist_csv, len(history_rows)))
 
 
 if __name__ == "__main__":

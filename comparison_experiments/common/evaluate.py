@@ -1,6 +1,7 @@
-"""Unified evaluation: acc + per-class recall + macro AUC + full metrics.
+"""统一评估：acc + per-class recall + macro-AUC + 完整指标（与主工程 eval_utils 一致）。
 
-Same as the main project eval_utils; all baseline methods use this for fairness.
+（Unified evaluation: acc + macro AUC + full metric set, consistent with the
+main project. All baseline methods use this for a fair comparison.）
 """
 import time
 import numpy as np
@@ -15,7 +16,7 @@ from sklearn.metrics import (
 
 def test(encoder, classifier, dataloader, dataset_size, num_classes=3,
          class_names=None, show_progress=False):
-    """Evaluate acc + macro-ovr AUC + per-class recall. Returns (acc, auc, per_class_recall)."""
+    """评估 acc + macro-ovr AUC + per-class recall。返回 (acc, auc, per_class_recall)。"""
     since = time.time()
     acc = 0
     prob_all = torch.Tensor()
@@ -48,7 +49,7 @@ def test(encoder, classifier, dataloader, dataset_size, num_classes=3,
     p = pred_all.numpy().astype(int)
     auc = float(roc_auc_score(y, prob_all.numpy(), average='macro', multi_class='ovr'))
 
-    # Full metric set (same as main project TEST_METRICS)
+    # ── 完整指标集（与主工程 TEST_METRICS 一致）──
     recall_m = float(recall_score(y, p, average='macro', zero_division=0))
     precision_m = float(precision_score(y, p, average='macro', zero_division=0))
     f1_m = float(f1_score(y, p, average='macro', zero_division=0))

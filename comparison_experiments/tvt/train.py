@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
-"""Run one task x one seed with the official TVT code (third_party/TVT/main.py).
+"""train.py —— 调用 TVT 官方代码（third_party/TVT/main.py）跑单任务单种子。
 
-Requires the official pretrained checkpoint checkpoint/ViT-B_16.npz (ImageNet-21K)
-and apex (or the README patch B).
+依赖：
+  - 官方预训练权重 checkpoint/ViT-B_16.npz（ImageNet-21K，见 README）
+  - apex（或按 README 方案 B 打补丁）
 
-Usage:
+用法：
   python -m comparison_experiments.tvt.train --task A-B --seed 42
-Output: official log tail + "RESULT acc=..." line (parsed by run_all)
+输出：
+  终端打印官方日志尾部 + "RESULT acc=..." 行（供 run_all 解析）
 """
 import argparse
 import os
@@ -15,7 +17,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-# Windows GBK console: use replacement chars for subprocess output to avoid UnicodeEncodeError
+# 服务器 Windows 控制台 GBK：打印子进程输出含特殊字符时用替换符，避免 UnicodeEncodeError
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(errors="replace")
 
@@ -28,7 +30,7 @@ TASK_SRC_TGT = {"A-B": ("BOE", "TMI"), "A-C": ("BOE", "CELL"),
 ACC_RE = re.compile(r"Best Accuracy:\s*([\d.]+)")
 ACC_RE2 = re.compile(r"Best element-wise Accuracy:\s*([\d.]+)")
 BEST_AUC_RE = re.compile(r"Best AUC:\s*([\d.]+)")
-# one evaluation per eval_every steps: Valid Accuracy / Valid AUC appear in pairs
+# 每 eval_every 步评估一轮：Valid Accuracy / Valid AUC 成对出现
 VALID_RE = re.compile(r"Valid Accuracy:\s*([\d.]+)")
 VALID_AUC_RE = re.compile(r"Valid AUC:\s*([\d.]+)")
 
@@ -40,7 +42,7 @@ def run_one(task, seed, num_steps=5000, img_size=224, batch=64,
     name = "{}_s{}".format(task, seed)
     cmd = [sys.executable, "main.py",
            "--name", name,
-           "--dataset", "office",          # affects transform only; custom lists use office's generic transform
+           "--dataset", "office",          # 仅影响 transform；自定义列表用 office 的通用 transform
            "--source_list", os.path.join(lists_dir, "source_list.txt"),
            "--target_list", os.path.join(lists_dir, "target_list.txt"),
            "--test_list", os.path.join(lists_dir, "test_list.txt"),
@@ -98,10 +100,10 @@ def run_one(task, seed, num_steps=5000, img_size=224, batch=64,
             best_auc = float(m.group(1))
     proc.wait()
     if proc.returncode != 0:
-        print("[ERROR] TVT {} seed={} failed rc={}".format(task, seed, proc.returncode))
+        print("[ERROR] TVT {} seed={} 失败 rc={}".format(task, seed, proc.returncode))
         sys.exit(1)
     if best is None:
-        print("[WARN] TVT {} seed={} Best Accuracy not captured (history kept)".format(task, seed))
+        print("[WARN] TVT {} seed={} 未捕获到 Best Accuracy（history 仍保留）".format(task, seed))
         return None, None, None
     secs = (datetime.now() - t0).total_seconds()
     print("[TIME] TVT {} seed={} end: {} ({} s)".format(task, seed, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), int(secs)), flush=True)
@@ -111,7 +113,7 @@ def run_one(task, seed, num_steps=5000, img_size=224, batch=64,
 
 
 def main():
-    ap = argparse.ArgumentParser(description='TVT single task single seed')
+    ap = argparse.ArgumentParser(description='TVT 单任务单种子')
     ap.add_argument('--task', type=str, default='A-B', choices=['A-B', 'A-C', 'B-C'])
     ap.add_argument('--seed', type=int, default=42)
     ap.add_argument('--num-steps', type=int, default=5000)

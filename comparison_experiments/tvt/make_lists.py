@@ -1,24 +1,29 @@
 # -*- coding: utf-8 -*-
-"""Generate the three-task data lists for the official TVT code.
+"""make_lists.py —— 为 TVT 官方代码生成三任务数据列表。
 
-Format (TVT ImageList/ImageListIndex): one "abs_path label" per line.
-Source: train set (labeled); target (UDA unlabeled train): train+val;
-test: target test set (labeled, for evaluation).
+格式（TVT ImageList/ImageListIndex）：每行 "绝对路径 类别号"。
+- 源域：训练集（含标签）
+- 目标域（UDA 无标签训练）：训练+验证集（TVT 的 ImageListIndex 忽略标签，用于聚类）
+- 测试：目标域测试集（含标签，用于评估）
 
-Task mapping: A->B BOE->TMI; A->C BOE->CELL; B->C TMI->CELL.
-Output: lists/{task}/{source_list,target_list,test_list}.txt
+任务映射（与主表一致）：
+  A->B: BOE -> TMI
+  A->C: BOE -> CELL
+  B->C: TMI -> CELL
+
+输出：lists/{task}/source_list.txt, target_list.txt, test_list.txt
 """
 import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(os.path.dirname(HERE))   # project root
+ROOT = os.path.dirname(os.path.dirname(HERE))   # hcy 根目录
 DATASETS = {
     "BOE": os.path.join(ROOT, "datasets", "BOE_split_by_person"),
     "TMI": os.path.join(ROOT, "datasets", "TMIdata_split_by_person"),
     "CELL": os.path.join(ROOT, "datasets", "CELL_split_2025"),
 }
 TASKS = [("A-B", "BOE", "TMI"), ("A-C", "BOE", "CELL"), ("B-C", "TMI", "CELL")]
-CLASSES = ["AMD", "DME", "NORMAL"]   # alphabetical order -> 0/1/2, same across datasets
+CLASSES = ["AMD", "DME", "NORMAL"]   # 字母序 → 0/1/2，三数据集一致
 
 
 def write_list(paths_labels, out_path):
@@ -28,7 +33,7 @@ def write_list(paths_labels, out_path):
 
 
 def collect(ds, split):
-    """Return [(abs_path, label)]; split is 'train' / 'val' / 'test'."""
+    """返回 [(abs_path, label)]，split 为 'train' / 'val' / 'test'。"""
     out = []
     base = os.path.join(DATASETS[ds], split)
     for lab, cls in enumerate(CLASSES):

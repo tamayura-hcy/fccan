@@ -2,8 +2,16 @@
 
 Koch et al., "Noise transfer for unsupervised domain adaptation of retinal OCT
 images", MICCAI 2022. Official repo: https://github.com/ValentinKoch/SVDNA
-Non-adversarial: restyle source images to match target-domain noise / pixel-intensity
-statistics via SVD, then train a classifier on the restyled source images.
+
+OCT-specific, non-adversarial representative: restyle source images to match
+the target domain's noise / pixel-intensity statistics via SVD, then train a
+classifier on the restyled source images.
+
+SVDNA algorithm (per paper):
+  For each source image, decompose with SVD, rebuild it using target-domain
+  singular values / pixel statistics so the noise pattern resembles target.
+  We approximate per-image: normalize source intensity to target mean/std
+  (pixel-intensity match) + apply SVD low-rank noise transfer.
 
 Usage:
     python -m comparison_experiments.svdna.train --src A --tgt B --seed 777
@@ -85,11 +93,11 @@ def compute_target_svd_spectrum(tgt_loader, n_ref=24):
 
 def train(args):
     set_seed(args.seed)
-    # unified with other baselines: use load_task (incl. CELL 75% protocol, person splits)
+    # 与其他对比方法统一：用 load_task 加载（含 CELL 75% 协议、按人划分等）
     data = load_task(args.src, args.tgt, input_size=args.input_size,
                      batch_src=args.batch, batch_tgt=args.batch)
     dl_src = data['src_train']
-    dl_tgt_stats = data['tgt_train']   # target train set: compute SVD noise spectrum
+    dl_tgt_stats = data['tgt_train']   # 目标域训练集：算 SVD 噪声频谱
     dl_tgt_test = data['tgt_test']
     n_cls = len(data['class_names'])
     print("task={}->{}  classes={}".format(
@@ -132,7 +140,7 @@ def main():
     parser.add_argument('--alpha', type=float, default=0.8,
                         help='SVDNA spectrum-mixing ratio: how much target spectrum to inject (official-style noise transfer)')
     parser.add_argument('--input_size', type=int, default=224,
-                        help='thuml ResNet official input 224')
+                        help='thuml ResNet 官方输入 224')
     args = parser.parse_args()
     train(args)
 

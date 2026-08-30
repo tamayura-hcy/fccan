@@ -4,9 +4,9 @@ from torchvision import transforms
 from data.data_list_image import Normalize
 
 def get_transform(dataset, img_size):
-    # Official code uses data/ilsvrc_2012_mean.npy (VISDA per-pixel mean file),
-    # which is unavailable on our server; use equivalent ImageNet per-channel
-    # means instead (Normalize subtracts the mean only, no std division).
+    # 注：官方用 data/ilsvrc_2012_mean.npy（VISDA 逐像素均值文件），
+    # 该文件在官方 data 包里且服务器不可得；这里改用等价的 ImageNet
+    # 逐通道均值（Normalize 只减均值、不除方差，与官方行为一致）。
     IM_MEAN = [0.485, 0.456, 0.406]
     if dataset in ['svhn2mnist', 'usps2mnist', 'mnist2usps']:
         transform_source = transforms.Compose([

@@ -1,0 +1,62 @@
+  [TMI tgt] 75% 协议: train1828 + val1009 = 2837 (约 75%)
+task=BOE->TMI  classes=['AMD', 'DME', 'NORMAL']
+  test acc=0.4161 | auc=0.7459 | recall=0.4458 | precision=0.3909 | f1=0.3364 | bacc=0.4458 | specificity=0.7209 | kappa=0.1541 | gmean=0.1769 | mcc=0.1881 | time=12.8s
+  per-class recall: AMD:0.7920 | DME:0.5323 | NORMAL:0.0131
+  [FDA] epoch 1/20 tgt_acc=0.4161 tgt_auc=0.7459
+  test acc=0.4455 | auc=0.7228 | recall=0.5024 | precision=0.4737 | f1=0.4214 | bacc=0.5024 | specificity=0.7411 | kappa=0.2118 | gmean=0.4009 | mcc=0.2427 | time=6.1s
+  per-class recall: AMD:0.6154 | DME:0.7527 | NORMAL:0.1391
+  [FDA] epoch 2/20 tgt_acc=0.4455 tgt_auc=0.7228
+  test acc=0.4673 | auc=0.7446 | recall=0.5385 | precision=0.5042 | f1=0.4389 | bacc=0.5385 | specificity=0.7601 | kappa=0.2585 | gmean=0.3834 | mcc=0.3131 | time=6.0s
+  per-class recall: AMD:0.6610 | DME:0.8548 | NORMAL:0.0997
+  [FDA] epoch 3/20 tgt_acc=0.4673 tgt_auc=0.7446
+  test acc=0.4248 | auc=0.6990 | recall=0.4998 | precision=0.4782 | f1=0.3987 | bacc=0.4998 | specificity=0.7447 | kappa=0.2112 | gmean=0.3273 | mcc=0.2700 | time=6.1s
+  per-class recall: AMD:0.5897 | DME:0.8387 | NORMAL:0.0709
+  [FDA] epoch 4/20 tgt_acc=0.4248 tgt_auc=0.6990
+  test acc=0.4597 | auc=0.7445 | recall=0.5160 | precision=0.4837 | f1=0.4512 | bacc=0.5160 | specificity=0.7455 | kappa=0.2269 | gmean=0.4521 | mcc=0.2513 | time=5.9s
+  per-class recall: AMD:0.5613 | DME:0.7742 | NORMAL:0.2126
+  [FDA] epoch 5/20 tgt_acc=0.4597 tgt_auc=0.7445
+  test acc=0.4434 | auc=0.7167 | recall=0.5051 | precision=0.4643 | f1=0.4148 | bacc=0.5051 | specificity=0.7461 | kappa=0.2203 | gmean=0.3617 | mcc=0.2620 | time=5.8s
+  per-class recall: AMD:0.6467 | DME:0.7742 | NORMAL:0.0945
+  [FDA] epoch 6/20 tgt_acc=0.4434 tgt_auc=0.7167
+  test acc=0.4303 | auc=0.7063 | recall=0.4915 | precision=0.4636 | f1=0.4113 | bacc=0.4915 | specificity=0.7399 | kappa=0.2029 | gmean=0.3744 | mcc=0.2404 | time=6.2s
+  per-class recall: AMD:0.5954 | DME:0.7634 | NORMAL:0.1155
+  [FDA] epoch 7/20 tgt_acc=0.4303 tgt_auc=0.7063
+  test acc=0.4477 | auc=0.7224 | recall=0.4991 | precision=0.4824 | f1=0.4285 | bacc=0.4991 | specificity=0.7463 | kappa=0.2202 | gmean=0.4037 | mcc=0.2544 | time=6.1s
+  per-class recall: AMD:0.6325 | DME:0.7204 | NORMAL:0.1444
+  [FDA] epoch 8/20 tgt_acc=0.4477 tgt_auc=0.7224
+  test acc=0.4281 | auc=0.7058 | recall=0.5008 | precision=0.4834 | f1=0.4102 | bacc=0.5008 | specificity=0.7433 | kappa=0.2101 | gmean=0.3668 | mcc=0.2599 | time=6.1s
+  per-class recall: AMD:0.5641 | DME:0.8333 | NORMAL:0.1050
+  [FDA] epoch 9/20 tgt_acc=0.4281 tgt_auc=0.7058
+  test acc=0.4270 | auc=0.6940 | recall=0.4923 | precision=0.4577 | f1=0.3966 | bacc=0.4923 | specificity=0.7417 | kappa=0.2051 | gmean=0.3294 | mcc=0.2521 | time=6.1s
+  per-class recall: AMD:0.6239 | DME:0.7796 | NORMAL:0.0735
+  [FDA] epoch 10/20 tgt_acc=0.4270 tgt_auc=0.6940
+  test acc=0.4597 | auc=0.7587 | recall=0.5352 | precision=0.5308 | f1=0.4494 | bacc=0.5352 | specificity=0.7572 | kappa=0.2503 | gmean=0.4296 | mcc=0.3032 | time=6.1s
+  per-class recall: AMD:0.5584 | DME:0.8871 | NORMAL:0.1601
+  [FDA] epoch 11/20 tgt_acc=0.4597 tgt_auc=0.7587
+  test acc=0.4695 | auc=0.7464 | recall=0.5399 | precision=0.5261 | f1=0.4597 | bacc=0.5399 | specificity=0.7591 | kappa=0.2578 | gmean=0.4449 | mcc=0.3034 | time=6.1s
+  per-class recall: AMD:0.5783 | DME:0.8656 | NORMAL:0.1759
+  [FDA] epoch 12/20 tgt_acc=0.4695 tgt_auc=0.7464
+  test acc=0.4651 | auc=0.7448 | recall=0.5366 | precision=0.5161 | f1=0.4539 | bacc=0.5366 | specificity=0.7569 | kappa=0.2522 | gmean=0.4326 | mcc=0.2976 | time=6.1s
+  per-class recall: AMD:0.5840 | DME:0.8656 | NORMAL:0.1601
+  [FDA] epoch 13/20 tgt_acc=0.4651 tgt_auc=0.7448
+  test acc=0.4749 | auc=0.7540 | recall=0.5427 | precision=0.5299 | f1=0.4519 | bacc=0.5427 | specificity=0.7639 | kappa=0.2678 | gmean=0.4143 | mcc=0.3217 | time=6.2s
+  per-class recall: AMD:0.6553 | DME:0.8441 | NORMAL:0.1286
+  [FDA] epoch 14/20 tgt_acc=0.4749 tgt_auc=0.7540
+  test acc=0.4891 | auc=0.7563 | recall=0.5549 | precision=0.5456 | f1=0.4718 | bacc=0.5549 | specificity=0.7695 | kappa=0.2843 | gmean=0.4484 | mcc=0.3352 | time=6.1s
+  per-class recall: AMD:0.6524 | DME:0.8495 | NORMAL:0.1627
+  [FDA] epoch 15/20 tgt_acc=0.4891 tgt_auc=0.7563
+  test acc=0.4346 | auc=0.7114 | recall=0.5138 | precision=0.4966 | f1=0.4133 | bacc=0.5138 | specificity=0.7492 | kappa=0.2248 | gmean=0.3528 | mcc=0.2865 | time=6.1s
+  per-class recall: AMD:0.5783 | DME:0.8763 | NORMAL:0.0866
+  [FDA] epoch 16/20 tgt_acc=0.4346 tgt_auc=0.7114
+  test acc=0.4869 | auc=0.7495 | recall=0.5510 | precision=0.5395 | f1=0.4642 | bacc=0.5510 | specificity=0.7688 | kappa=0.2816 | gmean=0.4310 | mcc=0.3338 | time=6.1s
+  per-class recall: AMD:0.6781 | DME:0.8333 | NORMAL:0.1417
+  [FDA] epoch 17/20 tgt_acc=0.4869 tgt_auc=0.7495
+  test acc=0.4728 | auc=0.7300 | recall=0.5373 | precision=0.5188 | f1=0.4496 | bacc=0.5373 | specificity=0.7614 | kappa=0.2620 | gmean=0.4142 | mcc=0.3110 | time=6.1s
+  per-class recall: AMD:0.6581 | DME:0.8226 | NORMAL:0.1312
+  [FDA] epoch 18/20 tgt_acc=0.4728 tgt_auc=0.7300
+  test acc=0.4782 | auc=0.7583 | recall=0.5217 | precision=0.5154 | f1=0.4516 | bacc=0.5217 | specificity=0.7579 | kappa=0.2544 | gmean=0.4327 | mcc=0.2887 | time=6.1s
+  per-class recall: AMD:0.7009 | DME:0.6989 | NORMAL:0.1654
+  [FDA] epoch 19/20 tgt_acc=0.4782 tgt_auc=0.7583
+  test acc=0.4760 | auc=0.7484 | recall=0.5242 | precision=0.5260 | f1=0.4521 | bacc=0.5242 | specificity=0.7602 | kappa=0.2578 | gmean=0.4305 | mcc=0.2976 | time=6.1s
+  per-class recall: AMD:0.6866 | DME:0.7258 | NORMAL:0.1601
+  [FDA] epoch 20/20 tgt_acc=0.4760 tgt_auc=0.7484

@@ -1,12 +1,16 @@
 """SHOT (Source Hypothesis Transfer) baseline.
 
-Liang et al., "Do We Really Need to Access the Source Data? Source Hypothesis
-Transfer for Unsupervised Domain Adaptation", ICML 2020.
-Reproduced from tim-learn/SHOT: ResNet50(2048) + feat_bottleneck(256,BN) + linear
-classifier; source uses CrossEntropyLabelSmooth(0.1) with layered lr (netF 0.1x);
-target uses cluster pseudo-labels + CE(0.3) + entropy(1.0) + gent.
+Liang et al., "Do We Really Need to Access the Source Data? Source Hypothesis Transfer
+for Unsupervised Domain Adaptation", ICML 2020.
+按 tim-learn/SHOT 官方复现（object/image_source.py + image_target.py）：
+  - 结构：ResNet50(2048) + feat_bottleneck(256,BN) + feat_classifier(linear)
+  - 源训练：CrossEntropyLabelSmooth(ε=0.1)，分层 lr（netF 0.1×lr, netB/netC 1×lr）
+  - 目标适应：聚类伪标签（obtain_label，cosine 距离 2 轮）+ CE(cls_par=0.3)
+              + 熵最小化(ent_par=1.0) + 全局熵(gent)
+  - lr_scheduler：lr*(1+10*iter/max)^(-0.75), wd=1e-3, nesterov=True；lr=1e-2
 
-Usage: python -m comparison_experiments.shot.train --src A --tgt B --seed 777
+Usage:
+    python -m comparison_experiments.shot.train --src A --tgt B --seed 777
 """
 import argparse
 import os
@@ -34,7 +38,7 @@ def op_copy(optimizer):
 
 
 def lr_scheduler(optimizer, iter_num, max_iter, gamma=10, power=0.75):
-    """SHOT official lr_scheduler: lr0 * (1+gamma*iter/max)^(-power), wd=1e-3, nesterov."""
+    """SHOT 官方 lr_scheduler：lr0 * (1+gamma*iter/max)^(-power)，wd=1e-3，nesterov。"""
     decay = (1 + gamma * iter_num / max_iter) ** (-power)
     for param_group in optimizer.param_groups:
         param_group['lr'] = param_group['lr0'] * decay
@@ -45,7 +49,7 @@ def lr_scheduler(optimizer, iter_num, max_iter, gamma=10, power=0.75):
 
 
 class CrossEntropyLabelSmooth(nn.Module):
-    """SHOT official source loss: label smoothing CE (loss.py CrossEntropyLabelSmooth)."""
+    """SHOT 官方源训练损失：label smoothing CE（loss.py CrossEntropyLabelSmooth）。"""
 
     def __init__(self, num_classes, epsilon=0.1):
         super().__init__()
@@ -55,7 +59,7 @@ class CrossEntropyLabelSmooth(nn.Module):
 
     def forward(self, inputs, targets):
         log_probs = self.logsoftmax(inputs)
-        # official: build CPU one-hot then scatter (avoid index/tensor device mismatch), then move to input device
+        # 官方：先建 CPU one-hot 再 scatter（避免 index/张量设备不一致），最后移到 inputs 设备
         targets = torch.zeros(log_probs.size()).scatter_(1, targets.unsqueeze(1).cpu(), 1)
         if targets.is_cuda or inputs.is_cuda:
             targets = targets.to(inputs.device)
@@ -64,7 +68,7 @@ class CrossEntropyLabelSmooth(nn.Module):
 
 
 class IndexedDataset(Dataset):
-    """Wrapper returning (x, y, idx) for mem_label indexing in target adaptation (official ImageList_idx)."""
+    """返回 (x, y, idx) 的包装，供目标适应 mem_label 索引（官方 ImageList_idx）。"""
 
     def __init__(self, ds):
         self.ds = ds
@@ -78,7 +82,7 @@ class IndexedDataset(Dataset):
 
 
 def train_source(enc, clf, src_loader, device, epochs, lr):
-    """SHOT official source training: label smoothing + layered lr (netF 0.1x, netB/netC 1x)."""
+    """SHOT 官方源训练：label smoothing + 分层 lr（netF 0.1×, netB/netC 1×）。"""
     optimizer = optim.SGD([{'params': enc.parameters(), 'lr': lr * 0.1},
                            {'params': clf.bottleneck.parameters(), 'lr': lr},
                            {'params': clf.head.parameters(), 'lr': lr}])
@@ -108,9 +112,10 @@ def train_source(enc, clf, src_loader, device, epochs, lr):
 
 
 def obtain_label(dataset, enc, clf, device, batch_size=64, distance='cosine', threshold=0):
-    """SHOT official cluster pseudo-labels (image_target.py obtain_label): softmax-weighted
-    class centers + 2 cdist rounds. Uses an unshuffled loader so label order matches
-    dataset indices (mem_label[tar_idx] alignment).
+    """SHOT 官方聚类伪标签（image_target.py obtain_label）：softmax 加权类中心 + cdist 2 轮。
+
+    dataset：目标域训练集（IndexedDataset 包装过）；内部用不 shuffle 的 loader，
+    保证返回的伪标签顺序与数据集索引一致（mem_label[tar_idx] 对齐）。
     """
     from torch.utils.data import DataLoader
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
@@ -148,7 +153,7 @@ def obtain_label(dataset, enc, clf, device, batch_size=64, distance='cosine', th
 
 def adapt_target(enc, clf, tgt_train, tgt_test, device, epochs, lr,
                  cls_par=0.3, ent_par=1.0, gent=True, interval=15):
-    """SHOT official target adaptation: cluster pseudo-label CE + entropy minimization (netC frozen)."""
+    """SHOT 官方目标适应：聚类伪标签 CE + 熵最小化（netC 冻结）。"""
     for p in clf.head.parameters():
         p.requires_grad_(False)
     optimizer = optim.SGD([{'params': enc.parameters(), 'lr': lr * 0.1},
@@ -172,7 +177,7 @@ def adapt_target(enc, clf, tgt_train, tgt_test, device, epochs, lr,
         if inputs_test.size(0) == 1:
             continue
         if iter_num % interval_iter == 0:
-            # official transductive setting target=test; here train != test, so use tgt_train for pseudo-labels
+            # 官方 transductive 设置 target=test；我们 train≠test，为索引自洽用 tgt_train 生成伪标签
             mem_label = obtain_label(tgt_train.dataset, enc, clf, device)
             mem_label = torch.from_numpy(mem_label.astype('int64')).to(device)
             enc.train(); clf.train()
@@ -215,7 +220,7 @@ def train(args):
         LABEL_TO_DATASET[args.src], LABEL_TO_DATASET[args.tgt], data['class_names']))
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    enc, clf = build_models(n_cls, device)   # bottleneck 'bn' official
+    enc, clf = build_models(n_cls, device)   # bottleneck 'bn' 官方
 
     print("  [SHOT] stage 1: source training (label smoothing)")
     train_source(enc, clf, data['src_train'], device, epochs=args.src_epochs, lr=args.lr)
@@ -236,23 +241,23 @@ def main():
     parser.add_argument('--tgt', type=str, default='B', choices=['A', 'B', 'C'])
     parser.add_argument('--seed', type=int, default=777)
     parser.add_argument('--src_epochs', type=int, default=20,
-                        help='SHOT official source training max_epoch=20 (image_source.py)')
+                        help='SHOT 官方源训练 max_epoch=20（image_source.py）')
     parser.add_argument('--epochs', type=int, default=15,
-                        help='SHOT official target adaptation max_epoch=15')
+                        help='SHOT 官方目标适应 max_epoch=15')
     parser.add_argument('--batch', type=int, default=64,
-                        help='SHOT official batch=64 (image_source.py)')
+                        help='SHOT 官方 batch=64（image_source.py）')
     parser.add_argument('--lr', type=float, default=1e-2,
-                        help='SHOT official lr=1e-2')
+                        help='SHOT 官方 lr=1e-2')
     parser.add_argument('--cls_par', type=float, default=0.3,
-                        help='SHOT official pseudo-label weight cls_par=0.3')
+                        help='SHOT 官方伪标签权重 cls_par=0.3')
     parser.add_argument('--ent_par', type=float, default=1.0,
-                        help='SHOT official entropy weight ent_par=1.0')
+                        help='SHOT 官方熵权重 ent_par=1.0')
     parser.add_argument('--gent', type=int, default=1,
-                        help='SHOT official global entropy gent=True')
+                        help='SHOT 官方全局熵 gent=True')
     parser.add_argument('--interval', type=int, default=15,
-                        help='SHOT official pseudo-label update interval=15')
+                        help='SHOT 官方伪标签更新 interval=15')
     parser.add_argument('--input_size', type=int, default=224,
-                        help='thuml ResNet official input 224')
+                        help='thuml ResNet 官方输入 224')
     args = parser.parse_args()
     args.gent = bool(args.gent)
     train(args)

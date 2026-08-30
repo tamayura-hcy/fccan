@@ -5,3 +5,4 @@ __pycache__/
 
 # Oversized model checkpoint (exceeds GitHub 100 MB per-file limit)
 comparison_experiments/third_party/TVT/checkpoint/ViT-B_16.npz
+comparison_experiments/third_party/DaC/VisDA/experiments/OCT/source/uda/oct/B/source_F.pt

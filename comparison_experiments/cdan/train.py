@@ -1,9 +1,12 @@
 """CDAN (Conditional Adversarial Domain Adaptation) baseline.
 
 Long et al., "Conditional Adversarial Domain Adaptation", NeurIPS 2018.
-Reproduced from thuml/Transfer-Learning-Library: MultiLinearMap f (x) g flattened;
-thuml DomainDiscriminator (sigmoid + BN + 1024 hidden); WarmStart GRL + single SGD
-with layered lr (backbone 0.1x); CDAN-E entropy conditioning with --entropy.
+按 thuml/Transfer-Learning-Library 官方复现（alignment/cdan.py + example/cdan.py）：
+  - MultiLinearMap：f ⊗ g（bottleneck 256 特征 × C 类）展平
+  - 判别器：thuml DomainDiscriminator（sigmoid 单输出 + BN + 1024 hidden）
+  - WarmStart GRL + 单一 SGD optimizer（分层 lr，backbone 0.1×）
+  - CDAN-E：entropy conditioning（--entropy 时启用）
+  - 超参：lr=0.01, lr_gamma=0.001, lr_decay=0.75, wd=1e-3, trade_off=1.0
 
 Usage:
     python -m comparison_experiments.cdan.train --src A --tgt B --seed 777
@@ -39,7 +42,7 @@ class GradientReverseFunction(Function):
 
 
 class WarmStartGradientReverseLayer(nn.Module):
-    """thuml WarmStartGradientReverseLayer (alpha 0->1, max_iters=1000)."""
+    """thuml WarmStartGradientReverseLayer（alpha 0→1，max_iters=1000）。"""
 
     def __init__(self, alpha=1.0, lo=0.0, hi=1.0, max_iters=1000., auto_step=True):
         super().__init__()
@@ -65,7 +68,7 @@ class WarmStartGradientReverseLayer(nn.Module):
 
 
 class DomainDiscriminator(nn.Module):
-    """thuml official DomainDiscriminator (sigmoid single output + BN + hidden 1024)."""
+    """thuml 官方 DomainDiscriminator（sigmoid 单输出 + BN + hidden 1024）。"""
 
     def __init__(self, in_feature, hidden_size=1024):
         super().__init__()
@@ -82,19 +85,19 @@ class DomainDiscriminator(nn.Module):
 
 
 class MultiLinearMap(nn.Module):
-    """thuml MultiLinearMap: T(f, g) = f (x) g flattened (official cdan.py)."""
+    """thuml MultiLinearMap：T(f, g) = f ⊗ g 展平（官方 cdan.py）。"""
 
     def forward(self, f, g):
         return torch.bmm(f.unsqueeze(2), g.unsqueeze(1)).view(f.size(0), -1)
 
 
 def entropy(p):
-    """Entropy of softmax probabilities (thuml modules/entropy.py)."""
+    """对 softmax 概率计算熵（thuml modules/entropy.py）。"""
     return -(p * torch.log(p + 1e-5)).sum(dim=1)
 
 
 class ConditionalDomainAdversarialLoss(nn.Module):
-    """thuml official CDAN loss (alignment/cdan.py), sigmoid + BCE."""
+    """thuml 官方 CDAN 损失（alignment/cdan.py），sigmoid + BCE。"""
 
     def __init__(self, domain_discriminator, entropy_conditioning=False, reduction='mean'):
         super().__init__()
@@ -130,11 +133,11 @@ def train(args):
         LABEL_TO_DATASET[args.src], LABEL_TO_DATASET[args.tgt], data['class_names']))
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    enc, clf = build_models(n_cls, device)   # bottleneck 'bn' official
-    # official: discriminator input = features_dim * num_classes (bottleneck 256 x C)
+    enc, clf = build_models(n_cls, device)   # bottleneck 'bn' 官方
+    # CDAN 官方：判别器输入 = features_dim * num_classes（bottleneck 256 × C）
     disc = DomainDiscriminator(in_feature=clf.features_dim * n_cls).to(device)
 
-    # thuml official: single SGD, layered lr (backbone 0.1x), nesterov + wd
+    # thuml 官方：单一 SGD，分层 lr（backbone 0.1×），nesterov + wd
     optimizer = optim.SGD(clf.get_parameters(base_lr=1.0, backbone=enc) + disc.get_parameters(),
                           lr=args.lr, momentum=0.9, weight_decay=args.weight_decay, nesterov=True)
     lr_scheduler = LambdaLR(optimizer,
@@ -182,20 +185,20 @@ def main():
     parser.add_argument('--tgt', type=str, default='B', choices=['A', 'B', 'C'])
     parser.add_argument('--seed', type=int, default=777)
     parser.add_argument('--epochs', type=int, default=20,
-                        help='thuml official CDAN epochs=20')
+                        help='thuml 官方 CDAN epochs=20')
     parser.add_argument('--batch', type=int, default=32,
-                        help='thuml official CDAN batch=32')
+                        help='thuml 官方 CDAN batch=32')
     parser.add_argument('--lr', type=float, default=0.01,
-                        help='thuml official CDAN lr=0.01')
+                        help='thuml 官方 CDAN lr=0.01')
     parser.add_argument('--weight_decay', type=float, default=1e-3,
-                        help='thuml official CDAN wd=1e-3')
+                        help='thuml 官方 CDAN wd=1e-3')
     parser.add_argument('--lr_gamma', type=float, default=0.001)
     parser.add_argument('--lr_decay', type=float, default=0.75)
     parser.add_argument('--trade_off', type=float, default=1.0)
     parser.add_argument('--entropy', action='store_true',
-                        help='Use CDAN-E entropy conditioning (thuml official --entropy)')
+                        help='使用 CDAN-E 熵条件加权（thuml 官方 --entropy）')
     parser.add_argument('--input_size', type=int, default=224,
-                        help='thuml ResNet official input 224')
+                        help='thuml ResNet 官方输入 224')
     args = parser.parse_args()
     train(args)
 

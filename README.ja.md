@@ -120,7 +120,7 @@ python -m comparison_experiments.run_all --methods dann,mcc,emdda --tasks A-B,A-
 python run_comparison.py          # または全手法を一括実行
 ```
 
-手法一覧（11 の DA 手法 + ベースライン）：`DANN`、`ADDA`、`CDAN`、`EM-DDA`、`MCC`、`SHOT`、`CAT`、`SVDNA`、`DAGCN`、`TVT`、`DaC`；加えて 3 つの source-only 下限（ResNet-18/50、VGG-16）と 1 つの oracle 参照行。詳細は `comparison_experiments/README.md`。
+手法一覧（13 の DA 手法 + ベースライン）：`DANN`、`ADDA`、`CDAN`、`EM-DDA`、`MCC`、`FDA`、`CAN`、`SHOT`、`CAT`、`SVDNA`、`DAGCN`、`TVT`、`DaC`；加えて 3 つの source-only 下限（ResNet-18/50、VGG-16）と 1 つの oracle 参照行。詳細は `comparison_experiments/README.md`。
 
 > `BNM` / `TENT` / `DAN` / `DDC` は OCT クロスデバイスタスクで完全な負の転移（source-only 下限未満）を示したため、実験と論文から削除済みです。
 

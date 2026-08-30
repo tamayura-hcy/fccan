@@ -1,12 +1,14 @@
-"""Run the oracle upper bound: 3 tasks x 5 seeds, report mean±std.
+"""跑 oracle 上界：3 任务 × 5 种子，输出 mean±std。
 
-Scenarios: A->B (BOE->TMI) and A->C/B->C (BOE/TMI -> CELL), oracle = fully
-supervised training on the target domain.
+与主表场景对应：
+  A->B (BOE->TMI) : oracle = TMI 全监督  → tgt B
+  A->C (BOE->CELL): oracle = CELL 全监督 → tgt C
+  B->C (TMI->CELL): oracle = CELL 全监督 → tgt C（与 A->C 相同，可复用结果）
 
 Usage:
-    python -m comparison_experiments.oracle.run_all          # all (3 tasks x 5 seeds)
-    python -m comparison_experiments.oracle.run_all --tgt B  # target B only
-Results written to comparison_experiments/results/oracle_summary.txt
+    python -m comparison_experiments.oracle.run_all          # 全跑（3 任务 × 5 种子）
+    python -m comparison_experiments.oracle.run_all --tgt B  # 只跑目标 B
+结果写入 comparison_experiments/results/oracle_summary.txt
 """
 import argparse
 import os
@@ -17,7 +19,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
 
 from comparison_experiments.oracle.train import run_oracle, SEEDS
 
-# scenario -> (target label, scenario name)
+# 场景 → (目标标签, 场景名)
 SCENARIOS = [
     ('B', 'A->B'),
     ('C', 'A->C'),
@@ -28,16 +30,16 @@ OUT_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 
 
 def main():
-    ap = argparse.ArgumentParser(description='Oracle upper bound: 3 tasks x 5 seeds')
+    ap = argparse.ArgumentParser(description='Oracle 上界：3 任务 × 5 种子')
     ap.add_argument('--tgt', type=str, default=None, choices=['B', 'C'],
-                    help='Run only the specified target domain (B or C), default all')
+                    help='只跑指定目标域（B 或 C），默认跑全部')
     ap.add_argument('--epochs', type=int, default=10)
     ap.add_argument('--skip-existing', action='store_true',
-                    help='Skip already recorded results')
+                    help='跳过已记录的结果')
     args = ap.parse_args()
 
     results = {tgt: [] for tgt in ('B', 'C')}   # tgt -> [(acc, auc)]
-    lines = ["# Oracle upper bound (fully supervised target ResNet-50, 5-seed mean±std)"]
+    lines = ["# Oracle 上界（目标域全监督 ResNet-50，5 种子 mean±std）"]
     for tgt, scen in SCENARIOS:
         if args.tgt and tgt != args.tgt:
             continue
@@ -59,7 +61,7 @@ def main():
     os.makedirs(os.path.dirname(OUT_FILE), exist_ok=True)
     with open(OUT_FILE, 'w', encoding='utf-8') as f:
         f.write('\n'.join(lines) + '\n')
-    print("\nResults saved to {}".format(OUT_FILE))
+    print("\n结果已写入 {}".format(OUT_FILE))
 
 
 if __name__ == '__main__':
