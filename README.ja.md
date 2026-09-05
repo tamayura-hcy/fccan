@@ -122,6 +122,8 @@ python run_comparison.py          # または全手法を一括実行
 
 手法一覧（13 の DA 手法 + ベースライン）：`DANN`、`ADDA`、`CDAN`、`EM-DDA`、`MCC`、`FDA`、`CAN`、`SHOT`、`CAT`、`SVDNA`、`DAGCN`、`TVT`、`DaC`；加えて 3 つの source-only 下限（ResNet-18/50、VGG-16）と 1 つの oracle 参照行。詳細は `comparison_experiments/README.md`。
 
+> 注：`FDA` は実装済みですが、クロスデバイス OCT では負の転移を示すため、論文の比較表には含めていません（コードは再現用に残置）。
+
 > `BNM` / `TENT` / `DAN` / `DDC` は OCT クロスデバイスタスクで完全な負の転移（source-only 下限未満）を示したため、実験と論文から削除済みです。
 
 ### 1.6 説明対象外のディレクトリ
@@ -442,4 +444,6 @@ python main.py --only TMI->CELL -es 8 -et 15 --seed 3407 -i 1 --cell_split CELL_
 
 ## 12. ライセンスと引用
 
-本プロジェクトは研究用コードで、DAGCN reference ベースラインを改良したものです。コア手法：ウェーブレット周波数強調（FEA）+ クラス対比（CaCo）+ 低周波ショートカット抑制。引用については著者までご連絡ください。
+本プロジェクトは MIT ライセンスで公開しています（[LICENSE](LICENSE) 参照）。
+
+本プロジェクトは研究用コードで、DAGCN reference ベースラインを改良したものです。コア手法：ウェーブレット周波数強調（FEA）+ クラス対比（CaCo）+ 低周波ショートカット抑制。本コードを使用する場合は論文を引用してください（採録後に文献番号を追記予定）。

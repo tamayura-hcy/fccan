@@ -122,6 +122,8 @@ python run_comparison.py          # 或一键跑全部
 
 方法清单（13 个域适应方法 + 基线）：`DANN`、`ADDA`、`CDAN`、`EM-DDA`、`MCC`、`FDA`、`CAN`、`SHOT`、`CAT`、`SVDNA`、`DAGCN`、`TVT`、`DaC`；另有 3 个 source-only 下界（ResNet-18/50、VGG-16）和 1 个 oracle 参考行。详见 `comparison_experiments/README.md`。
 
+> 注：`FDA` 已实现，但在跨设备 OCT 上表现为负迁移，未纳入论文对比表（代码保留，可复现）。
+
 > `BNM` / `TENT` / `DAN` / `DDC` 在 OCT 跨设备任务上是完全负迁移（低于仅源域下界），已从对比实验和论文中移除。
 
 ### 1.6 不纳入说明的目录
@@ -442,4 +444,6 @@ python main.py --only TMI->CELL -es 8 -et 15 --seed 3407 -i 1 --cell_split CELL_
 
 ## 12. 许可与引用
 
-本项目是科研实验代码，基于 DAGCN reference 基线改进。方法核心：小波频率增强（FEA）+ 类别对比（CaCo）+ 低频捷径抑制。引用请与作者联系。
+本项目以 MIT 许可证开源，详见 [LICENSE](LICENSE)。
+
+本项目是科研实验代码，基于 DAGCN reference 基线改进。方法核心：小波频率增强（FEA）+ 类别对比（CaCo）+ 低频捷径抑制。使用请引用论文（投稿后补编号）。

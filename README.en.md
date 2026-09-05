@@ -121,6 +121,8 @@ python run_comparison.py          # or run everything in one batch
 
 Methods (13 DA methods + baselines): `DANN`, `ADDA`, `CDAN`, `EM-DDA`, `MCC`, `FDA`, `CAN`, `SHOT`, `CAT`, `SVDNA`, `DAGCN`, `TVT`, `DaC`; plus 3 source-only lower bounds (ResNet-18/50, VGG-16) and 1 oracle reference row. See `comparison_experiments/README.md`.
 
+> Note: `FDA` is implemented but shows negative transfer on cross-device OCT; it is therefore not included in the paper comparison table (code kept for reproduction).
+
 > `BNM` / `TENT` / `DAN` / `DDC` show fully negative transfer on OCT cross-device tasks (below the source-only lower bound) and have been removed from the experiments and the paper.
 
 ### 1.6 Directories Not Documented
@@ -441,4 +443,6 @@ Run the per-seed best configs in §9 (5 seeds, mean ± std), or simply `python r
 
 ## 12. License & Citation
 
-This is research code, improved from the DAGCN reference baseline. Core method: wavelet frequency enhancement (FEA) + category contrast (CaCo) + low-frequency shortcut suppression. For citation, please contact the author.
+This project is open-sourced under the MIT License, see [LICENSE](LICENSE).
+
+This is research code, improved from the DAGCN reference baseline. Core method: wavelet frequency enhancement (FEA) + category contrast (CaCo) + low-frequency shortcut suppression. If you use this code, please cite our paper (reference number to be added after submission).
